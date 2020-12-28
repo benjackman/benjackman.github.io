@@ -1,0 +1,18 @@
+---
+title: Article on The Term Funding Facility
+author: Ben Jackman
+date: '2020-12-28'
+slug: article-on-the-term-funding-facility
+categories: []
+tags: []
+Description: 'This blogpost outlines an RBA Bulletin article I wrote with some of my colleagues on the Term Funding Facility.'
+Tags: []
+Categories: []
+DisableComments: no
+---
+
+Several of my colleagues and I have published an RBA Bulletin article on the [Term Funding Facility](https://www.rba.gov.au/publications/bulletin/2020/dec/the-term-funding-facility.html) (TFF). This article outlines the purpose and design of the facility, as well as the usage of the TFF so far. 
+
+Working on the TFF has been a fascinating experience for me. I returned home to Australia from full-time study in the UK -- 6 months earlier than expected -- as the severity of the pandemic was becoming clear. While in hotel quarantine in Sydney, I offered to help my very busy RBA colleagues. I only hoping to pass the time between my (suddenly remote) classes, time I would have spent at the college pub if I was still in the UK! 
+
+My colleagues asked me to help on the design and setup of a facility to provide secured term funding to Australian banks. This type of facility has been used by many foreign central banks, but is a first for Australia. We set the facility up in a matter of weeks, in an exciting (and sometimes scary!) period for financial markets. Nine months later, I find myself managing the team that administers the TFF and analyses its effects on the Australian economy. The Bulletin article is a small slice of the fascinating work the team is doing, which I hope any readers enjoy. 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Website of Ben Jackman</title>
+    <link>https://example.com/post/</link>
+    <description>Recent content in Posts on Website of Ben Jackman</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Article on The Term Funding Facility</title>
+      <link>https://example.com/post/article-on-the-term-funding-facility/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/post/article-on-the-term-funding-facility/</guid>
+      <description>Several of my colleagues and I have published an RBA Bulletin article on the Term Funding Facility (TFF).</description>
+    </item>
+    
+    <item>
+      <title>Building a static website in Blogdown</title>
+      <link>https://example.com/post/building-a-static-website-in-blogdown/</link>
+      <pubDate>Wed, 30 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/post/building-a-static-website-in-blogdown/</guid>
+      <description>My personal site is built using Blogdown, a simple RStats package that uses the Hugo framework to create HTML for static websites.</description>
+    </item>
+    
+    <item>
+      <title>Playing around with R Markdown</title>
+      <link>https://example.com/post/2015-07-23-r-rmarkdown/</link>
+      <pubDate>Mon, 28 Sep 2020 21:13:14 -0500</pubDate>
+      
+      <guid>https://example.com/post/2015-07-23-r-rmarkdown/</guid>
+      <description>R MarkdownThis is known as a ‘R Markdown’ document.</description>
+    </item>
+    
+  </channel>
+</rss>
