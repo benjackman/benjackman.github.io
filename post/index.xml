@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Website of Ben Jackman</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 28 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Plotting Runs with Strava Calendar</title>
+      <link>/post/plotting-runs-with-strava-calendar/</link>
+      <pubDate>Sun, 03 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/plotting-runs-with-strava-calendar/</guid>
+      <description>I use Strava for logging my running. It’s a great tool (particularly all the free functionality!</description>
+    </item>
+    
     <item>
       <title>Article on The Term Funding Facility</title>
       <link>/post/article-on-the-term-funding-facility/</link>

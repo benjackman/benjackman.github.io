@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme=""><head>
-    <title> Ben Jackman </title>
+    <title> Ben Jackman | Plotting Runs with Strava Calendar </title>
 
     
     <meta charset="utf-8"><meta name="generator" content="Hugo 0.75.1" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -29,7 +29,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
 
-    <link rel="canonical" href="/archives/">
+    <link rel="canonical" href="/post/plotting-runs-with-strava-calendar/">
 
     
     
@@ -42,8 +42,8 @@
     <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="/images/site-feature-image.png"/>
 
-<meta name="twitter:title" content=""/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="Plotting Runs with Strava Calendar"/>
+<meta name="twitter:description" content="This blogpost outlines my use of a great Strava Calendars tool"/>
 
 </head>
 <body><div class="sidebar animated fadeInDown ">
@@ -123,11 +123,38 @@
     <div class="post  animated fadeInDown ">
         <div class="post-content">
             <div class="post-title">
-                <h3></h3>
+                <h3>Plotting Runs with Strava Calendar</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date">Sun, Jan 3, 2021</span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">2-minute read</span>
+                    </div>
                 
             </div>
 
-            </div>
+            
+
+
+<p>I use Strava for logging my running. It’s a great tool (particularly all the free functionality!), and over the last few years I’ve built up a reasonable database of my runs.</p>
+<p>Some years ago, <a href="https://colindcarroll.com/">Colin Carroll</a> created a nifty Python package for simple visualisations of Strava exercises in calendar format. It’s the aptly named <a href="https://github.com/ColCarroll/strava_calendar">Strava Calendar</a>. Colin actively monitors this repo and recently added automatic support for .gpx files, which Strava now provides if you request all your data.</p>
+<p>This package gives out-of-the-box support for great visualisations. Here are all my runs in February 2019:</p>
+<p><img src="C:/Users/benja/Desktop/Personal_Site_Master/New_Personal_Site/static/images/Feb_2019_plain.png" alt="Feb 2019 Runs" />
+The first run is my attempt at the <a href="https://sunruncoleclassic.com.au/">Cole Classic Sun Run</a>. The 4 similar looking runs with loops in their top-right corners (Feb 4, 6, 20 and 27) are Sydney’s <a href="http://www.sydneycorporatecup.org.au/">Corporate Cup</a> course - starting in the Domain, past the Botanic Gardens, and looping around Mrs Macquarie’s Chair on Sydney Harbour. A few other runs are thrown in there for good measure.</p>
+<p>Paired with more metadata provided by Strava, these little calendars become like little exercise diaries. I had a great time going back and thinking about some of the context from these UK runs:</p>
+<div class="figure">
+<img src="C:/Users/benja/Desktop/Personal_Site_Master/New_Personal_Site/static/images/Oct_2019_annotated.png" alt="" />
+<p class="caption">Oct 2019 Runs</p>
+</div>
+<p>In October 2019 I had just arrived for study. The runs include some early London jogs in Stoke Newington (home of everyone’s favourite <a href="https://youtu.be/4zdASvSTCe8?t=11">Penny Farthing crash</a>), and my first run in Oxford. I’ve also popped in some of my notes from the Strava run titles - about my back feeling a bit better allowing a few runs in a row, and a typically Australian complaint about the weather.</p>
+<p>The package also includes a default plot_calendar() function, which spits out a full calendar year. For some reason I had trouble getting it to run for 2019 and 2020 (and so raised a quick <a href="https://github.com/ColCarroll/strava_calendar/issues/5">Github Issue</a>, but it works fine for 2018. You can see the complete stoppage as a result of my bad ankle injury in late March of 2018, my two attempts to come back to running in late May and July, before things finally get going again in September.</p>
+<div class="figure">
+<img src="C:/Users/benja/Desktop/Personal_Site_Master/New_Personal_Site/static/images/2018_calendar.png" alt="" />
+<p class="caption">2018 Annual Runs</p>
+</div>
+<p>These images (and similar images I might develop in future) would be a great addition to travel diaries, or a ‘year in review’ style post. I intend to keep playing around with Strava Calendar and producing more interest diagrams. I’m grateful to Colin for building such a simple and enjoyable tool.</p>
+</div>
         <div class="post-footer">
             <div class="info">
                 
@@ -135,6 +162,8 @@
             </div>
         </div>
 
+        
+            
         
     </div>
 
