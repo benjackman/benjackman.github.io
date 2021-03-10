@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme=""><head>
+    <title> Ben Jackman | Neural network demo with MNIST and Tensorflow </title>
+
+    
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.75.1" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="I&#39;m an economist and data scientist in Sydney, Australia. ">
+    
+    <link rel="stylesheet"
+          href="/css/style.min.28b1ee64753ae7e3e46327acb742498816170bd217640dd4bf69240697a4d5e4.css"
+          integrity="sha256-KLHuZHU65&#43;PkYyest0JJiBYXC9IXZA3Uv2kkBpek1eQ="
+          crossorigin="anonymous"
+          type="text/css">
+    
+    <link rel="stylesheet"
+        href="/css/markupHighlight.min.9755453ffb7bc4cd220f86ebb5922107b49f193cc62fc17e9785d27b33a8bf5b.css"
+        integrity="sha256-l1VFP/t7xM0iD4brtZIhB7SfGTzGL8F&#43;l4XSezOov1s="
+        crossorigin="anonymous"
+        type="text/css">
+    
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" 
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" 
+    crossorigin="anonymous" />
+
+    
+    <link rel="shortcut icon" href="/favicons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+
+    <link rel="canonical" href="/post/neural-network-demo-with-mnist-and-tensorflow/">
+
+    
+    
+    
+    
+    <script type="text/javascript"
+            src="/js/anatole-header.min.e782db136ec18d105a4552702eac49f4620d6867da3fbf808bd53e806c96be6e.js"
+            integrity="sha256-54LbE27BjRBaRVJwLqxJ9GINaGfaP7&#43;Ai9U&#43;gGyWvm4="
+            crossorigin="anonymous"></script>
+    <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/images/site-feature-image.png"/>
+
+<meta name="twitter:title" content="Neural network demo with MNIST and Tensorflow"/>
+<meta name="twitter:description" content="A blogpost on a neural network demo completed in the context of a brief python introduction."/>
+
+</head>
+<body><div class="sidebar animated fadeInDown ">
+    <div class="logo-title">
+        <div class="title">
+            <img src="/images/personal_photo_fuji_crop.jpg" alt="profile picture">
+            <h3 title=""><a href="/">Ben Jackman</a></h3>
+            <div class="description">
+                <p>I&#39;m an economist and data scientist in Sydney, Australia. </p>
+            </div>
+        </div>
+    </div>
+    <ul class="social-links">
+        
+            <li>
+                <a href="https://www.linkedin.com/in/ben-t-jackman/" rel="me" aria-label="Linkedin">
+                    <i class="fab fa-linkedin fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://github.com/benjackman" rel="me" aria-label="GitHub">
+                    <i class="fab fa-github fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            <li>
+                <a href="mailto:benjackman@gmail.com" rel="me" aria-label="e-mail">
+                    <i class="fas fa-envelope fa-2x" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+    </ul>
+    <div class="footer">
+        <div class="by_farbox">&copy; Ben Jackman 2021 </div>
+    </div>
+</div>
+<div class="main">
+    <div class="page-top  animated fadeInDown ">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+    <ul class="nav" id="navMenu">
+        
+        
+            
+            <li><a 
+                   href="/"
+                        
+                   title="">Home</a></li>
+        
+            
+            <li><a 
+                   href="/post/"
+                        
+                   title="">Posts</a></li>
+        
+            
+            <li><a 
+                   href="/about/"
+                        
+                   title="">About</a></li>
+        
+        
+        <li class="theme-switch-item">
+            <a class="theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+    <div class="autopagerize_page_element">
+        <div class="content">
+    <div class="post  animated fadeInDown ">
+        <div class="post-content">
+            <div class="post-title">
+                <h3>Neural network demo with MNIST and Tensorflow</h3>
+                
+                    <div class="info">
+                        <em class="fas fa-calendar-day"></em>
+                        <span class="date">Thu, Jan 28, 2021</span>
+                        <em class="fas fa-stopwatch"></em>
+                        <span class="reading-time">5-minute read</span>
+                    </div>
+                
+            </div>
+
+            
+
+
+<p>I’m a bit of a Python tragic. In an organisation full of R users, this means I’m often tasked with hosting Python introductions and training. These sessions outline what Python is, give examples of what it is used for, and provide the audience with internal and external resources.</p>
+<p>For Python examples, I like to show both cutting-edge and more practical use-cases. For the former, I’ve recently showcased OpenAI’s new <a href="https://openai.com/blog/dall-e/">DALL-E</a> image generator, or the very fun (and free!) text-to-voice generator from <a href="15.ai">15.ai</a>. For the latter, I work through a short data science exercise to illustrate how Python is a simple and powerful tool for such tasks. What does this exercise look like?</p>
+<p>The audience are generally junior economists, unfamiliar with Python but technically savvy, aware of data science concepts like neural networks, and familiar with code workflows. So, we run a worked example of training a neural network to do a simple – and importantly visual – classification task. The MINST dataset is perfect.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<div id="mnist-example" class="section level2">
+<h2>MNIST Example</h2>
+<pre class="r"><code>import tensorflow as tf
+import numpy as np</code></pre>
+<p>While MNIST is famous enough to have its own <a href="https://en.wikipedia.org/wiki/MNIST_database">Wikipedia page</a>, in short, it’s a collection of processed images of hand-written digits from 0 to 9, tagged with the true integer the writer was intending to convey. To familiarise the group, I show a few example images (like below), and ask the audience to ‘classify’ them by telling me the integer. When they succeed I congratulate them on being a highly advanced neural network.</p>
+<div class="figure">
+<img src="/post/images/MNIST_combined_test_data_img.png" alt="" />
+<p class="caption"><em>The MNIST Example Images</em></p>
+</div>
+<p>I then motivate our simple example. What if we were building some hand writing recognition software, and needed a small neural network to identify digits and return an integer?<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> I explain that in just a few minutes, we can build, train, and test a neural network in Python that will classify these digits to a high accuracy. At this point I engage in a quick Q&amp;A, asking the audience to tell me what they know about neural networks and how they work, and check if they have any questions.</p>
+</div>
+<div id="build-and-train-a-neural-network" class="section level2">
+<h2>Build and train a neural network</h2>
+<p>We then begin working through a Jupyter Notebook, based loosely on the Google Tensorflow <a href="https://www.tensorflow.org/tutorials/quickstart/beginner">‘Get Started’ example</a> (my notebook is available on GitHub here). We do some simple pre-processing, and then set up a model. Once it is initialised –- and I’ve reminded the audience that initialised models have random parameters – we ask it to classify the 5 example digits above. As expected, the un-trained model puts out gibberish, as it’s no better at classifying than chance.</p>
+<p>Following that, we compile and train the model. I use these steps to discuss neural networks, using the analogy to OLS regression (that economists are very familiar with). We talk about defining a loss function, compared with minimising least squares in an OLS. We talk about optimisers, and how numeric approaches are required for neural networks whereas analytical solutions are available for OLS regressions. These discussions also help us pass the time used for model training (although for such a simple neural network, this takes only a minute or two even on old hardware).</p>
+<p>Once training is complete, we check the accuracy of the model (usually around 98 per cent), and also see if the model has correctly predicted the example images above, which it almost always has.</p>
+</div>
+<div id="what-does-the-model-get-wrong" class="section level2">
+<h2>What does the model get wrong?</h2>
+<p>Although correct predictions are fun for everyone, I also find it’s enlightening to talk about what handwritten digits the model <em>failed</em> to predict correctly. I pull up a list of digits where the prediction failed. Below I show these with the correct classification in the bottom left, and the model’s incorrect classification in the bottom right. This usually facilitates an interesting discussion about why the model got these digits wrong (see if you can identify what features the model saw that it mistook), and about how we are much better at understanding and interpreting the handwriting than a model.</p>
+<p><img src="/post/images/mnist_post_classification_fail_long_with_preds.png" alt="Incorrect Predictions (bottom LHS is actual, bottom RHS is model prediction)" />
+A useful extension to this exercise might be to look through the most common incorrectly classified MNIST digits to see some that are truly ambiguous due to very poor or unorthodox handwriting (although it looks like <a href="https://github.com/youkaichao/mnist-wrong-test">someone on GitHub</a> is ahead of me). This might lead to discussions about shortcomings of the dataset, which raises a broader question.</p>
+</div>
+<div id="is-this-example-worthwhile" class="section level2">
+<h2>Is this example worthwhile?</h2>
+<p>Attentive audience members might ask why the MNIST dataset is <em>so</em> comparatively easy to classify. At the end of the exercise, I emphasise that this data is available for free, is pre-cleaned, has no noise, and so on. IT also has a very well behaved dimensional structure (that is, the parameter space of different digits is very distinct – see this <a href="https://colah.github.io/posts/2014-10-Visualizing-MNIST/">excellent blog post</a>). Overall, this makes MNIST quite an unrealistic example for data science amateurs.</p>
+<p>A few online have complained about the MNIST example for thsi reason – some <a href="https://matteo-a-barbieri.medium.com/why-mnist-is-the-worst-thing-that-has-ever-happened-to-humanity-49fd053f0f66">more dramatically</a> than <a href="https://www.ttested.com/ditch-mnist/">others</a>. Although the dataset isn’t perfect, a visual, simple and computationally-light data science example can be an engaging and thought-provoking exercise to demonstrate to an unfamiliar audience. In future, I might consider moving to the alternative <a href="https://github.com/zalandoresearch/fashion-mnist">Fashion-MNIST dataset</a>, or amending the presentation to focus more on MNIST’s shortcomings.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>If you haven’t already, it’s important to check if any of your audience members have a visual impairment before including an exercise along these lines.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>I also mention that this is not that far from our actual work – text and pattern recognition is being increasingly used in economic applications, like in digitising old datasets and archived material.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+</div>
+        <div class="post-footer">
+            <div class="info">
+                
+                
+            </div>
+        </div>
+
+        
+            
+        
+    </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="/js/jquery.min.86b1e8f819ee2d9099a783e50b49dff24282545fc40773861f9126b921532e4c.js"
+        integrity="sha256-hrHo&#43;BnuLZCZp4PlC0nf8kKCVF/EB3OGH5EmuSFTLkw="
+        crossorigin="anonymous"></script>
+
+
+
+
+<script type="text/javascript"
+        src="/js/bundle.min.0f9c74cb78f13d1f15f33daff4037c70354f98acfbb97a6f61708966675c3cae.js"
+        integrity="sha256-D5x0y3jxPR8V8z2v9AN8cDVPmKz7uXpvYXCJZmdcPK4="
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript"
+        src="/js/medium-zoom.min.92f21c856129f84aeb719459b3e6ac621a3032fd7b180a18c04e1d12083f8aba.js"
+        integrity="sha256-kvIchWEp&#43;ErrcZRZs&#43;asYhowMv17GAoYwE4dEgg/iro="
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
