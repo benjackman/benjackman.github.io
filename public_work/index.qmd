@@ -1,0 +1,33 @@
+---
+title: Professional Work
+---
+## December 2022 - Securities Lending
+
+<img src="opening_bonds_futures_basis.svg" style="height: 70%; width: 70%; object-fit: contain" onclick="window.open(&apos;https://www.rba.gov.au/publications/bulletin/2022/dec/the-rba-and-aofm-securities-lending-facilities.html&apos;, &apos;blank&apos;);"/>
+
+In 2022 my colleague Ahmet Aziz and I wrote in the RBA Bulletin about the [AOFM and RBA's securities lending](https://www.rba.gov.au/publications/bulletin/2022/dec/the-rba-and-aofm-securities-lending-facilities.html), which had grown to very large levels - we lent more than AUD$1 trillion in bonds to the market in 2022 (albeit in quite short tenor repo). We wrote about the purpose and design of the securities lending facility, why usage was so high, and a stylised example of the shorts in the bonds-futures basis that were underlying lots of the borrowing. 
+
+## August 2021 - Use of the TFF
+
+<img src="tff_banner_final.png" style="height: 80%; width: 80%; object-fit: contain" onclick="window.open(&apos;https://www.rba.gov.au/mkt-operations/term-funding-facility/use-of-the-tff.html&apos;, &apos;blank&apos;);"/>
+<!-- Useful example of code links -->
+<!-- <a href="https://arxiv.org/abs/2210.07278" target="_blank">arXiv Preprint</a> \| <a href="https://github.com/marvinschmitt/MetaUncertaintyPaper" target="_blank">Code</a><br> -->
+
+In August 2021 we provided an update in the *Statement on Monetary Policy* on usage of the Term Funding Facility (more detail see below). This outlined how most of the funding available under the TFF was drawn down, and includes a table of the top 10 biggest borrowers.
+
+------------------------------------------------------------------------
+
+## December 2020 - The Term Funding Facility
+
+<img src="rba_frontage_tff_bulletin.jpg" style="height: 80%; width: 80%; object-fit: contain" onclick="window.open(&apos;https://www.rba.gov.au/publications/bulletin/2020/dec/the-term-funding-facility.html&apos;, &apos;blank&apos;);"/>
+
+<a href="https://arxiv.org/abs/2112.08866" target="_blank">arXiv Preprint</a> \| <a href="https://github.com/marvinschmitt/ModelMisspecificationBF" target="_blank">Code</a><br>
+
+In December 2020, my colleagues and I put out an article in the RBA Bulletin on the [Term Funding Facility](https://www.rba.gov.au/publications/bulletin/2020/dec/the-term-funding-facility.html). It outlined the purpose and design of the TFF, as well as how it had been used to date. I had spent the early months of the pandemic setting up the TFF, and I learnt a lot about facility design in the process. 
+
+<!-- Useful example of HTML Button - use Ctrl-Shift-C to uncomment this block -->
+<!-- ```{=html} -->
+<!-- <div  style="margin: 30px; text-align: center;"> -->
+<!-- <a class="btn btn-primary" href="https://www.marvinschmitt.com/blog/website-tutorial-quarto/" role="button" target="_blank" style="padding: 15px 30px;">View the tutorial for this template (+ download link)</a> -->
+<!-- </div> -->
+<!-- ``` -->

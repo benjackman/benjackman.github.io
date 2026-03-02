@@ -1,0 +1,32 @@
+---
+about:
+  template: jolla
+  id: about-block
+  image: "img/personal_photo_fuji_crop.jpg"
+  links:
+    - icon: twitter-x
+      text: X
+      href: https://x.com/bentjackman
+    - icon: github
+      text: Github
+      href: https://github.com/benjackman
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/ben-t-jackman/
+    - icon: envelope
+      text: Email
+      href: "mailto:ben.jackman@gmail.com"  
+---
+
+::: {#about-block}
+:::
+
+# Ben Jackman
+
+I'm an economist and data scientist in Sydney. I work in Monetary Policy Implementation at the Reserve Bank of Australia. I'm interested in macro, finance, central banking, and data science. The "Public Work" tab highlights some of my  professional work, and 'Tinkering' documents what else I've been playing with. You can contact me via email, Twitter, LinkedIn, or on the Bloomberg terminal.
+
+---
+
+::: {style="font-size: 0.9em; color: #6c757d;"}
+Thanks to [Marvin Schmitt](https://marvin-schmitt.com/) for this helpful Quarto website template, and Claude for being helpful as always.
+:::

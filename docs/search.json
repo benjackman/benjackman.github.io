@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "public_work/index.html",
+    "href": "public_work/index.html",
+    "title": "Professional Work",
+    "section": "",
+    "text": "In 2022 my colleague Ahmet Aziz and I wrote in the RBA Bulletin about the AOFM and RBA’s securities lending, which had grown to very large levels - we lent more than AUD$1 trillion in bonds to the market in 2022 (albeit in quite short tenor repo). We wrote about the purpose and design of the securities lending facility, why usage was so high, and a stylised example of the shorts in the bonds-futures basis that were underlying lots of the borrowing."
+  },
+  {
+    "objectID": "public_work/index.html#december-2022---securities-lending",
+    "href": "public_work/index.html#december-2022---securities-lending",
+    "title": "Professional Work",
+    "section": "",
+    "text": "In 2022 my colleague Ahmet Aziz and I wrote in the RBA Bulletin about the AOFM and RBA’s securities lending, which had grown to very large levels - we lent more than AUD$1 trillion in bonds to the market in 2022 (albeit in quite short tenor repo). We wrote about the purpose and design of the securities lending facility, why usage was so high, and a stylised example of the shorts in the bonds-futures basis that were underlying lots of the borrowing."
+  },
+  {
+    "objectID": "public_work/index.html#august-2021---use-of-the-tff",
+    "href": "public_work/index.html#august-2021---use-of-the-tff",
+    "title": "Professional Work",
+    "section": "August 2021 - Use of the TFF",
+    "text": "August 2021 - Use of the TFF\n  \nIn August 2021 we provided an update in the Statement on Monetary Policy on usage of the Term Funding Facility (more detail see below). This outlined how most of the funding available under the TFF was drawn down, and includes a table of the top 10 biggest borrowers."
+  },
+  {
+    "objectID": "public_work/index.html#december-2020---the-term-funding-facility",
+    "href": "public_work/index.html#december-2020---the-term-funding-facility",
+    "title": "Professional Work",
+    "section": "December 2020 - The Term Funding Facility",
+    "text": "December 2020 - The Term Funding Facility\n\narXiv Preprint | Code\nIn December 2020, my colleagues and I put out an article in the RBA Bulletin on the Term Funding Facility. It outlined the purpose and design of the TFF, as well as how it had been used to date. I had spent the early months of the pandemic setting up the TFF, and I learnt a lot about facility design in the process."
+  },
+  {
+    "objectID": "tinkering/index.html",
+    "href": "tinkering/index.html",
+    "title": "Tinkering",
+    "section": "",
+    "text": "3 March 2026\nPosit is currently running a private beta test of its AI product for RStudio, powered by Claude under the hood. I was lucky enough to receive an invite and have been tinkering with it as a result. The integration is in a new left-hand pane, like you can see in the image below.\n\n\n\nRStudio with the Posit AI pane\n\n\nEven as someone relatively bullish on AI’s potential for software and data science, having Claude integrated directly into the RStudio IDE has been better than I expected. It can view files in the workspace, understand relevant context, and edit files, all relatively seamlessly. And this extends to built-in tools like bash commands, which means Claude can render Quarto documents and sites (like this one!), check files in folders, and more.\nBut more so, the RStudio integration seems quite thoughtful. Claude’s use of tools and deletions is helpfully controlled with the user via the AI pane within RStudio, with interactive checks that allow you to deny, approve, or ‘approve all for this project’ of a given tool. This gives you the right level of control depending on your use case. Below is an example of Claude’s workflow for rejecting tool use in the AI pane.\n\n\n\nThe approve/deny workflow for tool use\n\n\nHaving used AI tools for R coding before, it’s the tooling (not just the model) that makes a big difference over existing options. Having context immediately available and in-line tooling is a meaningful step up. For me, this feels like a significant improvement even over GitHub Copilot editing R files in VS Code.\nNext steps in my testing for this tooling will include more detailed R package development, as well as heavier data tasks like visualisation and running complex data workflows involving modelling.\nI also wonder whether Posit will allow different models to be integrated into the harness, which could improve compatibility across enterprise environments served by AI providers other than Anthropic.\nRegardless, thanks to Posit for producing this great product. It’s a credit to their team, and I can’t wait to keep using it even after the private beta. Thanks also to my new R coding buddy - this post benefited from Claude’s helpful edits."
+  },
+  {
+    "objectID": "tinkering/index.html#posits-ai-beta",
+    "href": "tinkering/index.html#posits-ai-beta",
+    "title": "Tinkering",
+    "section": "",
+    "text": "3 March 2026\nPosit is currently running a private beta test of its AI product for RStudio, powered by Claude under the hood. I was lucky enough to receive an invite and have been tinkering with it as a result. The integration is in a new left-hand pane, like you can see in the image below.\n\n\n\nRStudio with the Posit AI pane\n\n\nEven as someone relatively bullish on AI’s potential for software and data science, having Claude integrated directly into the RStudio IDE has been better than I expected. It can view files in the workspace, understand relevant context, and edit files, all relatively seamlessly. And this extends to built-in tools like bash commands, which means Claude can render Quarto documents and sites (like this one!), check files in folders, and more.\nBut more so, the RStudio integration seems quite thoughtful. Claude’s use of tools and deletions is helpfully controlled with the user via the AI pane within RStudio, with interactive checks that allow you to deny, approve, or ‘approve all for this project’ of a given tool. This gives you the right level of control depending on your use case. Below is an example of Claude’s workflow for rejecting tool use in the AI pane.\n\n\n\nThe approve/deny workflow for tool use\n\n\nHaving used AI tools for R coding before, it’s the tooling (not just the model) that makes a big difference over existing options. Having context immediately available and in-line tooling is a meaningful step up. For me, this feels like a significant improvement even over GitHub Copilot editing R files in VS Code.\nNext steps in my testing for this tooling will include more detailed R package development, as well as heavier data tasks like visualisation and running complex data workflows involving modelling.\nI also wonder whether Posit will allow different models to be integrated into the harness, which could improve compatibility across enterprise environments served by AI providers other than Anthropic.\nRegardless, thanks to Posit for producing this great product. It’s a credit to their team, and I can’t wait to keep using it even after the private beta. Thanks also to my new R coding buddy - this post benefited from Claude’s helpful edits."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ben Jackman",
+    "section": "",
+    "text": "X\n  \n  \n    \n     Github\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     Email\n  \n\n\n\n\nBen Jackman\nI’m an economist and data scientist in Sydney. I work in Monetary Policy Implementation at the Reserve Bank of Australia. I’m interested in macro, finance, central banking, and data science. The “Public Work” tab highlights some of my professional work, and ‘Tinkering’ documents what else I’ve been playing with. You can contact me via email, Twitter, LinkedIn, or on the Bloomberg terminal.\n\n\nThanks to Marvin Schmitt for this helpful Quarto website template, and Claude for being helpful as always."
+  },
+  {
+    "objectID": "cv/index.html",
+    "href": "cv/index.html",
+    "title": "Curriculum vitae",
+    "section": "",
+    "text": "Download current CV"
+  }
+]
