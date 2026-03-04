@@ -1,0 +1,22 @@
+{
+  "permission": {
+    "bash": {
+      "cd /Users/ben/Documents/GitHub/benjackman.github.io": "allow",
+      "git *": "allow",
+      "head *": "allow",
+      "echo *": "allow",
+      "grep *": "allow",
+      "ls *": "allow",
+      "cat *": "allow",
+      "mv post/images/2018_calendar.png tinkering/": "allow",
+      "mv post/images/Feb_2019_plain.png tinkering/": "allow",
+      "mv post/images/Oct_2019_annotated.png tinkering/": "allow",
+      "rmdir post/images": "allow",
+      "rmdir post": "allow",
+      "quarto render 2>&1": "allow"
+    },
+    "edit": {
+      "tinkering/*": "allow"
+    }
+  }
+}
