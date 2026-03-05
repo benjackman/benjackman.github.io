@@ -13,10 +13,12 @@
       "mv post/images/Oct_2019_annotated.png tinkering/": "allow",
       "rmdir post/images": "allow",
       "rmdir post": "allow",
-      "quarto render 2>&1": "allow"
+      "quarto render 2>&1": "allow",
+      "open /Users/ben/Documents/GitHub/benjackman.github.io/docs/index.html": "allow"
     },
     "edit": {
-      "tinkering/*": "allow"
+      "tinkering/*": "allow",
+      "*.qmd": "allow"
     }
   }
 }
