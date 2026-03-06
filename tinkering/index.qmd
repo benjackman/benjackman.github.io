@@ -1,5 +1,147 @@
 ---
 title: Tinkering
+resources:
+  - ags_yield_curve.gif
+---
+
+## Animating the AGS Yield Curve
+
+*6 March 2026*
+
+A couple of years ago, several of my RBA colleagues and I worked to bring back the RBA's publication of daily Australian Government Securities (AGS) bond yields. This was the return of RBA Statistical Table F16 ([found here](https://www.rba.gov.au/statistics/tables/)), which for a time had not been available.
+
+We're very happy to be able to continue publishing this data - it's a great resource, available to the public for free, enabling all kinds of nifty analysis and visualisation. 
+
+With a bit of R Code, we can visualise the last decade of the AGS yield curve (below), highlighting some of the big macro events. We can see the yield curve slowly drift down through the late 2010s, the sharp decline as the pandemic begins in March 2020, the clear kink in the curve due to the RBA's Yield Target through 2020 and 2021, and the subsequent lift in the curve as interest rates have risen. 
+
+The plot below is monthly, but as the data is daily even more detailed visualisations would be possible. The R code for generating this gif is included below. (Note I used Simon Willison's excellent [gif-optimizer](https://tools.simonwillison.net/gif-optimizer) tool to reduce the file size of the gif outputted by the code below by about 70%.)
+
+```{=html}
+<div style="text-align: center; position: relative; display: inline-block; width: 100%;">
+  <img id="yield-curve" src="ags_yield_curve_poster.png" alt="Australian Government Bond Yield Curve, Jan 2015 - Feb 2026" style="width: 100%; max-width: 800px;">
+  <div id="yield-curve-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+    <button id="yield-curve-btn" onclick="playYieldCurve()" style="padding: 12px 24px; font-size: 16px; cursor: pointer; background: rgba(255,255,255,0.85); border: 1px solid #ccc; border-radius: 6px;">
+      ▶ Play
+    </button>
+  </div>
+</div>
+
+<script>
+function playYieldCurve() {
+  var img = document.getElementById('yield-curve');
+  var btn = document.getElementById('yield-curve-btn');
+  // Reload GIF with cache-bust to restart from frame 1
+  img.src = 'ags_yield_curve.gif?' + new Date().getTime();
+  btn.style.display = 'none';
+  // GIF is 582 frames at 10fps = ~58.2s, show button again after
+  setTimeout(function() {
+    img.src = 'ags_yield_curve_poster.png';
+    btn.style.display = 'inline-block';
+  }, 58500);
+}
+</script>
+```
+
+<details>
+<summary>Show R code</summary>
+
+```r
+library(readrba)
+library(tidyverse)
+library(scales)
+library(magick)
+
+# Download RBA F16 - Australian Government Securities yields
+f16 <- read_rba(table_no = "f16")
+
+# Filter to nominal Treasury Bonds only (exclude inflation-linked)
+bonds <- f16 |>
+  filter(series == "Treasury Bond") |>
+  mutate(
+    maturity_date = lubridate::dmy(str_extract(description, "\\d{2}-[A-Za-z]+-\\d{4}")),
+    years_to_maturity = as.numeric(maturity_date - date) / 365.25
+  )
+
+# Downsample to weekly snapshots
+bonds_weekly <- bonds |>
+  mutate(yw = lubridate::floor_date(date, "week")) |>
+  group_by(yw, series_id, description, maturity_date) |>
+  slice_max(date, n = 1) |>
+  ungroup()
+
+# Keep only bonds not yet matured and weeks with enough bonds to draw a curve
+anim_data <- bonds_weekly |>
+  filter(
+    years_to_maturity > 0,
+    yw >= as.Date("2015-01-01")
+  ) |>
+  group_by(yw) |>
+  filter(n() >= 3) |>
+  ungroup()
+
+weeks <- sort(unique(anim_data$yw))
+y_max <- ceiling(max(anim_data$value, na.rm = TRUE))
+
+# Number of trailing weeks to show as fading ghost trails
+n_trail <- 6
+
+# Render each week as a PNG frame, then stitch with magick
+tmp_dir <- tempfile()
+dir.create(tmp_dir)
+
+line_col <- "#5B9BD5"
+
+for (i in seq_along(weeks)) {
+  w <- weeks[i]
+
+  trail_indices <- seq(max(1, i - n_trail), max(1, i - 1))
+  trail_layers <- list()
+  for (j in trail_indices) {
+    age <- i - j
+    alpha <- 0.10 + 0.10 * (n_trail - age) / n_trail
+    trail_df <- filter(anim_data, yw == weeks[j])
+    trail_layers <- c(trail_layers, list(
+      geom_line(data = trail_df, color = line_col, linewidth = 0.5, alpha = alpha),
+      geom_point(data = trail_df, color = line_col, size = 0.8, alpha = alpha)
+    ))
+  }
+
+  current_df <- filter(anim_data, yw == w)
+
+  p <- ggplot(current_df, aes(x = years_to_maturity, y = value)) +
+    trail_layers +
+    geom_line(color = line_col, linewidth = 0.8) +
+    geom_point(color = line_col, size = 1.5) +
+    labs(
+      title = "Australian Government Bond Yield Curve",
+      subtitle = format(w, "%d %B %Y"),
+      x = "Years to Maturity",
+      y = "Yield (% p.a.)",
+      caption = "Source: RBA Statistical Table F16"
+    ) +
+    scale_x_continuous(limits = c(0, 32), breaks = seq(0, 30, by = 5)) +
+    scale_y_continuous(limits = c(0, y_max), labels = label_number(suffix = "%")) +
+    theme_minimal(base_size = 14) +
+    theme(
+      plot.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank(),
+      panel.border = element_rect(color = "grey80", fill = NA, linewidth = 0.5)
+    )
+
+  ggsave(
+    filename = file.path(tmp_dir, sprintf("frame_%04d.png", i)),
+    plot = p, width = 8, height = 5, dpi = 100
+  )
+}
+
+# Stitch frames into a GIF
+frames <- image_read(list.files(tmp_dir, full.names = TRUE))
+gif <- image_animate(frames, fps = 10)
+image_write(gif, "ags_yield_curve.gif")
+```
+
+</details>
+
 ---
 
 ## Posit's AI Beta

@@ -28,5 +28,5 @@ I'm an economist and data scientist in Sydney. I work in Monetary Policy Impleme
 ---
 
 ::: {style="font-size: 0.9em; color: #6c757d;"}
-Thanks to [Marvin Schmitt](https://marvin-schmitt.com/) for this helpful Quarto website template, and Claude for being helpful as always.
+Thanks to [Marvin Schmitt](https://marvin-schmitt.com/) for this great Quarto website template, and Claude for being ever-helpful.
 :::
