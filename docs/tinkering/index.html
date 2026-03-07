@@ -195,16 +195,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="what-can-claude-one-shot">What can Claude one-shot?</h2>
 <p><em>7 March 2026</em></p>
 <p>Claude’s abilities, especially when powered by the Opus 4.6 model, are quite strong. I have been surprised by the model’s ability to complete complex tasks with limited direction. So I set out to test the default Claude Code settings in an empty folder to see how far a complicated project can get when you just let it run.</p>
-<p>The tradeoff here is pretty clear. More complex projects are where models shine unsupervised - give it enough to work on and it can build something substantial. But they’re also where LLMs start to lose track as context bloats, and can even undergo something like model collapse. More detailed strategies and model handholding can reportedly improve this performance, but I was curious what “out of the box” can achieve.</p>
-<section id="setup" class="level3">
-<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<p>The tradeoff here is pretty clear. More complex projects are great in theory - let an agent work independently to build something substantial. But they’re also where LLMs start to lose track as context bloats and complexity grows, and can even lead to model collapse. I’ve heard that more detailed strategies and model handholding can reportedly improve this performance, but I was curious what we can achieve “out of the box”.</p>
+<section id="getting-started" class="level3">
+<h3 class="anchored" data-anchor-id="getting-started">Getting started</h3>
 <p>I followed a simple model: ask Opus to plan an app with basic instructions, then execute, including using subagents. Specifically, I asked for a Formula 1 calendar app that scrapes public APIs for F1 session times, presents them in an app available on iOS or Mac, has widgets to place on home screens, and sends notifications ahead of session starts - all with the usual user customisation options.</p>
 <p>Going in, I’d say I had limited faith it could one-shot something perfectly - particularly because it’s not set up to be able to run Swift code itself, so it can’t interactively test the code during the attempt.</p>
 <p>I kicked off Claude Opus on this yesterday evening. The planning process began, and Opus spent a significant amount of time working through various API options, and appearing to think about other aspects of the app development. The planning process ended with several interactive questions from Claude about details, including which specific additional features to include, and some simple design spec questions. It then suggested I kick off the build.</p>
 <p>As a side note, there wasn’t an obvious way to switch from Opus to Sonnet before telling Opus to start the build. And the planning process was already quite token intensive, and as a result, as Sonnet began working I immediately ran into a Claude Pro token limit (I wasn’t using the <a href="https://benjackman.github.io/tinkering/#posits-ai-beta">Posit AI beta</a> for this one - tokens my own!). I restarted with Sonnet the following morning and it finished Opus’ plan.</p>
 </section>
-<section id="getting-started" class="level3">
-<h3 class="anchored" data-anchor-id="getting-started">Getting started</h3>
+<section id="claudes-output" class="level3">
+<h3 class="anchored" data-anchor-id="claudes-output">Claude’s output</h3>
 <p>Claude didn’t have the tools to set up an Xcode project properly, so I had to follow a setup.md file with instructions to properly initiate everything. This was particularly confusing - although I have some passing familiarity with Swift, I have none with Xcode, and it has a bunch of fiddly settings that are tricky to deal with at first. Nonetheless, 20 minutes of back and forth with Claude, including sending screenshots, and things were set up in a way that at least seems correct. Claude appeared to hallucinate some image contents at one point, but by chance this setting was already correct anyway. Stay skeptical!</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Lesson">
 <div class="callout-header d-flex align-content-center">
@@ -231,15 +231,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>This loop happened several times over, with new errors happening each time, and my faith in Claude’s effort started to dim. Perhaps I had been too ambitious. But…</p>
 </section>
-<section id="some-success" class="level3">
-<h3 class="anchored" data-anchor-id="some-success">Some success</h3>
+<section id="success" class="level3">
+<h3 class="anchored" data-anchor-id="success">Success!</h3>
 <p>After 6 error screenshots, the 7th attempt to build was successful. Xcode loaded the iPhone 16 Pro preview pane, and we see something quite nice:</p>
 <p><img src="claude-code-f1times-output-first-build-success.png" alt="The successful first build of the F1 times app" style="width: 100%; max-width: 250px; display: block; margin: 0 auto;"></p>
 <p>This app actually appears to work in preview - the times pulled from the OpenF1 API are correct, the countdown timing is correct (as I write this I’m watching the Aus GP Q3), the navigation works, the user control flow to not show various types of sessions works, etc. That said, I haven’t tested it in full yet.</p>
 </section>
 <section id="this-is-kind-of-crazy" class="level3">
 <h3 class="anchored" data-anchor-id="this-is-kind-of-crazy">This is kind of crazy</h3>
-<p>I imagined a small, lightweight F1 app that I’d find handy. I told a large language model through a chater interface to plan it out and build it. I did not touch a single line of code, just fiddled with some IDE settings and permissions and told it about some errors. After 7 build attempts, it actually appears to work. I have read about this sort of performance, but seeing it happen first hand is quite disorienting. This would be ridiculous science fiction just a few years ago! Of course, a vibe-coded iPhone app could be garbage quality, bloated, brittle, and unsafe code. I’ll take a look under the hood and see what Opus and Sonnet have cooked up. But the fact this works at all is remarkable.</p>
+<p>I imagined a small, lightweight F1 app that I’d find handy. I told a large language model through a chat interface to plan it out and build it. I did not touch a single line of code, just fiddled with some IDE settings and permissions and told it about some errors. After 7 build attempts, it actually appears to work. I have read about this sort of performance, but seeing it happen first hand is quite disorienting. This would be ridiculous science fiction just a few years ago! Of course, a vibe-coded iPhone app could be full of low quality, brittle, and unsafe code. I’ll take a look under the hood and see what Opus and Sonnet have cooked up. But the fact this works at all is remarkable.</p>
 </section>
 <section id="next-steps" class="level3">
 <h3 class="anchored" data-anchor-id="next-steps">Next steps</h3>
