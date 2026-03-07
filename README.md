@@ -1,2 +1,2 @@
 # quarto_personal_site
-A quick attempt at a quarto personal site revamp
+A revamped personal site, with handy help from Claude.
