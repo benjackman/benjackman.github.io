@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -72,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0d8043861744ed2fe3699f512ed9e6f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-bb1dbfdc38c5a1a2434e65284244f171.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -191,6 +191,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="what-can-claude-one-shot" class="level2">
+<h2 class="anchored" data-anchor-id="what-can-claude-one-shot">What can Claude one-shot?</h2>
+<p><em>7 March 2026</em></p>
+<p>Claude’s abilities, especially when powered by the Opus 4.6 model, are quite strong. I have been surprised by the model’s ability to complete complex tasks with limited direction. So I set out to test the default Claude Code settings in an empty folder to see how far a complicated project can get when you just let it run.</p>
+<p>The tradeoff here is pretty clear. More complex projects are where models shine unsupervised - give it enough to work on and it can build something substantial. But they’re also where LLMs start to lose track as context bloats, and can even undergo something like model collapse. More detailed strategies and model handholding can reportedly improve this performance, but I was curious what “out of the box” can achieve.</p>
+<p>I followed a simple model: ask Opus to plan an app with basic instructions, then execute, including using subagents. Specifically, I asked for a Formula 1 calendar app that scrapes public APIs for F1 session times, presents them in an app available on iOS or Mac, has widgets to place on home screens, and sends notifications ahead of session starts - all with the usual user customisation options.</p>
+<p>I kicked off Claude on this yesterday evening. Going in, I’d say I had limited faith it could one-shot something perfectly - particularly because it’s not set up to run Homebrew itself, so it can’t interactively test the code during the attempt. And, indeed, I immediately ran into a Claude Pro token limit. I restarted with Sonnet and it finished what it had set out to do shortly after.</p>
+<p>Let’s open the project in Xcode and see what we have!</p>
+<hr>
+</section>
 <section id="animating-the-ags-yield-curve" class="level2">
 <h2 class="anchored" data-anchor-id="animating-the-ags-yield-curve">Animating the AGS Yield Curve</h2>
 <p><em>6 March 2026</em></p>
