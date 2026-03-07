@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -72,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bb1dbfdc38c5a1a2434e65284244f171.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-0d8043861744ed2fe3699f512ed9e6f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -191,15 +191,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="what-can-claude-one-shot" class="level2">
+<section id="what-can-claude-one-shot" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="what-can-claude-one-shot">What can Claude one-shot?</h2>
 <p><em>7 March 2026</em></p>
 <p>Claude’s abilities, especially when powered by the Opus 4.6 model, are quite strong. I have been surprised by the model’s ability to complete complex tasks with limited direction. So I set out to test the default Claude Code settings in an empty folder to see how far a complicated project can get when you just let it run.</p>
 <p>The tradeoff here is pretty clear. More complex projects are where models shine unsupervised - give it enough to work on and it can build something substantial. But they’re also where LLMs start to lose track as context bloats, and can even undergo something like model collapse. More detailed strategies and model handholding can reportedly improve this performance, but I was curious what “out of the box” can achieve.</p>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
 <p>I followed a simple model: ask Opus to plan an app with basic instructions, then execute, including using subagents. Specifically, I asked for a Formula 1 calendar app that scrapes public APIs for F1 session times, presents them in an app available on iOS or Mac, has widgets to place on home screens, and sends notifications ahead of session starts - all with the usual user customisation options.</p>
-<p>I kicked off Claude on this yesterday evening. Going in, I’d say I had limited faith it could one-shot something perfectly - particularly because it’s not set up to run Homebrew itself, so it can’t interactively test the code during the attempt. And, indeed, I immediately ran into a Claude Pro token limit. I restarted with Sonnet and it finished what it had set out to do shortly after.</p>
-<p>Let’s open the project in Xcode and see what we have!</p>
+<p>Going in, I’d say I had limited faith it could one-shot something perfectly - particularly because it’s not set up to be able to run Swift code itself, so it can’t interactively test the code during the attempt.</p>
+<p>I kicked off Claude Opus on this yesterday evening. The planning process began, and Opus spent a significant amount of time working through various API options, and appearing to think about other aspects of the app development. The planning process ended with several interactive questions from Claude about details, including which specific additional features to include, and some simple design spec questions. It then suggested I kick off the build.</p>
+<p>As a side note, there wasn’t an obvious way to switch from Opus to Sonnet before telling Opus to start the build. And the planning process was already quite token intensive, and as a result, as Sonnet began working I immediately ran into a Claude Pro token limit (I wasn’t using the <a href="https://benjackman.github.io/tinkering/#posits-ai-beta">Posit AI beta</a> for this one - tokens my own!). I restarted with Sonnet the following morning and it finished Opus’ plan.</p>
+</section>
+<section id="getting-started" class="level3">
+<h3 class="anchored" data-anchor-id="getting-started">Getting started</h3>
+<p>Claude didn’t have the tools to set up an Xcode project properly, so I had to follow a setup.md file with instructions to properly initiate everything. This was particularly confusing - although I have some passing familiarity with Swift, I have none with Xcode, and it has a bunch of fiddly settings that are tricky to deal with at first. Nonetheless, 20 minutes of back and forth with Claude, including sending screenshots, and things were set up in a way that at least seems correct. Claude appeared to hallucinate some image contents at one point, but by chance this setting was already correct anyway. Stay skeptical!</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Lesson">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Lesson
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Setup an Xcode project first for the LLM, and learn some sensible Xcode setting defaults to pre-specify.</p>
+</div>
+</div>
+</section>
+<section id="the-build-error-edit-build-loop" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="the-build-error-edit-build-loop">The build-error-edit-build loop</h3>
+<p>Perhaps unsurprisingly, Claude did not one-shot an app that built on first try. This started an iteration where I would attempt a build in Xcode, see the error, screenshot it, and paste it to Claude, who would edit the files in place and tell me to build again. An obvious question here is whether some Xcode, Swift or Claude Code tool would allow Claude to run these build attempts itself and parse the output.</p>
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p><img src="claude-code-f1times-build-error-loop.png" class="img-fluid figure-img"></p>
+<figcaption class="margin-caption">Telling Claude to deal with errors</figcaption>
+</figure>
+</div>
+<p>This loop happened several times over, with new errors happening each time, and my faith in Claude’s effort started to dim. Perhaps I had been too ambitious. But…</p>
+</section>
+<section id="some-success" class="level3">
+<h3 class="anchored" data-anchor-id="some-success">Some success</h3>
+<p>After 6 error screenshots, the 7th attempt to build was successful. Xcode loaded the iPhone 16 Pro preview pane, and we see something quite nice:</p>
+<p><img src="claude-code-f1times-output-first-build-success.png" alt="The successful first build of the F1 times app" style="width: 100%; max-width: 250px; display: block; margin: 0 auto;"></p>
+<p>This app actually appears to work in preview - the times pulled from the OpenF1 API are correct, the countdown timing is correct (as I write this I’m watching the Aus GP Q3), the navigation works, the user control to not show various types of sessions works, etc. I haven’t tested it in full.</p>
+</section>
+<section id="this-is-kind-of-crazy" class="level3">
+<h3 class="anchored" data-anchor-id="this-is-kind-of-crazy">This is kind of crazy</h3>
+<p>I imagined a small, lightweight F1 app that I’d find handy. I told a large language model to plan it out and build it. I did not touch a single line of code, just fiddled with some IDE settings and permissions and told it about some errors. After 7 build attempts, it works a treat. I have read about this sort of performance, but seeing it happen first hand is quite disorienting. This would be ridiculous science fiction just a few years ago!</p>
+</section>
+<section id="next-steps" class="level3">
+<h3 class="anchored" data-anchor-id="next-steps">Next steps</h3>
+<p>Let’s test the app properly, and learn how to load a local iOS app onto a personal iPhone.</p>
 <hr>
+</section>
 </section>
 <section id="animating-the-ags-yield-curve" class="level2">
 <h2 class="anchored" data-anchor-id="animating-the-ags-yield-curve">Animating the AGS Yield Curve</h2>
