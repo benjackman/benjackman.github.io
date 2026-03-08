@@ -44,7 +44,7 @@ I tested the f1_qualifying() function first (in part because I was curious about
 
 This really highlights that a one-shot agent can do a lot, but won't think carefully about the limitations of the data or edge cases that it goes through. But this is also something that could be caught with some detailed test-driven development workflows beforehand. I can't really complain though, since I specified nothing!
 
-This also tells me next steps for this package is to get Opus to write a pretty sizeable test suite, as part of a process of testing the functions themselves.
+This also tells me next steps for this package is to get Opus to write a pretty sizeable test suite, as part of a process of testing the functions themselves. I've published the [package code on Github](https://github.com/benjackman/pitlaneR), with suitable warnings about AI authorship. You can also see Claude's [first attempt at a vignette](https://benjackman.github.io/pitlaneR/articles/pitlaneR.html) (also with warnings I've added).
 
 ### Takeaways
 
