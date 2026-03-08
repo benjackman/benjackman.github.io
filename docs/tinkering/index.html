@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -72,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-bb1dbfdc38c5a1a2434e65284244f171.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-0d8043861744ed2fe3699f512ed9e6f3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -191,6 +191,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="claude-builds-an-r-package" class="level2">
+<h2 class="anchored" data-anchor-id="claude-builds-an-r-package">Claude builds an R package</h2>
+<p><em>8 March 2026</em></p>
+<p><img src="pitlaneR_blogpost_header_image.jpg" class="img-fluid"></p>
+<p>I have access to the <a href="#posits-ai-beta">Posit AI beta</a>, which means I am testing Claude in RStudio.</p>
+<p>After earlier experiments with my own Claude Code sessions to build a <a href="#what-can-claude-one-shot">Formula 1 timing iOS app</a>, I wanted to see what Claude could build relating to F1 in RStudio.</p>
+<section id="the-request-and-planning" class="level3">
+<h3 class="anchored" data-anchor-id="the-request-and-planning">The request and planning</h3>
+<p>I asked Claude to make an R package that scrapes a public F1 data API and provides it to users of the package in a sensible structured format. (I know the fantastic <a href="https://github.com/SCasanova/f1dataR">f1dataR</a> package already exists, but it relies on Python via the reticulate package, and I wondered what R could do on its own.)</p>
+<p>Opus flew through the planning for this quite quickly (notably faster than for the iOS app, perhaps reflecting the relative simplicity of R packages?). It presented a few naming options, one of which I chose - pitlaneR, since others were a bit more clunky.</p>
+<p>One note is that Opus searched for APIs and prompted me to choose an option, which I did, and it immediately ignored this and chose another (although the choice I made was quite a bad one in hindsight). This behaviour is a bit concerning, but worked out positively in this particular case. This is something I’ll watch closely in future.Finally, Claude kicked off the process and began generating files.</p>
+</section>
+<section id="the-build" class="level3">
+<h3 class="anchored" data-anchor-id="the-build">The build</h3>
+<p>Claude in RStudio seems very familiar with the structure of R packages and the general development environment for R development, and chided me for not having usethis already installed on the R instance I was working in (fair enough!). This is good as other (albeit older) frontier LLMs have been a bit flaky on R development in my experience. This could also be because Posit’s harness for Claude in the AI beta might be quite R-specific and well built.</p>
+<p>The build seemed relatively sensible, and during the process Claude was testing functionality in the R console, which was nice to see. Claude added a bunch of relatively nice features that I did not request - a cache for the API data, and a few tests.</p>
+<p>Claude did not start by opening a new RProject file, but directed me to move over to it in RStudio once it had written the files. Upon doing this, a new conversation in Claude was triggered, and the previous context appeared to be wiped, and I couldn’t access it easily. This is not a big deal, but does mean spending additional tokens to get a new instance caught up.</p>
+</section>
+<section id="a-strong-result" class="level3">
+<h3 class="anchored" data-anchor-id="a-strong-result">A strong result</h3>
+<p>Unlike the F1 iOS app, early returns suggest everything Claude made works out of the box, although the work was at times a bit sloppy - like poor documentation, and data issues I’ll raise below. The relative success probably just reflects that an R package with a simple data API is simpler and smaller context than an iOS package.</p>
+<p>Devtools::check() complained about some minor details (when does it ever not?), with the most notable being some lack of documentation for some functions. I asked the new Claude instance to take a look, it immediately began complaining about its own work, before making some updates which devtools::check begrudgingly accepted. Another few small build notes and warnings will be dealt with later (although this might be a good candidate to get Claude to iterate on, since it can read console output I think).</p>
+<p>Basic functionality - like loading data, and things appearing in a relatively sensible format - all appears to work. It is a bit jarring to see what you think of as something you ‘created’ returning formatting you would never use, but I guess this is the new normal now. The API caching also works perfectly.</p>
+</section>
+<section id="some-weaknesses" class="level3">
+<h3 class="anchored" data-anchor-id="some-weaknesses">Some weaknesses</h3>
+<p>I tested the f1_qualifying() function first (in part because I was curious about <a href="https://old.reddit.com/r/formula1/comments/1rn6vt5/is_this_the_most_stacked_q1_elimination_ever/">this question</a>). The function returned nothing for years prior to 1994, and upon asking Opus why, it explained the API does not have data for these years (and said that filling it in would have to be a web scraping effort), but it did not document this when producing the function. I asked it to add appropriate guard handling, documentation and tests which it did.</p>
+<p>This really highlights that a one-shot agent can do a lot, but won’t think carefully about the limitations of the data or edge cases that it goes through. But this is also something that could be caught with some detailed test-driven development workflows beforehand. I can’t really complain though, since I specified nothing!</p>
+<p>This also tells me next steps for this package is to get Opus to write a pretty sizeable test suite, as part of a process of testing the functions themselves.</p>
+</section>
+<section id="takeaways" class="level3">
+<h3 class="anchored" data-anchor-id="takeaways">Takeaways</h3>
+<ul>
+<li>This is miraculous, but as is always the case with technological change, somehow also feels more and more normal as I use these tools everyday. I should remind myself every now and then just how bonkers this really is.</li>
+<li>Claude can output pretty great boilerplate R package code, but as always with AI development - careful attention must be paid to what it produces.</li>
+<li>Testing and documentation should be easier (but still verified). Claude one-shotted a good looking vignette - including with the new f1_qualifying limit.</li>
+<li>Finally, this is a lot of fun. Thanks again to our friends at Posit.</li>
+</ul>
+<hr>
+</section>
+</section>
 <section id="what-can-claude-one-shot" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="what-can-claude-one-shot">What can Claude one-shot?</h2>
 <p><em>7 March 2026</em></p>
