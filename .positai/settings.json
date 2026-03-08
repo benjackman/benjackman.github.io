@@ -23,7 +23,8 @@
     "edit": {
       "tinkering/*": "allow",
       "*.qmd": "allow",
-      "*.R": "allow"
+      "*.R": "allow",
+      "*.md": "allow"
     }
   },
   "model": {
