@@ -139,6 +139,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../cv/index.html"> 
 <span class="menu-text">CV</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../swearjar/index.html"> 
+<span class="menu-text">🤬 Swear Jar</span></a>
+  </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
@@ -219,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="some-weaknesses">Some weaknesses</h3>
 <p>I tested the f1_qualifying() function first (in part because I was curious about <a href="https://old.reddit.com/r/formula1/comments/1rn6vt5/is_this_the_most_stacked_q1_elimination_ever/">this question</a>). The function returned nothing for years prior to 1994, and upon asking Opus why, it explained the API does not have data for these years (and said that filling it in would have to be a web scraping effort), but it did not document this when producing the function. I asked it to add appropriate guard handling, documentation and tests which it did.</p>
 <p>This really highlights that a one-shot agent can do a lot, but won’t think carefully about the limitations of the data or edge cases that it goes through. But this is also something that could be caught with some detailed test-driven development workflows beforehand. I can’t really complain though, since I specified nothing!</p>
-<p>This also tells me next steps for this package is to get Opus to write a pretty sizeable test suite, as part of a process of testing the functions themselves.</p>
+<p>This also tells me next steps for this package is to get Opus to write a pretty sizeable test suite, as part of a process of testing the functions themselves. I’ve published the <a href="https://github.com/benjackman/pitlaneR">package code on Github</a>, with suitable warnings about AI authorship. You can also see Claude’s <a href="https://benjackman.github.io/pitlaneR/articles/pitlaneR.html">first attempt at a vignette</a> (also with warnings I’ve added).</p>
 </section>
 <section id="takeaways" class="level3">
 <h3 class="anchored" data-anchor-id="takeaways">Takeaways</h3>

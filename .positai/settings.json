@@ -18,13 +18,16 @@
       "cp /Users/ben/Documents/GitHub/benjackman.github.io/ags_yield_curve.gif /Users/ben/Documents/GitHub/benjackman.github.io/tinkering/ags_yield_curve.gif": "allow",
       "cd /Users/ben/Documents/GitHub/benjackman.github.io && quarto preview index.qmd --no-browser 2>&1 &\nsleep 3\necho \"Preview server started\"": "allow",
       "quarto render tinkering/index.qmd 2>&1": "allow",
-      "tail *": "allow"
+      "tail *": "allow",
+      "mkdir -p /Users/ben/Documents/GitHub/benjackman.github.io/swearjar": "allow",
+      "open /Users/ben/Documents/GitHub/benjackman.github.io/docs/swearjar/index.html": "allow"
     },
     "edit": {
       "tinkering/*": "allow",
       "*.qmd": "allow",
       "*.R": "allow",
-      "*.md": "allow"
+      "*.md": "allow",
+      "*.yml": "allow"
     }
   },
   "model": {

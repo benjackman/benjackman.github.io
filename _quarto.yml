@@ -19,6 +19,8 @@ website:
         href: tinkering/index.qmd
       - text: "CV"
         href: cv/index.qmd
+      - text: "🤬 Swear Jar"
+        href: swearjar/index.qmd
     
     # your social media handles
     right:
