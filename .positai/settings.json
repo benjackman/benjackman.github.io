@@ -21,7 +21,11 @@
       "tail *": "allow",
       "mkdir -p /Users/ben/Documents/GitHub/benjackman.github.io/swearjar": "allow",
       "open /Users/ben/Documents/GitHub/benjackman.github.io/docs/swearjar/index.html": "allow",
-      "*": "allow"
+      "*": "allow",
+      "for f in swearjar/img/*.webp": "allow",
+      "do echo \"$f:\"": "allow",
+      "python3 -c \"\nfrom PIL import Image\nimg = Image.open('$f')\nprint(f'  Mode: {img.mode}')\nif img.mode == 'RGBA':\n    alpha = img.getchannel('A')\n    extrema = alpha.getextrema()\n    print(f'  Alpha range: {extrema[0]}-{extrema[1]}')\n    if extrema[0] == 255:\n        print('  ⚠️  NOT transparent (alpha is all 255)')\n    else:\n        print('  ✅ Has transparency')\nelse:\n    print('  ⚠️  No alpha channel — NOT transparent')\n\"": "allow",
+      "done": "allow"
     },
     "edit": {
       "tinkering/*": "allow",

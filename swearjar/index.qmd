@@ -2,9 +2,11 @@
 title: "🤬 Swear Jar"
 page-layout: full
 toc: false
+resources:
+  - img/*.webp
 ---
 
-My wife and I have potty-mouths. With a baby transforming into a toddler (and learning new words every day!) we need an incentive to stop swearing. This is the swear jar - a record of indiscretions, and a cash incentive to train us back to polite language.
+My wife and I have potty-mouths. With a toddler learning new words every day, we need an incentive to keep our words family-friendly. This is the Swear Jar. Only my wife and I can put a coin in the jar - but you can see our latest naughty words below. 
 
 ```{=html}
 <style>
@@ -26,64 +28,75 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   .jar {
     text-align: center;
     padding: 1.5rem 1rem;
-    border-radius: 16px;
-    background: #f8f9fa;
-    border: 2px solid #dee2e6;
-    transition: transform 0.1s;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #ffffff, #f0f1f3);
+    border: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .jar:hover {
-    border-color: #adb5bd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
   }
 
   .jar-name {
     font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
+    color: #2d3436;
   }
 
-  .jar-emoji {
-    font-size: 3rem;
+  .jar-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
     display: block;
-    margin: 0.5rem 0;
-    transition: transform 0.15s;
+    margin: 0.5rem auto;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .jar-emoji.pop {
-    transform: scale(1.3);
+  .jar-img.pop {
+    transform: scale(1.3) rotate(-5deg);
   }
 
   .jar-count {
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 2.2rem;
+    font-weight: 800;
     color: #d63384;
     margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
   }
 
   .swear-btn {
     display: inline-block;
-    padding: 0.6rem 1.5rem;
+    padding: 0.65rem 1.5rem;
     border: none;
-    border-radius: 8px;
-    background: #d63384;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d63384, #c2255c);
     color: white;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    box-shadow: 0 2px 8px rgba(214, 51, 132, 0.3);
+    transition: all 0.15s ease;
   }
 
   .swear-btn:hover {
-    background: #b02a6f;
+    background: linear-gradient(135deg, #c2255c, #a61e4d);
+    box-shadow: 0 4px 14px rgba(214, 51, 132, 0.4);
+    transform: translateY(-1px);
   }
 
   .swear-btn:active {
-    transform: scale(0.95);
+    transform: scale(0.96) translateY(0);
+    box-shadow: 0 1px 4px rgba(214, 51, 132, 0.3);
   }
 
   .swear-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    box-shadow: none;
   }
 
   /* ---- Note input ---- */
@@ -93,11 +106,20 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
 
   .note-input {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
+    padding: 0.6rem 0.85rem;
+    border: none;
+    border-radius: 10px;
     font-size: 0.95rem;
     box-sizing: border-box;
+    background: #f0f1f3;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .note-input:focus {
+    outline: none;
+    background: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 3px rgba(214, 51, 132, 0.15);
   }
 
   .note-input::placeholder {
@@ -106,39 +128,45 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
 
   /* ---- Settlement ---- */
   .settlement-box {
-    background: #f8f9fa;
-    border: 2px solid #dee2e6;
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
+    background: linear-gradient(145deg, #ffffff, #f0f1f3);
+    border: none;
+    border-radius: 16px;
+    padding: 1.1rem 1.25rem;
     margin-bottom: 1.5rem;
     text-align: center;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
   }
 
   .settlement-box .owes {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
+    color: #2d3436;
   }
 
   .settle-btn {
     padding: 0.5rem 1.25rem;
     border: none;
-    border-radius: 8px;
-    background: #198754;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #198754, #157347);
     color: white;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s;
+    box-shadow: 0 2px 8px rgba(25, 135, 84, 0.3);
+    transition: all 0.15s ease;
   }
 
   .settle-btn:hover {
-    background: #146c43;
+    background: linear-gradient(135deg, #157347, #0f5132);
+    box-shadow: 0 4px 14px rgba(25, 135, 84, 0.35);
+    transform: translateY(-1px);
   }
 
   .settle-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    box-shadow: none;
   }
 
   /* ---- History ---- */
@@ -149,22 +177,30 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   .history-section h3 {
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
+    color: #2d3436;
   }
 
   .history-list {
     max-height: 300px;
     overflow-y: auto;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
+    border: none;
+    border-radius: 12px;
     padding: 0;
     margin: 0;
     list-style: none;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
   }
 
   .history-list li {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid #f1f3f5;
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
     font-size: 0.9rem;
+    transition: background 0.15s ease;
+  }
+
+  .history-list li:hover {
+    background: rgba(0, 0, 0, 0.015);
   }
 
   .history-list li:last-child {
@@ -172,7 +208,8 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   }
 
   .history-list .person-tag {
-    font-weight: 600;
+    font-weight: 700;
+    color: #2d3436;
   }
 
   .history-list .note-text {
@@ -197,7 +234,7 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
     cursor: pointer;
     font-size: 0.85rem;
     padding: 0 0.2rem;
-    opacity: 0.4;
+    opacity: 0.35;
     transition: opacity 0.15s;
   }
 
@@ -208,23 +245,26 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   .history-list .edit-inline {
     display: flex;
     gap: 0.3rem;
-    margin-top: 0.3rem;
+    margin-top: 0.4rem;
   }
 
   .history-list .edit-inline input {
     flex: 1;
-    padding: 0.2rem 0.4rem;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 6px;
     font-size: 0.85rem;
+    background: #f0f1f3;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
   }
 
   .history-list .edit-inline button {
-    padding: 0.2rem 0.5rem;
+    padding: 0.25rem 0.6rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 0.8rem;
     cursor: pointer;
+    transition: opacity 0.15s;
   }
 
   .history-list .edit-inline .save-btn {
@@ -233,7 +273,7 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   }
 
   .history-list .edit-inline .cancel-btn {
-    background: #dee2e6;
+    background: #e9ecef;
     color: #495057;
   }
 
@@ -245,7 +285,12 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   .settlement-history summary {
     cursor: pointer;
     font-size: 0.95rem;
-    color: #6c757d;
+    color: #868e96;
+    transition: color 0.15s;
+  }
+
+  .settlement-history summary:hover {
+    color: #495057;
   }
 
   .settlement-history table {
@@ -256,9 +301,14 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   }
 
   .settlement-history th, .settlement-history td {
-    padding: 0.3rem 0.5rem;
-    border-bottom: 1px solid #dee2e6;
+    padding: 0.4rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     text-align: left;
+  }
+
+  .settlement-history th {
+    color: #868e96;
+    font-weight: 600;
   }
 
   /* ---- Status messages ---- */
@@ -273,7 +323,7 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   .loading {
     text-align: center;
     padding: 2rem;
-    color: #6c757d;
+    color: #868e96;
   }
 </style>
 
@@ -287,13 +337,13 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
     <div class="jars-container">
       <div class="jar" id="jarBen">
         <div class="jar-name">Ben</div>
-        <span class="jar-emoji" id="emojiBen">🫙</span>
+        <img class="jar-img" id="jarImgBen" src="img/coin_jar_0_empty.webp" alt="Ben's jar">
         <div class="jar-count" id="countBen">0</div>
         <button class="swear-btn" onclick="addSwear('ben')">+ Swear</button>
       </div>
       <div class="jar" id="jarVerity">
         <div class="jar-name">Verity</div>
-        <span class="jar-emoji" id="emojiVerity">🫙</span>
+        <img class="jar-img" id="jarImgVerity" src="img/coin_jar_0_empty.webp" alt="Verity's jar">
         <div class="jar-count" id="countVerity">0</div>
         <button class="swear-btn" onclick="addSwear('verity')">+ Swear</button>
       </div>
@@ -375,6 +425,20 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
   let lastSettlement = null;
   let currentCounts = { ben: 0, verity: 0 };
 
+  function jarImage(count) {
+    if (count === 0) return 'img/coin_jar_0_empty.webp';
+    if (count <= 4)  return 'img/coin_jar_1_almost_empty.webp';
+    if (count <= 9)  return 'img/coin_jar_2_half_full.webp';
+    if (count <= 14) return 'img/coin_jar_3_nearly_full.webp';
+    if (count <= 20) return 'img/coin_jar_4_full.webp';
+    return 'img/coin_jar_5_overflowing.webp';
+  }
+
+  function updateJarImages() {
+    document.getElementById('jarImgBen').src = jarImage(currentCounts.ben);
+    document.getElementById('jarImgVerity').src = jarImage(currentCounts.verity);
+  }
+
   // ---- Init ----
   async function init() {
     try {
@@ -417,6 +481,7 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
 
     document.getElementById('countBen').textContent = currentCounts.ben;
     document.getElementById('countVerity').textContent = currentCounts.verity;
+    updateJarImages();
   }
 
   async function loadHistory() {
@@ -488,11 +553,11 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
     btns.forEach(b => b.disabled = true);
 
     // Pop animation
-    const emojiEl = document.getElementById(
-      person === 'ben' ? 'emojiBen' : 'emojiVerity'
+    const imgEl = document.getElementById(
+      person === 'ben' ? 'jarImgBen' : 'jarImgVerity'
     );
-    emojiEl.classList.add('pop');
-    setTimeout(() => emojiEl.classList.remove('pop'), 200);
+    imgEl.classList.add('pop');
+    setTimeout(() => imgEl.classList.remove('pop'), 200);
 
     const { error } = await sb.from('swears').insert({
       person: person,
@@ -511,6 +576,7 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
     document.getElementById(
       person === 'ben' ? 'countBen' : 'countVerity'
     ).textContent = currentCounts[person];
+    updateJarImages();
     updateOwes();
     await loadHistory();
     btns.forEach(b => b.disabled = false);
@@ -621,6 +687,7 @@ My wife and I have potty-mouths. With a baby transforming into a toddler (and le
     document.getElementById(
       person === 'ben' ? 'countBen' : 'countVerity'
     ).textContent = currentCounts[person];
+    updateJarImages();
     updateOwes();
     await loadHistory();
   }
