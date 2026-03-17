@@ -4,6 +4,8 @@ page-layout: full
 toc: false
 ---
 
+My wife and I have potty-mouths. With a baby transforming into a toddler (and learning new words every day!) we need an incentive to stop swearing. This is the swear jar - a record of indiscretions, and a cash incentive to train us back to polite language.
+
 ```{=html}
 <style>
   /* ---- Layout ---- */
@@ -235,48 +237,6 @@ toc: false
     color: #495057;
   }
 
-  /* ---- Settings ---- */
-  .settings-toggle {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-
-  .settings-toggle button {
-    background: none;
-    border: none;
-    color: #6c757d;
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-decoration: underline;
-  }
-
-  .settings-panel {
-    display: none;
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .settings-panel.open {
-    display: block;
-  }
-
-  .settings-panel label {
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-
-  .settings-panel input {
-    width: 80px;
-    padding: 0.3rem 0.5rem;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    margin-left: 0.5rem;
-  }
-
   /* ---- Settlement history ---- */
   .settlement-history {
     margin-top: 1rem;
@@ -351,17 +311,6 @@ toc: false
       <button class="settle-btn" id="settleBtn" onclick="settleUp()">Settle Up</button>
     </div>
 
-    <!-- Settings -->
-    <div class="settings-toggle">
-      <button onclick="toggleSettings()">⚙️ Settings</button>
-    </div>
-    <div class="settings-panel" id="settingsPanel">
-      <label>Cost per swear: $
-        <input type="number" id="costInput" value="1.00" min="0.01" step="0.25"
-          onchange="updateCost()">
-      </label>
-    </div>
-
     <!-- Recent swears -->
     <div class="history-section">
       <h3>Recent swears</h3>
@@ -397,11 +346,34 @@ toc: false
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let costPerSwear = parseFloat(localStorage.getItem('swearjar_cost') || '1.00');
+  // ---- Auth gate ----
+  const PASSPHRASE_HASH = 'f1c072414387df13649fe3151d9b6c96ac1de1ea9dcf16e1c7b112d6daa9c8c1';
+  let isAuthed = localStorage.getItem('swearjar_authed') === 'true';
+
+  async function sha256(text) {
+    const buf = await crypto.subtle.digest('SHA-256',
+      new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf))
+      .map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function requireAuth() {
+    if (isAuthed) return true;
+    const input = prompt('Enter the passphrase to make changes:');
+    if (!input) return false;
+    const hash = await sha256(input.toLowerCase().trim());
+    if (hash === PASSPHRASE_HASH) {
+      isAuthed = true;
+      localStorage.setItem('swearjar_authed', 'true');
+      return true;
+    }
+    showStatus('Wrong passphrase!');
+    return false;
+  }
+
+  const costPerSwear = 1.00;
   let lastSettlement = null;
   let currentCounts = { ben: 0, verity: 0 };
-
-  document.getElementById('costInput').value = costPerSwear.toFixed(2);
 
   // ---- Init ----
   async function init() {
@@ -508,6 +480,7 @@ toc: false
 
   // ---- Actions ----
   async function addSwear(person) {
+    if (!await requireAuth()) return;
     const noteEl = document.getElementById('noteInput');
     const note = noteEl.value.trim() || null;
 
@@ -544,6 +517,7 @@ toc: false
   }
 
   async function settleUp() {
+    if (!await requireAuth()) return;
     const ben = currentCounts.ben;
     const verity = currentCounts.verity;
 
@@ -590,7 +564,8 @@ toc: false
   }
 
   // ---- Edit / Delete ----
-  function startEdit(id, currentNote) {
+  async function startEdit(id, currentNote) {
+    if (!await requireAuth()) return;
     const li = document.getElementById('entry-' + id);
     if (!li) return;
     const editHtml = `<div class="edit-inline">` +
@@ -628,7 +603,8 @@ toc: false
   }
 
   async function deleteSwear(id, person) {
-    if (!confirm('Delete this swear?')) return;
+    if (!await requireAuth()) return;
+    if (!confirm('Are you sure you want to delete this swear word record?')) return;
 
     const { error } = await sb
       .from('swears')
@@ -663,19 +639,6 @@ toc: false
       const who = diff > 0 ? 'Ben' : 'Verity';
       const amount = (Math.abs(diff) * costPerSwear).toFixed(2);
       el.textContent = `${who} owes $${amount}`;
-    }
-  }
-
-  function toggleSettings() {
-    document.getElementById('settingsPanel').classList.toggle('open');
-  }
-
-  function updateCost() {
-    const val = parseFloat(document.getElementById('costInput').value);
-    if (val > 0) {
-      costPerSwear = val;
-      localStorage.setItem('swearjar_cost', val.toFixed(2));
-      updateOwes();
     }
   }
 
