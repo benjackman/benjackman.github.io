@@ -4,6 +4,44 @@ resources:
   - ags_yield_curve.gif
 ---
 
+## Building the Swear Jar
+
+*18 March 2026*
+
+<img src="coin_jar_overflowing.webp" alt="An overflowing coin jar" style="width: 100%; max-width: 250px; display: block; margin: 0 auto; margin-bottom: 1em;">
+
+My wife and I have a very young toddler, a baby just past a year old, starting her initially-slow but rapidly accelerating takeoff into English language mastery. She only has a few reliable words in her current vocabulary, but is doing more parroting every day, and even occasionally nails a multiple-syllable sound.
+
+This is obviously extremely cute. But it's also disastrous for a family where the occasional swear word can slip out. We used to tell ourselves we had time to clean up our language before the baby was picking up words, but that time has run out!
+
+This brought on the idea for the [swear jar](https://benjackman.github.io/swearjar/) — a way to remind and train ourselves not to use naughty language in front of the baby, lest she start to teach it to other kids at daycare. A web app seemed like a great way to do this, as it'd be easily accessible for both me and my wife, wherever we are (and easier to make a habit than a physical jar stuck at home).
+
+### Kicking Off
+
+The concept is simple — if we accidentally swear within earshot of the baby, we open the webapp, tap our jar (or the others' jar if we're dobbing them in), and optionally note down our swear word as a fun bit of record-keeping. Each 'coin' in the jar represents a dollar, and every month or so, we'd settle up by transferring the net difference from worst offender to best behaved. (While my wife and I have combined finances, we separate a small pool of 'fun money', which facilitates little notional transfers like this.)
+
+I asked Claude to plan this project, and whether it should go on this personal blog or separately. I said I wanted it free, simple, interactive, but also to preserve state. Claude mulled this over and suggested adding a webapp to this blog, using some simple CSS styling and buttons for interactivity with an emoji for a jar, and using [Supabase's](https://supabase.com/) free tier database hosting. We skipped auth planning (at my request) at this point.
+
+I approved this plan, and Claude got to work, and within about 1 minute the LLM had one shot a single index.qmd with the custom styling and interactivity needed. Claude also provided instructions on the Supabase sign up and free project setup, with a single SQL query to instantiate the required basic tables and set some Supabase settings. After some skeptical quizzing on database security, I also followed Claude's instruction to add a project database key to the index.qmd. (Helpfully, Supabase also makes clear there are specific keys for exactly this purpose, by calling the relevant key "publishable", flagging it can be public in its docs, and literally having "publishable" in the key string — great job Supabase!).
+
+This worked great, and after some testing (and repeated deleting of the test rows in those new Supabase tables), I moved on to some tweaks.
+
+### Auth
+
+Although I thought this would be too hard for such a basic process, Claude's suggestion for a middle ground was to use a 'passphrase' stored in each visitor's LocalStorage, meaning the passphrase would be entered once and access to the Swear Jar would be granted automatically subsequently. This passphrase is hashed in index.qmd. This is secure enough only to stop people idly fiddling with the buttons or accidentally adding swears, but that's good enough for such a niche project. A bruteforce attack could get this passphrase quickly (but that's fine, especially as Supabase's free tier is hard-capped at zero cost, and facilitates regular free backups — great job Supabase!). The nice side effect is that this workflow is not triggered until a new user attempts to interact, so visitors can still see the page, and view our latest swearing indiscretions listed at the bottom.
+
+### Aesthetics
+
+At my request, the first round of the work had no focus on appearances, and so was a little ugly with a lot of what looks like default CSS styling. A very low impact refactor has made things look slightly better, although we're certainly not winning any design awards. A bit more thought went into updating the coin jars away from a default empty jar emoji. Using [Nano Banana](https://gemini.google/overview/image-generation/), I generated a series of cartoon-style jar images in increasing order of fill (from an empty jar all the way to overflowing). Somewhat annoyingly, these popped out as large pngs from Nano Banana, and my request for transparent background was met with fake transparent grid pattern that was actually rendered. Claude fortunately pointed me in the direction of some awesome free tools — [remove.bg](https://www.remove.bg/) (from Canva) and [Squoosh](https://squoosh.app/) (from Google) which gave these images a transparent background and converted them into webp format (and very small — 10s of kbs). Learning about these tools while Claude does most of the grunt work is such a great byproduct of accelerated development of fun side projects.
+
+### Conclusion
+
+My only challenge now is to get my wife to start using the webapp. I've added it her home phone screen as an open-on-web link, with 🤬 as the preview. She is the person I know with the least screen time (sometimes less than 90 minutes per day), but hopefully the idea of our baby swearing like a sailor will be motivation to get her using the swear jar now.
+
+More generally, I imagined this swear jar webapp last night, and now it exists, essentially exactly as I wanted it — free, simple, and shareable without a big risk that someone can fiddle with it accidentally. These large LLMs make fun side projects such a joy — from thought to reality with so much less effort, while learning a lot along the way. We might be in a new golden era of personal websites, which means [the](https://minifeed.net/blogs) [small](https://kagi.com/smallweb/?url=https%3A%2F%2Fcybersalon.org%2Fvort3x-50%2F) [web](https://kevinboone.me/small_web_is_big.html) resurgence is real.
+
+---
+
 ## Claude builds an R package
 
 *8 March 2026*
