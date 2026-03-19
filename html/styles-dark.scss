@@ -1,0 +1,85 @@
+/*-- scss:defaults --*/
+
+// Keep brand colors consistent with light theme
+$teal:    #068194 !default;
+$red:     #CF4446 !default;
+$orange:  #EE6A24 !default;
+$green:   #118230 !default;
+$cyan:    #3093CF !default;
+
+$primary:   $teal !default;
+$success:   $green !default;
+$info:      $cyan !default;
+$warning:   $orange !default;
+$danger:    $red !default;
+
+// Links
+$link-color: $teal !default;
+$link-decoration: none !default;
+$link-hover-color: $red !default;
+$link-hover-decoration: underline !default;
+
+// Footer
+$footer-bg: #1a1d20 !default;
+$footer-fg: #adb5bd !default;
+
+// TOC
+$toc-color: $orange;
+$toc-font-size: 1em;
+
+// Code copy
+$btn-code-copy-color-active: $orange !default;
+
+
+/*-- scss:rules --*/
+
+.nav-footer {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border: 0 !important;
+    min-height: 3em;
+
+    a {
+        color: $primary;
+    }
+
+    .faux-block {
+        display: block;
+        padding-bottom: 0.4em;
+    }
+
+    .nav-footer-center {
+        text-align: center;
+        position: inherit;
+        margin-top: 0;
+
+        @media (max-width: map-get($grid-breakpoints, md)) {
+            margin-top: 0.5em;
+            margin-bottom: 1.5em;
+        }
+    }
+
+    .nav-footer-left,
+    .nav-footer-right,
+    .nav-footer-center {
+        text-align: center;
+        width: 100%;
+        min-height: 2em;
+    }
+
+    @media (min-width: map-get($grid-breakpoints, md)) {
+        .nav-footer-left {
+            text-align: left;
+        }
+
+        .nav-footer-right {
+            text-align: right;
+        }
+
+        .nav-footer-left,
+        .nav-footer-right,
+        .nav-footer-center {
+            flex: 1 1 33%;
+        }
+    }
+}

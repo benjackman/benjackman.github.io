@@ -64,8 +64,12 @@ format:
   html:
     fontsize: 1.1em
     theme: 
-      - pulse
-      - html/styles.scss
+      light:
+        - pulse
+        - html/styles.scss
+      dark:
+        - darkly
+        - html/styles-dark.scss
     toc: false
     code-link: true
     anchor-sections: true

@@ -325,6 +325,110 @@ My wife and I have potty-mouths. With a toddler learning new words every day, we
     padding: 2rem;
     color: #868e96;
   }
+
+  /* ---- Dark mode overrides ---- */
+  .quarto-dark .jar {
+    background: linear-gradient(145deg, #2b2d30, #1e1f22);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .quarto-dark .jar:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .quarto-dark .jar-name {
+    color: #dee2e6;
+  }
+
+  .quarto-dark .note-input {
+    background: #2b2d30;
+    color: #dee2e6;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .quarto-dark .note-input:focus {
+    background: #1e1f22;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(214, 51, 132, 0.25);
+  }
+
+  .quarto-dark .note-input::placeholder {
+    color: #6c757d;
+  }
+
+  .quarto-dark .settlement-box {
+    background: linear-gradient(145deg, #2b2d30, #1e1f22);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .quarto-dark .settlement-box .owes {
+    color: #dee2e6;
+  }
+
+  .quarto-dark .history-section h3 {
+    color: #dee2e6;
+  }
+
+  .quarto-dark .history-list {
+    background: linear-gradient(145deg, #2b2d30, #1e1f22);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .quarto-dark .history-list li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .quarto-dark .history-list li:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .quarto-dark .history-list .person-tag {
+    color: #dee2e6;
+  }
+
+  .quarto-dark .history-list .note-text {
+    color: #adb5bd;
+  }
+
+  .quarto-dark .history-list .time-text {
+    color: #6c757d;
+  }
+
+  .quarto-dark .history-list .edit-inline input {
+    background: #1e1f22;
+    color: #dee2e6;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .quarto-dark .history-list .edit-inline .cancel-btn {
+    background: #495057;
+    color: #dee2e6;
+  }
+
+  .quarto-dark .settlement-history summary {
+    color: #adb5bd;
+  }
+
+  .quarto-dark .settlement-history summary:hover {
+    color: #dee2e6;
+  }
+
+  .quarto-dark .settlement-history th {
+    color: #adb5bd;
+  }
+
+  .quarto-dark .settlement-history th,
+  .quarto-dark .settlement-history td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: #dee2e6;
+  }
+
+  .quarto-dark .status-bar {
+    color: #e5484d;
+  }
+
+  .quarto-dark .loading {
+    color: #adb5bd;
+  }
 </style>
 
 <div class="swearjar-app">

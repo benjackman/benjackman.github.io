@@ -25,14 +25,16 @@
       "for f in swearjar/img/*.webp": "allow",
       "do echo \"$f:\"": "allow",
       "python3 -c \"\nfrom PIL import Image\nimg = Image.open('$f')\nprint(f'  Mode: {img.mode}')\nif img.mode == 'RGBA':\n    alpha = img.getchannel('A')\n    extrema = alpha.getextrema()\n    print(f'  Alpha range: {extrema[0]}-{extrema[1]}')\n    if extrema[0] == 255:\n        print('  ⚠️  NOT transparent (alpha is all 255)')\n    else:\n        print('  ✅ Has transparency')\nelse:\n    print('  ⚠️  No alpha channel — NOT transparent')\n\"": "allow",
-      "done": "allow"
+      "done": "allow",
+      "cd /Users/ben/Documents/GitHub/benjackman.github.io && quarto preview --no-browser &\nPREVIEW_PID=$!\nsleep 8\nkill $PREVIEW_PID 2>/dev/null\nwait $PREVIEW_PID 2>/dev/null": "allow"
     },
     "edit": {
       "tinkering/*": "allow",
       "*.qmd": "allow",
       "*.R": "allow",
       "*.md": "allow",
-      "*.yml": "allow"
+      "*.yml": "allow",
+      "*.scss": "allow"
     }
   },
   "model": {
