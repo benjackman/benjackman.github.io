@@ -118,3 +118,29 @@ $btn-code-copy-color-active: $orange !default;
         }
     }
 }
+
+// Mobile-friendly homepage about block
+div.quarto-about-jolla {
+    @media (max-width: map-get($grid-breakpoints, md)) {
+        .about-image {
+            height: 10em !important;
+            width: 10em !important;
+        }
+
+        .about-links {
+            flex-direction: row !important;
+            width: auto !important;
+            gap: 0.5em;
+            padding-bottom: 0.5em !important;
+        }
+
+        .about-link {
+            font-size: 0.8em !important;
+            padding: 0.3em 0.6em !important;
+        }
+
+        .about-link-text {
+            display: none;
+        }
+    }
+}
