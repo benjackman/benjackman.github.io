@@ -397,22 +397,24 @@ ul.task-list li input[type="checkbox"] {
 /* Countdown timer */
 .countdown-timer {
   display: flex;
+  flex-wrap: nowrap;       /* explicit — overrides Bootstrap's default wrap */
   justify-content: center;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: clamp(0.2rem, 1.5vw, 0.5rem);
   margin-bottom: 1rem;
-  flex-wrap: wrap;
 }
 
 .countdown-unit {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 72px;
+  flex: 1;           /* equal share of available width */
+  min-width: 0;      /* allow shrinking below content size */
 }
 
 .count-num {
-  font-size: 3.2rem;
+  /* Scales smoothly: 1.6rem on a 320px phone → 3.2rem on desktop */
+  font-size: clamp(1.6rem, 8vw, 3.2rem);
   font-weight: 800;
   font-family: 'Courier New', Courier, monospace;
   font-variant-numeric: tabular-nums;
@@ -422,7 +424,7 @@ ul.task-list li input[type="checkbox"] {
 }
 
 .count-label {
-  font-size: 0.65rem;
+  font-size: clamp(0.5rem, 1.8vw, 0.65rem);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: rgba(255,255,255,0.45);
@@ -430,13 +432,14 @@ ul.task-list li input[type="checkbox"] {
 }
 
 .countdown-sep {
-  font-size: 3.2rem;
+  font-size: clamp(1.6rem, 8vw, 3.2rem);
   font-weight: 800;
   font-family: 'Courier New', Courier, monospace;
   color: rgba(255,255,255,0.25);
   line-height: 1;
   padding-top: 0;
   align-self: flex-start;
+  flex-shrink: 0;
 }
 
 .hero-date-line {
@@ -651,8 +654,11 @@ ul.task-list li input[type="checkbox"] {
 
 /* --- Responsive tweaks --------------------------------------- */
 @media (max-width: 576px) {
-  .count-num      { font-size: 2.1rem; }
+  /* Shrink hero padding so the countdown timer has more horizontal room */
+  .space-hero { padding: 2rem 1rem 1.75rem; }
+  /* count-num scales via clamp() — no font-size override needed */
   .hero-mission   { font-size: 1.4rem; }
+  .countdown-timer { gap: 0.15rem; }
   .fc-thumb, .fc-thumb-placeholder { display: none; }
   .lr-date        { min-width: 50px; }
 }
