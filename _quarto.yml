@@ -19,7 +19,7 @@ website:
         href: tinkering/index.qmd
       - text: "CV"
         href: cv/index.qmd
-      - text: "🚀 Space Corner"
+      - text: "🪐 Space Corner"
         href: space_corner/index.qmd
       - text: "🤬 Swear Jar"
         href: swearjar/index.qmd
