@@ -555,6 +555,17 @@ resources:
     return `~${d.getUTCFullYear()}`;
   }
 
+  /** Format time in Australian Eastern (AEDT/AEST), only for precise launches */
+  function formatAET(launch) {
+    const p = launch.net_precision?.name || 'Hour';
+    if (p !== 'Hour' && p !== 'Minute') return '';
+    const d = new Date(launch.net);
+    const tz = 'Australia/Sydney';
+    const t = d.toLocaleTimeString('en-AU', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
+    const label = d.toLocaleTimeString('en-AU', { timeZone: tz, timeZoneName: 'short' }).split(' ').pop();
+    return ` / ${t} ${label}`;
+  }
+
   function badge(status) {
     const c = statusClass(status);
     const dot = c === 'go' ? '●' : c === 'tbd' ? '◌' : '◐';
@@ -608,7 +619,7 @@ resources:
             ` : ''}
             <div class="fc-footer">
               <span class="net-date ${isPrecise(launch) ? '' : 'net-imprecise'}">
-                📅 ${formatNET(launch)}
+                📅 ${formatNET(launch)}${formatAET(launch)}
               </span>
               ${isTruncated ? `<button class="fc-expand-toggle" data-action="expand">▾ More</button>` : ''}
               ${slug ? `<a href="https://spacelaunchnow.me/launch/${esc(slug)}" target="_blank" class="fc-info-link">More info ↗</a>` : ''}
@@ -733,10 +744,10 @@ resources:
     if (isPrecise(hero)) {
       startCountdown(new Date(hero.net).getTime());
       document.getElementById('countdown-timer').style.display = 'flex';
-      document.getElementById('hero-date').textContent = 'NET: ' + formatNET(hero);
+      document.getElementById('hero-date').textContent = 'NET: ' + formatNET(hero) + formatAET(hero);
     } else {
       document.getElementById('countdown-timer').style.display = 'none';
-      document.getElementById('hero-date').textContent = 'Estimated: ' + formatNET(hero);
+      document.getElementById('hero-date').textContent = 'Estimated: ' + formatNET(hero) + formatAET(hero);
     }
 
     // Webcast
