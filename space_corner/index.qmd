@@ -416,6 +416,12 @@ toc: false
   // Helpers
   // ----------------------------------------------------------
 
+  /** Escape HTML special characters to prevent XSS from API data */
+  function esc(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   /** Identify Starship / Artemis launches by name, rocket, or program tag */
   function getProgram(launch) {
     const check = (...strs) => strs.some(s => (s || '').toLowerCase().includes('starship'));
@@ -465,13 +471,13 @@ toc: false
   function badge(status) {
     const c = statusClass(status);
     const dot = c === 'go' ? '●' : c === 'tbd' ? '◌' : '◐';
-    return `<span class="sc-badge ${c}">${dot} ${status?.name || 'Unknown'}</span>`;
+    return `<span class="sc-badge ${c}">${dot} ${esc(status?.name || 'Unknown')}</span>`;
   }
 
   function webcastBtn(launch) {
     const v = launch.vidURLs?.[0];
     if (!v) return '';
-    return `<a href="${v.url}" target="_blank" class="webcast-btn">▶ Webcast</a>`;
+    return `<a href="${esc(v.url)}" target="_blank" class="webcast-btn">▶ Webcast</a>`;
   }
 
   // ----------------------------------------------------------
@@ -490,7 +496,7 @@ toc: false
     const location = launch.pad?.location?.name || '';
 
     const thumbHtml = thumb
-      ? `<img src="${thumb}" class="fc-thumb" alt=""
+      ? `<img src="${esc(thumb)}" class="fc-thumb" alt=""
              onerror="this.outerHTML='<div class=\\"fc-thumb-placeholder\\">${icon}</div>'">`
       : `<div class="fc-thumb-placeholder">${icon}</div>`;
 
@@ -502,12 +508,12 @@ toc: false
         <div class="fc-body">
           ${thumbHtml}
           <div style="flex:1;min-width:0">
-            <div class="fc-title">${launch.name}</div>
+            <div class="fc-title">${esc(launch.name)}</div>
             <div class="fc-meta">
-              ${rocket   ? `<span>🛸 ${rocket}</span>` : ''}
-              ${pad      ? `<span>📍 ${pad}${location ? ', ' + location : ''}</span>` : ''}
+              ${rocket   ? `<span>🛸 ${esc(rocket)}</span>` : ''}
+              ${pad      ? `<span>📍 ${esc(pad)}${location ? ', ' + esc(location) : ''}</span>` : ''}
             </div>
-            ${short ? `<div class="fc-desc">${short}</div>` : ''}
+            ${short ? `<div class="fc-desc">${esc(short)}</div>` : ''}
             <div class="fc-footer">
               <span class="net-date ${isPrecise(launch) ? '' : 'net-imprecise'}">
                 📅 ${formatNET(launch)}
@@ -539,8 +545,8 @@ toc: false
           <div class="lr-date-year" >${year}</div>
         </div>
         <div class="lr-info">
-          <div class="lr-name">${launch.name}${icon}</div>
-          <div class="lr-sub">${rocket}${provider ? ' · ' + provider : ''}${loc ? ' · ' + loc : ''}</div>
+          <div class="lr-name">${esc(launch.name)}${icon}</div>
+          <div class="lr-sub">${esc(rocket)}${provider ? ' · ' + esc(provider) : ''}${loc ? ' · ' + esc(loc) : ''}</div>
         </div>
         <div class="lr-right">
           ${badge(launch.status)}
@@ -617,7 +623,7 @@ toc: false
     document.getElementById('hero-status-wrap').innerHTML =
       `<span class="hero-status-badge"
              style="background:${col}22;border:1px solid ${col};color:${col}">
-         ${hero.status?.name || 'Unknown'}
+         ${esc(hero.status?.name || 'Unknown')}
        </span>`;
 
     // Timer or date only
@@ -633,7 +639,7 @@ toc: false
     // Webcast
     const vid = hero.vidURLs?.[0];
     document.getElementById('hero-webcast').innerHTML = vid
-      ? `<a href="${vid.url}" target="_blank" class="hero-webcast-link">▶ Watch Webcast</a>`
+      ? `<a href="${esc(vid.url)}" target="_blank" class="hero-webcast-link">▶ Watch Webcast</a>`
       : '';
   }
 
