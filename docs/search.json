@@ -49,6 +49,27 @@
     "text": "Plotting Runs with Strava Calendar\n3 January 2021\nI use Strava for logging my running. It’s a great tool (particularly all the free functionality!), and over the last few years I’ve built up a reasonable database of my runs.\nSome years ago, Colin Carroll created a nifty Python package for simple visualisations of Strava exercises in calendar format. It’s the aptly named Strava Calendar. Colin actively monitors this repo and recently added automatic support for .gpx files, which Strava now provides if you request all your data.\nThis package gives out-of-the-box support for great visualisations. Here are all my runs in February 2019:\n\n\n\nFeb 2019 Runs\n\n\nThe first run is my attempt at the Cole Classic Sun Run. The 4 similar looking runs with loops in their top-right corners (Feb 4, 6, 20 and 27) are Sydney’s Corporate Cup course - starting in the Domain, past the Botanic Gardens, and looping around Mrs Macquarie’s Chair on Sydney Harbour. A few other runs are thrown in there for good measure.\nPaired with more metadata provided by Strava, these little calendars become like little exercise diaries. I had a great time going back and thinking about some of the context from these UK runs:\n\n\n\nOct 2019 Runs\n\n\nIn October 2019 I had just arrived for study. The runs include some early London jogs in Stoke Newington (home of everyone’s favourite Penny Farthing crash), and my first run in Oxford. I’ve also popped in some of my notes from the Strava run titles - about my back feeling a bit better allowing a few runs in a row, and a typically Australian complaint about the weather.\nThe package also includes a default plot_calendar() function, which spits out a full calendar year. For some reason I had trouble getting it to run for 2019 and 2020 (and so raised a quick Github Issue), but it works fine for 2018. You can see the complete stoppage as a result of my bad ankle injury in late March of 2018, my two attempts to come back to running in late May and July, before things finally get going again in September.\n\n\n\n2018 Annual Runs\n\n\nThese images (and similar images I might develop in future) would be a great addition to travel diaries, or a ‘year in review’ style post. I intend to keep playing around with Strava Calendar and producing more interesting diagrams. I’m grateful to Colin for building such a simple and enjoyable tool."
   },
   {
+    "objectID": "space_corner/index.html",
+    "href": "space_corner/index.html",
+    "title": "🪐 Space Corner",
+    "section": "",
+    "text": "Loading launch data… 🛰️\n\n  \n    Next Featured Launch\n    —\n    \n    \n\n    \n      \n        --\n        Days\n      \n      :\n      \n        --\n        Hours\n      \n      :\n      \n        --\n        Mins\n      \n      :\n      \n        --\n        Secs\n      \n    \n\n    \n    \n  \n\n  \n    ⚠️ Could not load launch data\n  \n\n\n\n\n  Starship & Artemis\n  \n\n\n\n  More Launches\n  \n    Upcoming\n    Recent\n  \n  \n    \n      Loading… 🛰️\n    \n  \n  \n    \n      Loading… 🛰️\n    \n  \n\n\n\n  Data from Launch Library 2 ·\n  Updates every 30 min ·"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ben Jackman",
+    "section": "",
+    "text": "X\n  \n  \n    \n     Github\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     Email\n  \n\n\n\n\nBen Jackman\nI’m an economist and data scientist in Sydney. I work in Monetary Policy Implementation at the Reserve Bank of Australia. I’m interested in macro, finance, central banking, and data science. The “Public Work” tab highlights some of my professional work, and ‘Tinkering’ documents what else I’ve been playing with. You can contact me via email, Twitter, LinkedIn, or on the Bloomberg terminal.\n\n\nThanks to Marvin Schmitt for this great Quarto website template, and Claude for being ever-helpful."
+  },
+  {
+    "objectID": "cv/index.html",
+    "href": "cv/index.html",
+    "title": "Curriculum vitae",
+    "section": "",
+    "text": "Download current CV"
+  },
+  {
     "objectID": "public_work/index.html",
     "href": "public_work/index.html",
     "title": "Professional Work",
@@ -84,31 +105,10 @@
     "text": "December 2020 - The Term Funding Facility\n\narXiv Preprint | Code\nIn December 2020, my colleagues and I put out an article in the RBA Bulletin on the Term Funding Facility. It outlined the purpose and design of the TFF, as well as how it had been used to date. I had spent the early months of the pandemic setting up the TFF, and I learnt a lot about facility design in the process."
   },
   {
-    "objectID": "cv/index.html",
-    "href": "cv/index.html",
-    "title": "Curriculum vitae",
-    "section": "",
-    "text": "Download current CV"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Ben Jackman",
-    "section": "",
-    "text": "X\n  \n  \n    \n     Github\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     Email\n  \n\n\n\n\nBen Jackman\nI’m an economist and data scientist in Sydney. I work in Monetary Policy Implementation at the Reserve Bank of Australia. I’m interested in macro, finance, central banking, and data science. The “Public Work” tab highlights some of my professional work, and ‘Tinkering’ documents what else I’ve been playing with. You can contact me via email, Twitter, LinkedIn, or on the Bloomberg terminal.\n\n\nThanks to Marvin Schmitt for this great Quarto website template, and Claude for being ever-helpful."
-  },
-  {
     "objectID": "swearjar/index.html",
     "href": "swearjar/index.html",
     "title": "🤬 Swear Jar",
     "section": "",
     "text": "My wife and I have potty-mouths. With a toddler learning new words every day, we need an incentive to keep our words family-friendly. This is the Swear Jar. Only my wife and I can put a coin in the jar - but you can see our latest naughty words below. Made with help from Claude, which I’ve written about here.\n\n\n\n  \n\n  Loading swear jar...\n\n  \n    \n    \n      \n        Ben\n        \n        0\n        + Swear\n      \n      \n        Verity\n        \n        0\n        + Swear\n      \n    \n\n    \n    \n      \n    \n\n    \n    \n      All square!\n      Settle Up\n    \n\n    \n    \n      Recent swears\n      \n        No swears yet — keep it clean!\n      \n    \n\n    \n    \n      Settlement history\n      \n\n\n\nDate\nBen\nVerity\nResult"
-  },
-  {
-    "objectID": "space_corner/index.html",
-    "href": "space_corner/index.html",
-    "title": "🪐 Space Corner",
-    "section": "",
-    "text": "Loading launch data… 🛰️\n\n  \n    Next Featured Launch\n    —\n    \n    \n\n    \n      \n        --\n        Days\n      \n      :\n      \n        --\n        Hours\n      \n      :\n      \n        --\n        Mins\n      \n      :\n      \n        --\n        Secs\n      \n    \n\n    \n    \n  \n\n  \n    ⚠️ Could not load launch data\n  \n\n\n\n\n  🌟 Featured Launches\n  \n\n\n\n  🚀 All Upcoming Launches\n  \n    Loading… 🛰️\n  \n\n\n\n  Data from Launch Library 2 ·\n  Updates every 30 min ·"
   }
 ]

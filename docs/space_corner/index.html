@@ -557,11 +557,38 @@ ul.task-list li input[type="checkbox"] {
   font-size: 0.83rem;
   color: var(--bs-secondary-color);
   margin-bottom: 0.6rem;
+}
+.fc-desc-short {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.fc-desc-full { display: none; }
+.fc-desc.expanded .fc-desc-short { display: none; }
+.fc-desc.expanded .fc-desc-full  { display: block; }
+
+.fc-expand-toggle {
+  font-size: 0.76rem;
+  color: var(--bs-secondary-color);
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  transition: color 0.15s;
+}
+.fc-expand-toggle:hover { color: var(--bs-body-color); }
+
+.fc-info-link {
+  font-size: 0.76rem;
+  text-decoration: none;
+  color: var(--bs-secondary-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  transition: color 0.15s;
+}
+.fc-info-link:hover { color: var(--bs-body-color); }
 
 .fc-footer {
   display: flex;
@@ -643,6 +670,52 @@ ul.task-list li input[type="checkbox"] {
 
 .lr-right      { flex-shrink: 0; text-align: right; }
 
+/* --- Tabs ---------------------------------------------------- */
+.sc-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--bs-border-color);
+  margin-bottom: 1rem;
+}
+.sc-tab {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.sc-tab:hover { color: var(--bs-body-color); }
+.sc-tab.active {
+  color: var(--bs-body-color);
+  border-bottom-color: var(--bs-primary);
+}
+.sc-tab-panel { display: none; }
+.sc-tab-panel.active { display: block; }
+
+/* --- Show-more button ---------------------------------------- */
+.sc-show-more {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
+  border: 1px dashed var(--bs-border-color);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--bs-secondary-color);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.sc-show-more:hover {
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+}
+
 /* --- Loading / error states ---------------------------------- */
 .sc-loading { text-align: center; padding: 3rem; color: var(--bs-secondary-color); }
 .sc-error   {
@@ -711,14 +784,25 @@ ul.task-list li input[type="checkbox"] {
      LAUNCHES LIST
      ========================================================= -->
 <div id="featured-section" style="display:none">
-  <div class="sc-section-title">🌟 Featured Launches</div>
+  <div class="sc-section-title">Starship &amp; Artemis</div>
   <div id="featured-launches"></div>
 </div>
 
-<div id="all-section">
-  <div class="sc-section-title">🚀 All Upcoming Launches</div>
-  <div id="all-launches">
-    <div class="sc-loading">Loading… 🛰️</div>
+<div id="launches-section">
+  <div class="sc-section-title">More Launches</div>
+  <div class="sc-tabs">
+    <button class="sc-tab active" data-tab="upcoming">Upcoming</button>
+    <button class="sc-tab" data-tab="recent">Recent</button>
+  </div>
+  <div class="sc-tab-panel active" id="panel-upcoming">
+    <div id="all-launches">
+      <div class="sc-loading">Loading… 🛰️</div>
+    </div>
+  </div>
+  <div class="sc-tab-panel" id="panel-recent">
+    <div id="recent-launches">
+      <div class="sc-loading">Loading… 🛰️</div>
+    </div>
   </div>
 </div>
 
@@ -742,6 +826,12 @@ ul.task-list li input[type="checkbox"] {
   // ----------------------------------------------------------
   // Helpers
   // ----------------------------------------------------------
+
+  /** Escape HTML special characters to prevent XSS from API data */
+  function esc(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
   /** Identify Starship / Artemis launches by name, rocket, or program tag */
   function getProgram(launch) {
@@ -789,16 +879,27 @@ ul.task-list li input[type="checkbox"] {
     return `~${d.getUTCFullYear()}`;
   }
 
+  /** Format time in Australian Eastern (AEDT/AEST), only for precise launches */
+  function formatAET(launch) {
+    const p = launch.net_precision?.name || 'Hour';
+    if (p !== 'Hour' && p !== 'Minute') return '';
+    const d = new Date(launch.net);
+    const tz = 'Australia/Sydney';
+    const t = d.toLocaleTimeString('en-AU', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
+    const label = d.toLocaleTimeString('en-AU', { timeZone: tz, timeZoneName: 'short' }).split(' ').pop();
+    return ` / ${t} ${label}`;
+  }
+
   function badge(status) {
     const c = statusClass(status);
     const dot = c === 'go' ? '●' : c === 'tbd' ? '◌' : '◐';
-    return `<span class="sc-badge ${c}">${dot} ${status?.name || 'Unknown'}</span>`;
+    return `<span class="sc-badge ${c}">${dot} ${esc(status?.name || 'Unknown')}</span>`;
   }
 
   function webcastBtn(launch) {
     const v = launch.vidURLs?.[0];
     if (!v) return '';
-    return `<a href="${v.url}" target="_blank" class="webcast-btn">▶ Webcast</a>`;
+    return `<a href="${esc(v.url)}" target="_blank" class="webcast-btn">▶ Webcast</a>`;
   }
 
   // ----------------------------------------------------------
@@ -808,18 +909,18 @@ ul.task-list li input[type="checkbox"] {
   function renderFeaturedCard(launch) {
     const prog  = getProgram(launch);
     const thumb = launch.image?.thumbnail_url || launch.image?.image_url || null;
-    const icon  = prog === 'starship' ? '🚀' : '🌙';
-    const label = prog === 'starship' ? '🚀 SpaceX Starship' : '🌙 NASA Artemis';
+    const fallbackImg = prog === 'starship' ? 'starship.jpg' : 'artemis.jpg';
+    const label = prog === 'starship' ? 'SpaceX Starship' : 'NASA Artemis';
     const desc  = launch.mission?.description || '';
-    const short = desc.length > 190 ? desc.slice(0, 190) + '…' : desc;
+    const isTruncated = desc.length > 190;
+    const slug  = launch.slug || '';
     const rocket   = launch.rocket?.configuration?.full_name || launch.rocket?.configuration?.name || '';
     const pad      = launch.pad?.name || '';
     const location = launch.pad?.location?.name || '';
 
     const thumbHtml = thumb
-      ? `<img src="${thumb}" class="fc-thumb" alt=""
-             onerror="this.outerHTML='<div class=\\"fc-thumb-placeholder\\">${icon}</div>'">`
-      : `<div class="fc-thumb-placeholder">${icon}</div>`;
+      ? `<img src="${esc(thumb)}" class="fc-thumb" alt="" data-fallback-img="${fallbackImg}">`
+      : `<img src="${fallbackImg}" class="fc-thumb" alt="">`;
 
     return `
       <div class="featured-card ${prog} card">
@@ -829,16 +930,23 @@ ul.task-list li input[type="checkbox"] {
         <div class="fc-body">
           ${thumbHtml}
           <div style="flex:1;min-width:0">
-            <div class="fc-title">${launch.name}</div>
+            <div class="fc-title">${esc(launch.name)}</div>
             <div class="fc-meta">
-              ${rocket   ? `<span>🛸 ${rocket}</span>` : ''}
-              ${pad      ? `<span>📍 ${pad}${location ? ', ' + location : ''}</span>` : ''}
+              ${rocket   ? `<span>🛸 ${esc(rocket)}</span>` : ''}
+              ${pad      ? `<span>📍 ${esc(pad)}${location ? ', ' + esc(location) : ''}</span>` : ''}
             </div>
-            ${short ? `<div class="fc-desc">${short}</div>` : ''}
+            ${desc ? `
+              <div class="fc-desc">
+                <div class="fc-desc-short">${esc(desc)}</div>
+                ${isTruncated ? `<div class="fc-desc-full">${esc(desc)}</div>` : ''}
+              </div>
+            ` : ''}
             <div class="fc-footer">
               <span class="net-date ${isPrecise(launch) ? '' : 'net-imprecise'}">
-                📅 ${formatNET(launch)}
+                📅 ${formatNET(launch)}${formatAET(launch)}
               </span>
+              ${isTruncated ? `<button class="fc-expand-toggle" data-action="expand">▾ More</button>` : ''}
+              ${slug ? `<a href="https://spacelaunchnow.me/launch/${esc(slug)}" target="_blank" class="fc-info-link">More info ↗</a>` : ''}
               ${webcastBtn(launch)}
             </div>
           </div>
@@ -866,8 +974,8 @@ ul.task-list li input[type="checkbox"] {
           <div class="lr-date-year" >${year}</div>
         </div>
         <div class="lr-info">
-          <div class="lr-name">${launch.name}${icon}</div>
-          <div class="lr-sub">${rocket}${provider ? ' · ' + provider : ''}${loc ? ' · ' + loc : ''}</div>
+          <div class="lr-name">${esc(launch.name)}${icon}</div>
+          <div class="lr-sub">${esc(rocket)}${provider ? ' · ' + esc(provider) : ''}${loc ? ' · ' + esc(loc) : ''}</div>
         </div>
         <div class="lr-right">
           ${badge(launch.status)}
@@ -891,11 +999,17 @@ ul.task-list li input[type="checkbox"] {
         ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => {
           document.getElementById(id).textContent = '00';
         });
-        document.getElementById('hero-prefix').textContent = '🚀 T-0 — Launch!';
+        document.getElementById('hero-prefix').textContent = 'T-0 — Launch!';
         clearInterval(_timerID);
+        // Refresh after 5 seconds to show the next upcoming launch
+        setTimeout(() => {
+          localStorage.removeItem(CACHE_KEY);
+          load();
+        }, 5000);
         return;
       }
-      document.getElementById('cd-days') .textContent = pad(Math.floor(diff / 86400000));
+      const days = Math.floor(diff / 86400000);
+      document.getElementById('cd-days') .textContent = days;
       document.getElementById('cd-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
       document.getElementById('cd-mins') .textContent = pad(Math.floor((diff % 3600000)  / 60000));
       document.getElementById('cd-secs') .textContent = pad(Math.floor((diff % 60000)    / 1000));
@@ -909,7 +1023,10 @@ ul.task-list li input[type="checkbox"] {
   // ----------------------------------------------------------
 
   function renderHero(launches) {
-    const future = launches.filter(l => new Date(l.net).getTime() > Date.now());
+    const future = launches.filter(l =>
+      new Date(l.net).getTime() > Date.now() &&
+      (l.status?.abbrev || '').toLowerCase() !== 'success'
+    );
 
     // Priority: featured + precise → featured → any
     const hero =
@@ -927,9 +1044,9 @@ ul.task-list li input[type="checkbox"] {
 
     const prog = getProgram(hero);
     document.getElementById('hero-prefix').textContent =
-      prog === 'starship' ? '🚀 Next Starship Launch' :
-      prog === 'artemis'  ? '🌙 Next Artemis Launch'  :
-                            '🚀 Next Launch';
+      prog === 'starship' ? 'Next Starship Launch' :
+      prog === 'artemis'  ? 'Next Artemis Launch'  :
+                            'Next Launch';
 
     document.getElementById('hero-mission').textContent = hero.name;
 
@@ -944,23 +1061,23 @@ ul.task-list li input[type="checkbox"] {
     document.getElementById('hero-status-wrap').innerHTML =
       `<span class="hero-status-badge"
              style="background:${col}22;border:1px solid ${col};color:${col}">
-         ${hero.status?.name || 'Unknown'}
+         ${esc(hero.status?.name || 'Unknown')}
        </span>`;
 
     // Timer or date only
     if (isPrecise(hero)) {
       startCountdown(new Date(hero.net).getTime());
       document.getElementById('countdown-timer').style.display = 'flex';
-      document.getElementById('hero-date').textContent = 'NET: ' + formatNET(hero);
+      document.getElementById('hero-date').textContent = 'NET: ' + formatNET(hero) + formatAET(hero);
     } else {
       document.getElementById('countdown-timer').style.display = 'none';
-      document.getElementById('hero-date').textContent = 'Estimated: ' + formatNET(hero);
+      document.getElementById('hero-date').textContent = 'Estimated: ' + formatNET(hero) + formatAET(hero);
     }
 
     // Webcast
     const vid = hero.vidURLs?.[0];
     document.getElementById('hero-webcast').innerHTML = vid
-      ? `<a href="${vid.url}" target="_blank" class="hero-webcast-link">▶ Watch Webcast</a>`
+      ? `<a href="${esc(vid.url)}" target="_blank" class="hero-webcast-link">▶ Watch Webcast</a>`
       : '';
   }
 
@@ -969,8 +1086,9 @@ ul.task-list li input[type="checkbox"] {
   // ----------------------------------------------------------
 
   function renderLaunches(launches) {
-    const featured = launches.filter(l => getProgram(l));
-    const rest     = launches.filter(l => !getProgram(l));
+    const pending  = launches.filter(l => (l.status?.abbrev || '').toLowerCase() !== 'success');
+    const featured = pending.filter(l => getProgram(l));
+    const rest     = pending.filter(l => !getProgram(l));
 
     if (featured.length) {
       document.getElementById('featured-section').style.display = 'block';
@@ -978,11 +1096,62 @@ ul.task-list li input[type="checkbox"] {
         featured.map(renderFeaturedCard).join('');
     }
 
+    const VISIBLE_COUNT = 10;
     const allEl = document.getElementById('all-launches');
-    if (!launches.length) {
+    if (!rest.length && !featured.length) {
       allEl.innerHTML = '<div class="sc-loading">No upcoming launches found.</div>';
     } else {
-      allEl.innerHTML = launches.map(renderLaunchRow).join('');
+      const rows = rest.map((l, i) => {
+        const html = renderLaunchRow(l);
+        return i < VISIBLE_COUNT ? html : html.replace('class="launch-row"', 'class="launch-row lr-hidden" style="display:none"');
+      });
+      allEl.innerHTML = rows.join('');
+
+      const hidden = rest.length - VISIBLE_COUNT;
+      if (hidden > 0) {
+        const btn = document.createElement('button');
+        btn.className = 'sc-show-more';
+        btn.textContent = `Show ${hidden} more launches`;
+        btn.addEventListener('click', () => {
+          allEl.querySelectorAll('.lr-hidden').forEach(el => {
+            el.style.display = '';
+            el.classList.remove('lr-hidden');
+          });
+          btn.remove();
+        });
+        allEl.appendChild(btn);
+      }
+    }
+
+    // Recent launches (successful, most recent first)
+    const RECENT_VISIBLE = 10;
+    const recent = launches
+      .filter(l => (l.status?.abbrev || '').toLowerCase() === 'success')
+      .sort((a, b) => new Date(b.net) - new Date(a.net));
+    const recentEl = document.getElementById('recent-launches');
+    if (!recent.length) {
+      recentEl.innerHTML = '<div class="sc-loading">No recent launches found.</div>';
+    } else {
+      const rows = recent.map((l, i) => {
+        const html = renderLaunchRow(l);
+        return i < RECENT_VISIBLE ? html : html.replace('class="launch-row"', 'class="launch-row lr-hidden" style="display:none"');
+      });
+      recentEl.innerHTML = rows.join('');
+
+      const hidden = recent.length - RECENT_VISIBLE;
+      if (hidden > 0) {
+        const btn = document.createElement('button');
+        btn.className = 'sc-show-more';
+        btn.textContent = `Show ${hidden} more launches`;
+        btn.addEventListener('click', () => {
+          recentEl.querySelectorAll('.lr-hidden').forEach(el => {
+            el.style.display = '';
+            el.classList.remove('lr-hidden');
+          });
+          btn.remove();
+        });
+        recentEl.appendChild(btn);
+      }
     }
   }
 
@@ -1044,6 +1213,40 @@ ul.task-list li input[type="checkbox"] {
       showError(err.message);
     }
   }
+
+  // Tab switching
+  document.addEventListener('click', function (e) {
+    const tab = e.target.closest('.sc-tab');
+    if (!tab) return;
+    const tabs = tab.parentElement;
+    tabs.querySelectorAll('.sc-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const section = tabs.parentElement;
+    section.querySelectorAll('.sc-tab-panel').forEach(p => p.classList.remove('active'));
+    section.querySelector('#panel-' + tab.dataset.tab).classList.add('active');
+  });
+
+  // Toggle expanded/collapsed description on featured cards
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.fc-expand-toggle');
+    if (!btn) return;
+    const desc = btn.closest('.featured-card').querySelector('.fc-desc');
+    if (!desc) return;
+    const expanding = !desc.classList.contains('expanded');
+    desc.classList.toggle('expanded');
+    btn.textContent = expanding ? '▴ Less' : '▾ More';
+  });
+
+  // Replace broken thumbnail images with local fallback
+  document.addEventListener('error', function (e) {
+    if (e.target.tagName === 'IMG' && e.target.classList.contains('fc-thumb')) {
+      const fallback = e.target.dataset.fallbackImg;
+      if (fallback) {
+        e.target.removeAttribute('data-fallback-img');
+        e.target.src = fallback;
+      }
+    }
+  }, true);
 
   load();
 })();
