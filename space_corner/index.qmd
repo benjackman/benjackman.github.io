@@ -465,6 +465,7 @@ resources:
 </div>
 
 <div id="launches-section">
+  <div class="sc-section-title">More Launches</div>
   <div class="sc-tabs">
     <button class="sc-tab active" data-tab="upcoming">Upcoming</button>
     <button class="sc-tab" data-tab="recent">Recent</button>
