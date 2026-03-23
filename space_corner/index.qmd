@@ -1,6 +1,9 @@
 ---
 title: "🪐 Space Corner"
 toc: false
+resources:
+  - starship.jpg
+  - artemis.jpg
 ---
 
 ```{=html}
