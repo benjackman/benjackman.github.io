@@ -430,7 +430,7 @@ toc: false
      LAUNCHES LIST
      ========================================================= -->
 <div id="featured-section" style="display:none">
-  <div class="sc-section-title">🌟 Starship &amp; Artemis</div>
+  <div class="sc-section-title">Starship &amp; Artemis</div>
   <div id="featured-launches"></div>
 </div>
 
@@ -533,8 +533,8 @@ toc: false
   function renderFeaturedCard(launch) {
     const prog  = getProgram(launch);
     const thumb = launch.image?.thumbnail_url || launch.image?.image_url || null;
-    const icon  = prog === 'starship' ? '🚀' : '🌙';
-    const label = prog === 'starship' ? '🚀 SpaceX Starship' : '🌙 NASA Artemis';
+    const fallbackImg = prog === 'starship' ? 'starship.jpg' : 'artemis.jpg';
+    const label = prog === 'starship' ? 'SpaceX Starship' : 'NASA Artemis';
     const desc  = launch.mission?.description || '';
     const isTruncated = desc.length > 190;
     const slug  = launch.slug || '';
@@ -543,8 +543,8 @@ toc: false
     const location = launch.pad?.location?.name || '';
 
     const thumbHtml = thumb
-      ? `<img src="${esc(thumb)}" class="fc-thumb" alt="" data-fallback-icon="${esc(icon)}">`
-      : `<div class="fc-thumb-placeholder">${icon}</div>`;
+      ? `<img src="${esc(thumb)}" class="fc-thumb" alt="" data-fallback-img="${fallbackImg}">`
+      : `<img src="${fallbackImg}" class="fc-thumb" alt="">`;
 
     return `
       <div class="featured-card ${prog} card">
@@ -818,14 +818,14 @@ toc: false
     btn.textContent = expanding ? '▴ Less' : '▾ More';
   });
 
-  // Replace broken thumbnail images with emoji placeholders
+  // Replace broken thumbnail images with local fallback
   document.addEventListener('error', function (e) {
     if (e.target.tagName === 'IMG' && e.target.classList.contains('fc-thumb')) {
-      const icon = e.target.dataset.fallbackIcon || '🚀';
-      const placeholder = document.createElement('div');
-      placeholder.className = 'fc-thumb-placeholder';
-      placeholder.textContent = icon;
-      e.target.replaceWith(placeholder);
+      const fallback = e.target.dataset.fallbackImg;
+      if (fallback) {
+        e.target.removeAttribute('data-fallback-img');
+        e.target.src = fallback;
+      }
     }
   }, true);
 
