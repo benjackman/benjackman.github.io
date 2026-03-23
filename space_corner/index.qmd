@@ -572,6 +572,11 @@ toc: false
         });
         document.getElementById('hero-prefix').textContent = '🚀 T-0 — Launch!';
         clearInterval(_timerID);
+        // Refresh after 5 seconds to show the next upcoming launch
+        setTimeout(() => {
+          localStorage.removeItem(CACHE_KEY);
+          load();
+        }, 5000);
         return;
       }
       document.getElementById('cd-days') .textContent = pad(Math.floor(diff / 86400000));
