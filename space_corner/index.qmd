@@ -316,6 +316,25 @@ toc: false
 
 .lr-right      { flex-shrink: 0; text-align: right; }
 
+/* --- Show-more button ---------------------------------------- */
+.sc-show-more {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.5rem;
+  border: 1px dashed var(--bs-border-color);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--bs-secondary-color);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.sc-show-more:hover {
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+}
+
 /* --- Loading / error states ---------------------------------- */
 .sc-loading { text-align: center; padding: 3rem; color: var(--bs-secondary-color); }
 .sc-error   {
@@ -666,11 +685,31 @@ toc: false
         featured.map(renderFeaturedCard).join('');
     }
 
+    const VISIBLE_COUNT = 10;
     const allEl = document.getElementById('all-launches');
     if (!rest.length && !featured.length) {
       allEl.innerHTML = '<div class="sc-loading">No upcoming launches found.</div>';
     } else {
-      allEl.innerHTML = rest.map(renderLaunchRow).join('');
+      const rows = rest.map((l, i) => {
+        const html = renderLaunchRow(l);
+        return i < VISIBLE_COUNT ? html : html.replace('class="launch-row"', 'class="launch-row lr-hidden" style="display:none"');
+      });
+      allEl.innerHTML = rows.join('');
+
+      const hidden = rest.length - VISIBLE_COUNT;
+      if (hidden > 0) {
+        const btn = document.createElement('button');
+        btn.className = 'sc-show-more';
+        btn.textContent = `Show ${hidden} more launches`;
+        btn.addEventListener('click', () => {
+          allEl.querySelectorAll('.lr-hidden').forEach(el => {
+            el.style.display = '';
+            el.classList.remove('lr-hidden');
+          });
+          btn.remove();
+        });
+        allEl.appendChild(btn);
+      }
     }
   }
 
