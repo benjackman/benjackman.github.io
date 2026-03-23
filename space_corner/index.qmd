@@ -578,7 +578,8 @@ toc: false
         }, 5000);
         return;
       }
-      document.getElementById('cd-days') .textContent = pad(Math.floor(diff / 86400000));
+      const days = Math.floor(diff / 86400000);
+      document.getElementById('cd-days') .textContent = days;
       document.getElementById('cd-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
       document.getElementById('cd-mins') .textContent = pad(Math.floor((diff % 3600000)  / 60000));
       document.getElementById('cd-secs') .textContent = pad(Math.floor((diff % 60000)    / 1000));
