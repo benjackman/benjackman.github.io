@@ -496,8 +496,7 @@ toc: false
     const location = launch.pad?.location?.name || '';
 
     const thumbHtml = thumb
-      ? `<img src="${esc(thumb)}" class="fc-thumb" alt=""
-             onerror="this.outerHTML='<div class=\\"fc-thumb-placeholder\\">${icon}</div>'">`
+      ? `<img src="${esc(thumb)}" class="fc-thumb" alt="" data-fallback-icon="${esc(icon)}">`
       : `<div class="fc-thumb-placeholder">${icon}</div>`;
 
     return `
@@ -728,6 +727,17 @@ toc: false
       showError(err.message);
     }
   }
+
+  // Replace broken thumbnail images with emoji placeholders
+  document.addEventListener('error', function (e) {
+    if (e.target.tagName === 'IMG' && e.target.classList.contains('fc-thumb')) {
+      const icon = e.target.dataset.fallbackIcon || '🚀';
+      const placeholder = document.createElement('div');
+      placeholder.className = 'fc-thumb-placeholder';
+      placeholder.textContent = icon;
+      e.target.replaceWith(placeholder);
+    }
+  }, true);
 
   load();
 })();
