@@ -593,7 +593,10 @@ toc: false
   // ----------------------------------------------------------
 
   function renderHero(launches) {
-    const future = launches.filter(l => new Date(l.net).getTime() > Date.now());
+    const future = launches.filter(l =>
+      new Date(l.net).getTime() > Date.now() &&
+      (l.status?.abbrev || '').toLowerCase() !== 'success'
+    );
 
     // Priority: featured + precise → featured → any
     const hero =
@@ -653,8 +656,9 @@ toc: false
   // ----------------------------------------------------------
 
   function renderLaunches(launches) {
-    const featured = launches.filter(l => getProgram(l));
-    const rest     = launches.filter(l => !getProgram(l));
+    const pending  = launches.filter(l => (l.status?.abbrev || '').toLowerCase() !== 'success');
+    const featured = pending.filter(l => getProgram(l));
+    const rest     = pending.filter(l => !getProgram(l));
 
     if (featured.length) {
       document.getElementById('featured-section').style.display = 'block';
