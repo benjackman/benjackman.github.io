@@ -384,7 +384,7 @@ toc: false
      LAUNCHES LIST
      ========================================================= -->
 <div id="featured-section" style="display:none">
-  <div class="sc-section-title">🌟 Featured Launches</div>
+  <div class="sc-section-title">🌟 Starship &amp; Artemis</div>
   <div id="featured-launches"></div>
 </div>
 
