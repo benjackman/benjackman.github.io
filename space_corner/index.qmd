@@ -652,10 +652,10 @@ toc: false
     }
 
     const allEl = document.getElementById('all-launches');
-    if (!launches.length) {
+    if (!rest.length && !featured.length) {
       allEl.innerHTML = '<div class="sc-loading">No upcoming launches found.</div>';
     } else {
-      allEl.innerHTML = launches.map(renderLaunchRow).join('');
+      allEl.innerHTML = rest.map(renderLaunchRow).join('');
     }
   }
 
