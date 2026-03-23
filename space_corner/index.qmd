@@ -626,7 +626,7 @@ resources:
         ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => {
           document.getElementById(id).textContent = '00';
         });
-        document.getElementById('hero-prefix').textContent = '🚀 T-0 — Launch!';
+        document.getElementById('hero-prefix').textContent = 'T-0 — Launch!';
         clearInterval(_timerID);
         // Refresh after 5 seconds to show the next upcoming launch
         setTimeout(() => {
@@ -671,9 +671,9 @@ resources:
 
     const prog = getProgram(hero);
     document.getElementById('hero-prefix').textContent =
-      prog === 'starship' ? '🚀 Next Starship Launch' :
-      prog === 'artemis'  ? '🌙 Next Artemis Launch'  :
-                            '🚀 Next Launch';
+      prog === 'starship' ? 'Next Starship Launch' :
+      prog === 'artemis'  ? 'Next Artemis Launch'  :
+                            'Next Launch';
 
     document.getElementById('hero-mission').textContent = hero.name;
 
