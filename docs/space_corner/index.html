@@ -734,6 +734,11 @@ ul.task-list li input[type="checkbox"] {
   .countdown-timer { gap: 0.15rem; }
   .fc-thumb, .fc-thumb-placeholder { display: none; }
   .lr-date        { min-width: 50px; }
+
+  /* Stack launch rows: badge drops below, aligned with info text */
+  .launch-row     { flex-wrap: wrap; }
+  .lr-info        { flex-basis: calc(100% - 50px - 1rem); }
+  .lr-right       { margin-left: calc(50px + 1rem); }
 }
 </style>
 
