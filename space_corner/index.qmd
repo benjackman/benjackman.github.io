@@ -230,11 +230,38 @@ toc: false
   font-size: 0.83rem;
   color: var(--bs-secondary-color);
   margin-bottom: 0.6rem;
+}
+.fc-desc-short {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.fc-desc-full { display: none; }
+.fc-desc.expanded .fc-desc-short { display: none; }
+.fc-desc.expanded .fc-desc-full  { display: block; }
+
+.fc-expand-toggle {
+  font-size: 0.76rem;
+  color: var(--bs-secondary-color);
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  transition: color 0.15s;
+}
+.fc-expand-toggle:hover { color: var(--bs-body-color); }
+
+.fc-info-link {
+  font-size: 0.76rem;
+  text-decoration: none;
+  color: var(--bs-secondary-color);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  transition: color 0.15s;
+}
+.fc-info-link:hover { color: var(--bs-body-color); }
 
 .fc-footer {
   display: flex;
@@ -509,7 +536,8 @@ toc: false
     const icon  = prog === 'starship' ? '🚀' : '🌙';
     const label = prog === 'starship' ? '🚀 SpaceX Starship' : '🌙 NASA Artemis';
     const desc  = launch.mission?.description || '';
-    const short = desc.length > 190 ? desc.slice(0, 190) + '…' : desc;
+    const isTruncated = desc.length > 190;
+    const slug  = launch.slug || '';
     const rocket   = launch.rocket?.configuration?.full_name || launch.rocket?.configuration?.name || '';
     const pad      = launch.pad?.name || '';
     const location = launch.pad?.location?.name || '';
@@ -531,11 +559,18 @@ toc: false
               ${rocket   ? `<span>🛸 ${esc(rocket)}</span>` : ''}
               ${pad      ? `<span>📍 ${esc(pad)}${location ? ', ' + esc(location) : ''}</span>` : ''}
             </div>
-            ${short ? `<div class="fc-desc">${esc(short)}</div>` : ''}
+            ${desc ? `
+              <div class="fc-desc">
+                <div class="fc-desc-short">${esc(desc)}</div>
+                ${isTruncated ? `<div class="fc-desc-full">${esc(desc)}</div>` : ''}
+              </div>
+            ` : ''}
             <div class="fc-footer">
               <span class="net-date ${isPrecise(launch) ? '' : 'net-imprecise'}">
                 📅 ${formatNET(launch)}
               </span>
+              ${isTruncated ? `<button class="fc-expand-toggle" data-action="expand">▾ More</button>` : ''}
+              ${slug ? `<a href="https://spacelaunchnow.me/launch/${esc(slug)}" target="_blank" class="fc-info-link">More info ↗</a>` : ''}
               ${webcastBtn(launch)}
             </div>
           </div>
@@ -771,6 +806,17 @@ toc: false
       showError(err.message);
     }
   }
+
+  // Toggle expanded/collapsed description on featured cards
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.fc-expand-toggle');
+    if (!btn) return;
+    const desc = btn.closest('.featured-card').querySelector('.fc-desc');
+    if (!desc) return;
+    const expanding = !desc.classList.contains('expanded');
+    desc.classList.toggle('expanded');
+    btn.textContent = expanding ? '▴ Less' : '▾ More';
+  });
 
   // Replace broken thumbnail images with emoji placeholders
   document.addEventListener('error', function (e) {
