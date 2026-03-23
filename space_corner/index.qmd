@@ -346,6 +346,33 @@ resources:
 
 .lr-right      { flex-shrink: 0; text-align: right; }
 
+/* --- Tabs ---------------------------------------------------- */
+.sc-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--bs-border-color);
+  margin-bottom: 1rem;
+}
+.sc-tab {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bs-secondary-color);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.sc-tab:hover { color: var(--bs-body-color); }
+.sc-tab.active {
+  color: var(--bs-body-color);
+  border-bottom-color: var(--bs-primary);
+}
+.sc-tab-panel { display: none; }
+.sc-tab-panel.active { display: block; }
+
 /* --- Show-more button ---------------------------------------- */
 .sc-show-more {
   display: block;
@@ -437,10 +464,20 @@ resources:
   <div id="featured-launches"></div>
 </div>
 
-<div id="all-section">
-  <div class="sc-section-title">🚀 All Upcoming Launches</div>
-  <div id="all-launches">
-    <div class="sc-loading">Loading… 🛰️</div>
+<div id="launches-section">
+  <div class="sc-tabs">
+    <button class="sc-tab active" data-tab="upcoming">Upcoming</button>
+    <button class="sc-tab" data-tab="recent">Recent</button>
+  </div>
+  <div class="sc-tab-panel active" id="panel-upcoming">
+    <div id="all-launches">
+      <div class="sc-loading">Loading… 🛰️</div>
+    </div>
+  </div>
+  <div class="sc-tab-panel" id="panel-recent">
+    <div id="recent-launches">
+      <div class="sc-loading">Loading… 🛰️</div>
+    </div>
   </div>
 </div>
 
@@ -749,6 +786,37 @@ resources:
         allEl.appendChild(btn);
       }
     }
+
+    // Recent launches (successful, most recent first)
+    const RECENT_VISIBLE = 10;
+    const recent = launches
+      .filter(l => (l.status?.abbrev || '').toLowerCase() === 'success')
+      .sort((a, b) => new Date(b.net) - new Date(a.net));
+    const recentEl = document.getElementById('recent-launches');
+    if (!recent.length) {
+      recentEl.innerHTML = '<div class="sc-loading">No recent launches found.</div>';
+    } else {
+      const rows = recent.map((l, i) => {
+        const html = renderLaunchRow(l);
+        return i < RECENT_VISIBLE ? html : html.replace('class="launch-row"', 'class="launch-row lr-hidden" style="display:none"');
+      });
+      recentEl.innerHTML = rows.join('');
+
+      const hidden = recent.length - RECENT_VISIBLE;
+      if (hidden > 0) {
+        const btn = document.createElement('button');
+        btn.className = 'sc-show-more';
+        btn.textContent = `Show ${hidden} more launches`;
+        btn.addEventListener('click', () => {
+          recentEl.querySelectorAll('.lr-hidden').forEach(el => {
+            el.style.display = '';
+            el.classList.remove('lr-hidden');
+          });
+          btn.remove();
+        });
+        recentEl.appendChild(btn);
+      }
+    }
   }
 
   // ----------------------------------------------------------
@@ -809,6 +877,18 @@ resources:
       showError(err.message);
     }
   }
+
+  // Tab switching
+  document.addEventListener('click', function (e) {
+    const tab = e.target.closest('.sc-tab');
+    if (!tab) return;
+    const tabs = tab.parentElement;
+    tabs.querySelectorAll('.sc-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const section = tabs.parentElement;
+    section.querySelectorAll('.sc-tab-panel').forEach(p => p.classList.remove('active'));
+    section.querySelector('#panel-' + tab.dataset.tab).classList.add('active');
+  });
 
   // Toggle expanded/collapsed description on featured cards
   document.addEventListener('click', function (e) {
