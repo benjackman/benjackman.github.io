@@ -18,7 +18,7 @@ jobs:
         run: |
           TODAY=$(date -u +%Y-%m-%d)
           RESPONSE=$(curl -s \
-            "${SUPABASE_URL}/rest/v1/bets?resolved=eq.false&horizon=lte.${TODAY}&horizon_notified=eq.false&select=id,description,stake,horizon" \
+            "${SUPABASE_URL}/rest/v1/bets?resolved=eq.false&horizon=lte.${TODAY}&horizon_notified=eq.false&select=id,description,ben_position,verity_position,stake,horizon" \
             -H "apikey: ${SUPABASE_SERVICE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}")
 
@@ -27,15 +27,9 @@ jobs:
           echo "count=$COUNT" >> "$GITHUB_OUTPUT"
 
           if [ "$COUNT" -gt 0 ]; then
-            # Build email body
+            LINES=$(echo "$RESPONSE" | jq -r '.[] | "• \(.description) ($\(.stake)) — horizon was \(.horizon)\n  Ben: \(.ben_position)\n  Verity: \(.verity_position)"')
             BODY="The following bets have reached their horizon and remain unresolved:"
-            BODY="$BODY"$'\n'
-            echo "$RESPONSE" | jq -r '.[] | "• \(.description) ($\(.stake)) — horizon was \(.horizon)"' | while read -r line; do
-              BODY="$BODY"$'\n'"$line"
-            done
-
-            LINES=$(echo "$RESPONSE" | jq -r '.[] | "• \(.description) ($\(.stake)) — horizon was \(.horizon)"')
-            BODY="$BODY"$'\n'"$LINES"
+            BODY="$BODY"$'\n\n'"$LINES"
             BODY="$BODY"$'\n\n'"Time to check in."
             BODY="$BODY"$'\n'"https://benjackman.github.io/betledger/"
 
