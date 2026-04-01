@@ -4,6 +4,55 @@ resources:
   - ags_yield_curve.gif
 ---
 
+## Vibe Coding a macOS App from RStudio
+
+*30 March 2026*
+
+<img src="schedule_viewer_screenshot.png" alt="Schedule Viewer app showing launchd jobs on macOS" style="width: 100%; max-width: 700px; display: block; margin: 0 auto; margin-bottom: 1em;">
+
+I read Simon Willison's post on [vibe coding SwiftUI apps](https://simonwillison.net/2026/Mar/27/vibe-coding-swiftui/) a few days ago and immediately wanted to try it. He realised that a full SwiftUI app can fit in a single text file, compiled and run without ever opening Xcode, which is a delightful way to vibe-code simple MacOS utilities. 
+
+### The idea
+
+My Mac has various scheduled jobs running in the background via `launchd` — macOS's system for scheduled tasks, background services, and launch-on-load processes. I have a few personal tools, and the obvious system and app tasks from Dropbox, Google, and so on. Managing these normally means fiddling with XML plist files and `launchctl` terminal commands, which is doable but annoying. I'd prefer a GUI - and wondered if Claude can help me get away with not paying for one. 
+
+### The build
+
+I asked Claude to plan a lightweight SwiftUI app in a single text file — that produces a simple GUI for scheduled processes. Claude explored my system to see what launchd jobs look like, checked what Swift version was available, and put together a plan. I approved the first run, and Claude wrote the entire app and compiled it. Simon's tip is to then get the LLM to suggest features - Claude would plan them, I'd approve, and it would implement and compile. 
+
+### Feature creep 
+
+Over the course of 20 minutes of iteration, the app grew from a basic viewer into something relatively well featured:
+
+- **Monitoring**: auto-refresh on a timer, last-run timestamps derived from log file modification times, live log tailing with a pause button, and macOS notifications when a job fails
+- **Editing**: an enable/disable toggle per job, a schedule editor that modifies the plist and reloads the job, a form to create new jobs with a file browser for picking the program, and job duplication
+- **Quality of life**: grouped sidebar sections by domain (collapsible), Reveal in Finder and Open Plist buttons, a delete button requiring you to type the job name to confirm, and a menu bar icon for quick access without opening the full window
+
+The whole thing is about 1,200 lines of Swift in a single file, compiling to a ~430KB binary. Claude wrapped it in a proper `.app` bundle so it shows up in Spotlight and can sit in the Dock.
+
+### Testing
+
+To test the app's job creation feature, I used it to create a simple heartbeat job that writes a timestamp to a log file every minute. It worked — the job appeared in the sidebar, I could start it, watch the log file fill up, then disable it with the toggle and confirm it stopped. 
+
+I have no test suites or other QA for this app, but I don't really care, because it's not critical that I get my personal scheduled jobs exactly right. 
+
+### Bugs and bumps
+
+On several iterations there were some inscrutable Swift bugs during compilation (and one during runtime), but Claude picks up the former when builds fail and can iterate, and I just pasted any runtime issues back to Claude. This is a similar build-error-fix loop as with the [F1 timing app](#what-can-claude-one-shot), but smoother because Claude can see compile errors directly in its own context and fix them in place.
+
+### Reflections
+
+A few things stand out:
+
+- **SwiftUI from RStudio works surprisingly well.** The Posit AI beta's ability to run shell commands means compiling Swift is just another tool call. I never opened Xcode or Terminal.
+- **Single-file apps are underrated.** No project files, no build system, no dependencies. Just a `.swift` file and `swiftc`. This is smooth and easy, and I think makes the LLMs more reliable.
+- **The feature-suggestion pattern is great.** Asking LLMs to suggest features is a great way to discover what's possible, as they know the APIs and frameworks better than I do, and several features (like `DispatchSource` file monitoring for live log tailing) are things I wouldn't have thought to ask for.
+- **I don't really know Swift.** Similar to Simon's caveat — I can read it, but I didn't write any of this code, and I'm not well placed to evaluate whether it's doing things optimally under the hood. It works, and it feels solid in use, but the usual vibe coding disclaimers apply.
+
+The source code is on [GitHub](https://github.com/benjackman/ScheduleViewer). As always, it was a lot of fun to go from an idea to a working macOS app in a single session.
+
+---
+
 ## Building the Swear Jar
 
 *18 March 2026*
