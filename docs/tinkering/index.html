@@ -367,6 +367,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="vibe-coding-a-macos-app-from-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="vibe-coding-a-macos-app-from-rstudio">Vibe Coding a macOS App from RStudio</h2>
+<p><em>30 March 2026</em></p>
+<p><img src="schedule_viewer_screenshot.png" alt="Schedule Viewer app showing launchd jobs on macOS" style="width: 100%; max-width: 700px; display: block; margin: 0 auto; margin-bottom: 1em;"></p>
+<p>I read Simon Willison’s post on <a href="https://simonwillison.net/2026/Mar/27/vibe-coding-swiftui/">vibe coding SwiftUI apps</a> a few days ago and immediately wanted to try it. He realised that a full SwiftUI app can fit in a single text file, compiled and run without ever opening Xcode, which is a delightful way to vibe-code simple MacOS utilities.</p>
+<section id="the-idea" class="level3">
+<h3 class="anchored" data-anchor-id="the-idea">The idea</h3>
+<p>My Mac has various scheduled jobs running in the background via <code>launchd</code> — macOS’s system for scheduled tasks, background services, and launch-on-load processes. I have a few personal tools, and the obvious system and app tasks from Dropbox, Google, and so on. Managing these normally means fiddling with XML plist files and <code>launchctl</code> terminal commands, which is doable but annoying. I’d prefer a GUI - and wondered if Claude can help me get away with not paying for one.</p>
+</section>
+<section id="the-build" class="level3">
+<h3 class="anchored" data-anchor-id="the-build">The build</h3>
+<p>I asked Claude to plan a lightweight SwiftUI app in a single text file — that produces a simple GUI for scheduled processes. Claude explored my system to see what launchd jobs look like, checked what Swift version was available, and put together a plan. I approved the first run, and Claude wrote the entire app and compiled it. Simon’s tip is to then get the LLM to suggest features - Claude would plan them, I’d approve, and it would implement and compile.</p>
+</section>
+<section id="feature-creep" class="level3">
+<h3 class="anchored" data-anchor-id="feature-creep">Feature creep</h3>
+<p>Over the course of 20 minutes of iteration, the app grew from a basic viewer into something relatively well featured:</p>
+<ul>
+<li><strong>Monitoring</strong>: auto-refresh on a timer, last-run timestamps derived from log file modification times, live log tailing with a pause button, and macOS notifications when a job fails</li>
+<li><strong>Editing</strong>: an enable/disable toggle per job, a schedule editor that modifies the plist and reloads the job, a form to create new jobs with a file browser for picking the program, and job duplication</li>
+<li><strong>Quality of life</strong>: grouped sidebar sections by domain (collapsible), Reveal in Finder and Open Plist buttons, a delete button requiring you to type the job name to confirm, and a menu bar icon for quick access without opening the full window</li>
+</ul>
+<p>The whole thing is about 1,200 lines of Swift in a single file, compiling to a ~430KB binary. Claude wrapped it in a proper <code>.app</code> bundle so it shows up in Spotlight and can sit in the Dock.</p>
+</section>
+<section id="testing" class="level3">
+<h3 class="anchored" data-anchor-id="testing">Testing</h3>
+<p>To test the app’s job creation feature, I used it to create a simple heartbeat job that writes a timestamp to a log file every minute. It worked — the job appeared in the sidebar, I could start it, watch the log file fill up, then disable it with the toggle and confirm it stopped.</p>
+<p>I have no test suites or other QA for this app, but I don’t really care, because it’s not critical that I get my personal scheduled jobs exactly right.</p>
+</section>
+<section id="bugs-and-bumps" class="level3">
+<h3 class="anchored" data-anchor-id="bugs-and-bumps">Bugs and bumps</h3>
+<p>On several iterations there were some inscrutable Swift bugs during compilation (and one during runtime), but Claude picks up the former when builds fail and can iterate, and I just pasted any runtime issues back to Claude. This is a similar build-error-fix loop as with the <a href="#what-can-claude-one-shot">F1 timing app</a>, but smoother because Claude can see compile errors directly in its own context and fix them in place.</p>
+</section>
+<section id="reflections" class="level3">
+<h3 class="anchored" data-anchor-id="reflections">Reflections</h3>
+<p>A few things stand out:</p>
+<ul>
+<li><strong>SwiftUI from RStudio works surprisingly well.</strong> The Posit AI beta’s ability to run shell commands means compiling Swift is just another tool call. I never opened Xcode or Terminal.</li>
+<li><strong>Single-file apps are underrated.</strong> No project files, no build system, no dependencies. Just a <code>.swift</code> file and <code>swiftc</code>. This is smooth and easy, and I think makes the LLMs more reliable.</li>
+<li><strong>The feature-suggestion pattern is great.</strong> Asking LLMs to suggest features is a great way to discover what’s possible, as they know the APIs and frameworks better than I do, and several features (like <code>DispatchSource</code> file monitoring for live log tailing) are things I wouldn’t have thought to ask for.</li>
+<li><strong>I don’t really know Swift.</strong> Similar to Simon’s caveat — I can read it, but I didn’t write any of this code, and I’m not well placed to evaluate whether it’s doing things optimally under the hood. It works, and it feels solid in use, but the usual vibe coding disclaimers apply.</li>
+</ul>
+<p>The source code is on <a href="https://github.com/benjackman/ScheduleViewer">GitHub</a>. As always, it was a lot of fun to go from an idea to a working macOS app in a single session.</p>
+<hr>
+</section>
+</section>
 <section id="building-the-swear-jar" class="level2">
 <h2 class="anchored" data-anchor-id="building-the-swear-jar">Building the Swear Jar</h2>
 <p><em>18 March 2026</em></p>
@@ -408,8 +453,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Opus flew through the planning for this quite quickly (notably faster than for the iOS app, perhaps reflecting the relative simplicity of R packages?). It presented a few naming options, one of which I chose - pitlaneR, since others were a bit more clunky.</p>
 <p>One note is that Opus searched for APIs and prompted me to choose an option, which I did, and it immediately ignored this and chose another (although the choice I made was quite a bad one in hindsight). This behaviour is a bit concerning, but worked out positively in this particular case. This is something I’ll watch closely in future.Finally, Claude kicked off the process and began generating files.</p>
 </section>
-<section id="the-build" class="level3">
-<h3 class="anchored" data-anchor-id="the-build">The build</h3>
+<section id="the-build-1" class="level3">
+<h3 class="anchored" data-anchor-id="the-build-1">The build</h3>
 <p>Claude in RStudio seems very familiar with the structure of R packages and the general development environment for R development, and chided me for not having usethis already installed on the R instance I was working in (fair enough!). This is good as other (albeit older) frontier LLMs have been a bit flaky on R development in my experience. This could also be because Posit’s harness for Claude in the AI beta might be quite R-specific and well built.</p>
 <p>The build seemed relatively sensible, and during the process Claude was testing functionality in the R console, which was nice to see. Claude added a bunch of relatively nice features that I did not request - a cache for the API data, and a few tests.</p>
 <p>Claude did not start by opening a new RProject file, but directed me to move over to it in RStudio once it had written the files. Upon doing this, a new conversation in Claude was triggered, and the previous context appeared to be wiped, and I couldn’t access it easily. This is not a big deal, but does mean spending additional tokens to get a new instance caught up.</p>
