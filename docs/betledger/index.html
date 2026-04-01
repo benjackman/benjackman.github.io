@@ -1520,7 +1520,7 @@ ul.task-list li input[type="checkbox"] {
       const isActive = !bet.resolved;
 
       let resolvedCell;
-      if (isActive) resolvedCell = '<span class="status-pending">pending</span>';
+      if (isActive) resolvedCell = '<span class="status-yes">pending</span>';
       else if (isResolved) resolvedCell = '<span class="status-yes">Yes</span>';
       else resolvedCell = '<span class="status-no">—</span>';
 
@@ -1540,7 +1540,7 @@ ul.task-list li input[type="checkbox"] {
       // Actions column: only resolve (italic style), for active bets
       let actionsCell = '';
       if (isActive) {
-        actionsCell = `<button class="tbl-action" onclick="openResolve('${bet.id}', '${escapeAttr(bet.description)}')">resolve</button>`;
+        actionsCell = `<button class="tbl-action" onclick="openResolve('${bet.id}', '${escapeAttr(bet.description)}')">Resolve</button>`;
       }
 
       // Overdue indicator
