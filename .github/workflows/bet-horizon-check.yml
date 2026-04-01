@@ -1,0 +1,85 @@
+name: Check bet horizons
+
+on:
+  schedule:
+    # 8:00 AM AEDT (UTC+11) = 21:00 UTC previous day
+    - cron: '0 21 * * *'
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  check-horizons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query overdue bets
+        id: query
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          TODAY=$(date -u +%Y-%m-%d)
+          RESPONSE=$(curl -s \
+            "${SUPABASE_URL}/rest/v1/bets?resolved=eq.false&horizon=lte.${TODAY}&horizon_notified=eq.false&select=id,description,stake,horizon" \
+            -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}")
+
+          COUNT=$(echo "$RESPONSE" | jq 'length')
+          echo "Found $COUNT overdue bet(s)."
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+          if [ "$COUNT" -gt 0 ]; then
+            # Build email body
+            BODY="The following bets have reached their horizon and remain unresolved:"
+            BODY="$BODY"$'\n'
+            echo "$RESPONSE" | jq -r '.[] | "• \(.description) ($\(.stake)) — horizon was \(.horizon)"' | while read -r line; do
+              BODY="$BODY"$'\n'"$line"
+            done
+
+            LINES=$(echo "$RESPONSE" | jq -r '.[] | "• \(.description) ($\(.stake)) — horizon was \(.horizon)"')
+            BODY="$BODY"$'\n'"$LINES"
+            BODY="$BODY"$'\n\n'"Time to check in."
+            BODY="$BODY"$'\n'"https://benjackman.github.io/betledger/"
+
+            SUBJECT="Gambler's Ledger: ${COUNT} bet(s) past horizon"
+
+            # Save for later steps
+            echo "subject=$SUBJECT" >> "$GITHUB_OUTPUT"
+            # Use a delimiter for multiline output
+            {
+              echo "body<<BODY_EOF"
+              echo "$BODY"
+              echo "BODY_EOF"
+            } >> "$GITHUB_OUTPUT"
+
+            # Save IDs for the update step
+            IDS=$(echo "$RESPONSE" | jq -r '[.[].id] | join(",")')
+            echo "ids=$IDS" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Send email
+        if: steps.query.outputs.count > 0
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: ${{ steps.query.outputs.subject }}
+          body: ${{ steps.query.outputs.body }}
+          to: ${{ secrets.NOTIFY_EMAIL }}
+          from: Gambler's Ledger <${{ secrets.MAIL_USERNAME }}>
+
+      - name: Mark bets as notified
+        if: steps.query.outputs.count > 0
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          IDS="${{ steps.query.outputs.ids }}"
+          curl -s -X PATCH \
+            "${SUPABASE_URL}/rest/v1/bets?id=in.(${IDS})" \
+            -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=minimal" \
+            -d '{"horizon_notified": true}'
+          echo "Marked bets as notified."

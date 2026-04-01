@@ -562,40 +562,8 @@ ul.task-list li input[type="checkbox"] {
     color: #ced4da;
   }
 
-  /* Action buttons in table */
-  .tbl-btn {
-    padding: 0.2rem 0.5rem;
-    border: 1px solid #2d3436;
-    background: none;
-    font-size: 0.72rem;
-    font-weight: 600;
-    font-variant: small-caps;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-
-  .tbl-resolve {
-    color: #2d3436;
-  }
-
-  .tbl-resolve:hover {
-    background: #2d3436;
-    color: #fff;
-  }
-
-  .tbl-delete {
-    border-color: #adb5bd;
-    color: #adb5bd;
-    margin-left: 0.2rem;
-  }
-
-  .tbl-delete:hover {
-    border-color: #dc3545;
-    color: #dc3545;
-  }
-
-  .tbl-edit {
+  /* Action link style (used for resolve, edit, delete in-row) */
+  .tbl-action {
     border: none;
     background: none;
     padding: 0;
@@ -605,11 +573,90 @@ ul.task-list li input[type="checkbox"] {
     color: #ced4da;
     cursor: pointer;
     transition: color 0.15s;
-    margin-right: 0.3rem;
   }
 
-  .tbl-edit:hover {
+  .tbl-action:hover {
     color: #495057;
+  }
+
+  .tbl-action-delete:hover {
+    color: #dc3545;
+  }
+
+  /* ---- Overleaf dropdown ---- */
+  .bet-overleaf {
+    margin-top: 0.2rem;
+  }
+
+  .bet-overleaf summary {
+    cursor: pointer;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.68rem;
+    font-style: italic;
+    color: #ced4da;
+    transition: color 0.15s;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .bet-overleaf summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .bet-overleaf summary::before {
+    content: '▸';
+    font-style: normal;
+    font-size: 0.6rem;
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+
+  .bet-overleaf[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .bet-overleaf summary:hover {
+    color: #495057;
+  }
+
+  .bet-overleaf-content {
+    padding: 0.3rem 0 0.1rem 0.75rem;
+    font-size: 0.72rem;
+    color: #6c757d;
+    line-height: 1.6;
+    border-left: 1px solid #dee2e6;
+    margin-left: 0.15rem;
+    margin-top: 0.2rem;
+  }
+
+  .overleaf-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .overleaf-label {
+    font-variant: small-caps;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #495057;
+    font-size: 0.68rem;
+  }
+
+  .overleaf-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.15rem;
+  }
+
+  /* ---- Overdue tag ---- */
+  .overdue-tag {
+    font-size: 0.68rem;
+    font-style: italic;
+    color: #c0392b;
+    font-weight: 600;
   }
 
   /* ---- New bet form ---- */
@@ -985,31 +1032,36 @@ ul.task-list li input[type="checkbox"] {
     color: #495057;
   }
 
-  .quarto-dark .tbl-resolve {
-    border-color: #dee2e6;
-    color: #dee2e6;
-  }
-
-  .quarto-dark .tbl-resolve:hover {
-    background: #dee2e6;
-    color: #1e1f22;
-  }
-
-  .quarto-dark .tbl-edit {
+  .quarto-dark .tbl-action {
     color: #495057;
   }
 
-  .quarto-dark .tbl-edit:hover {
+  .quarto-dark .tbl-action:hover {
     color: #adb5bd;
   }
 
-  .quarto-dark .tbl-delete {
-    border-color: #6c757d;
-    color: #6c757d;
+  .quarto-dark .tbl-action-delete:hover {
+    color: #e5484d;
   }
 
-  .quarto-dark .tbl-delete:hover {
-    border-color: #e5484d;
+  .quarto-dark .bet-overleaf summary {
+    color: #495057;
+  }
+
+  .quarto-dark .bet-overleaf summary:hover {
+    color: #adb5bd;
+  }
+
+  .quarto-dark .bet-overleaf-content {
+    color: #868e96;
+    border-left-color: #495057;
+  }
+
+  .quarto-dark .overleaf-label {
+    color: #adb5bd;
+  }
+
+  .quarto-dark .overdue-tag {
     color: #e5484d;
   }
 
@@ -1158,7 +1210,7 @@ ul.task-list li input[type="checkbox"] {
     <div class="bl-masthead">
       <div class="bl-masthead-title">The Gambler's Ledger</div>
       <div class="bl-masthead-date" id="mastheadDate"></div>
-      <p class="bl-masthead-strapline"><strong>SYDNEY, New South Wales</strong> — A local couple, locked in a long-running series of trivial domestic wagers, have today made their betting record public. The pair, who have asked to be identified only as Ben and Verity, confirmed that their wagers range from their toddler's mealtime behaviour to whether local starlets Timothée and Kylie are soon to be betrothed. Stakes rarely exceed a few dollars. "We needed accountability," explained one member of the gambling family to this masthead. Only the couple may place or resolve bets, but the public is invited to inspect the record below. This ledger was produced with the assistance of <a href="https://benjackman.github.io/tinkering/"> Claude, a vast and foreign machine intelligence</a>.</p>
+      <p class="bl-masthead-strapline"><strong>SYDNEY, New South Wales</strong> — A local couple, locked in a long-running series of trivial domestic wagers, have today made their betting record public. The pair, who have asked to be identified only as Ben and Verity, confirmed that their wagers range from their toddler's mealtime behaviour to whether local starlets Timothée and Kylie are soon to be betrothed. Stakes rarely exceed a few dollars. Only the couple may place or resolve bets, but the public is invited to inspect the record below. This ledger was produced with the assistance of <a href="https://benjackman.github.io/tinkering/"> Claude, a vast and foreign machine intelligence</a>.</p>
     </div>
 
     <hr class="bl-rule-double">
@@ -1206,6 +1258,10 @@ ul.task-list li input[type="checkbox"] {
             <span class="currency">$</span>
             <input type="number" class="form-input" id="betStake" value="1" min="0.01" step="0.01" max="1000">
           </div>
+        </div>
+        <div class="form-group">
+          <label for="betHorizon">horizon <span style="font-variant:normal;font-weight:400;font-style:italic;letter-spacing:0;">(optional)</span></label>
+          <input type="date" class="form-input" id="betHorizon" style="width:170px;">
         </div>
         <button class="place-btn" id="placeBtn" onclick="placeBet()">place bet</button>
       </div>
@@ -1289,6 +1345,10 @@ ul.task-list li input[type="checkbox"] {
           <span class="currency">$</span>
           <input type="number" class="form-input" id="editStake" min="0.01" step="0.01" max="1000">
         </div>
+      </div>
+      <div class="form-group">
+        <label for="editHorizon">horizon <span style="font-variant:normal;font-weight:400;font-style:italic;letter-spacing:0;">(optional)</span></label>
+        <input type="date" class="form-input" id="editHorizon" style="width:170px;">
       </div>
       <div style="display:flex;gap:0.4rem;justify-content:center;margin-top:0.75rem;">
         <button class="place-btn" onclick="saveEdit()">save</button>
@@ -1421,6 +1481,20 @@ ul.task-list li input[type="checkbox"] {
     updateOwes();
   }
 
+  function formatHorizon(dateStr) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  }
+
+  function isOverdue(bet) {
+    if (!bet.horizon || bet.resolved) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const h = new Date(bet.horizon + 'T00:00:00');
+    return h <= today;
+  }
+
   function renderBetsTable() {
     const sorted = [...currentBets].sort((a, b) => {
       if (a.resolved !== b.resolved) return a.resolved ? 1 : -1;
@@ -1463,11 +1537,25 @@ ul.task-list li input[type="checkbox"] {
       else if (bet.winner === 'verity') winnerCell = '<span class="winner-name">Verity</span>';
       else winnerCell = '<span class="winner-dash">—</span>';
 
-      const editBtn = `<button class="tbl-edit" onclick="openEdit('${bet.id}')">edit</button>`;
-      let actionsCell = editBtn;
+      // Actions column: only resolve (italic style), for active bets
+      let actionsCell = '';
       if (isActive) {
-        actionsCell += `<button class="tbl-btn tbl-resolve" onclick="openResolve('${bet.id}', '${escapeAttr(bet.description)}')">resolve</button>` +
-          `<button class="tbl-btn tbl-delete" onclick="deleteBet('${bet.id}')">✕</button>`;
+        actionsCell = `<button class="tbl-action" onclick="openResolve('${bet.id}', '${escapeAttr(bet.description)}')">resolve</button>`;
+      }
+
+      // Overdue indicator
+      const overdue = isOverdue(bet);
+      const overdueTag = overdue ? ' · <span class="overdue-tag">overdue</span>' : '';
+
+      // Horizon display
+      const horizonDisplay = bet.horizon
+        ? `<span class="overleaf-label">Horizon:</span> ${formatHorizon(bet.horizon)}`
+        : '<span style="font-style:italic;">No horizon set</span>';
+
+      // Overleaf actions
+      let overleafActions = `<button class="tbl-action" onclick="openEdit('${bet.id}')">edit</button>`;
+      if (isActive) {
+        overleafActions += `<button class="tbl-action tbl-action-delete" onclick="deleteBet('${bet.id}')">delete</button>`;
       }
 
       const rowClass = isVoid ? ' class="row-void"' : '';
@@ -1479,7 +1567,14 @@ ul.task-list li input[type="checkbox"] {
             <span class="pos-name">Ben:</span> ${escapeHtml(bet.ben_position)}
             · <span class="pos-name">Verity:</span> ${escapeHtml(bet.verity_position)}
           </div>
-          <div class="bet-date-sub">${date}</div>
+          <div class="bet-date-sub">${date}${overdueTag}</div>
+          <details class="bet-overleaf">
+            <summary>Overleaf</summary>
+            <div class="bet-overleaf-content">
+              <div class="overleaf-row">${horizonDisplay}</div>
+              <div class="overleaf-actions">${overleafActions}</div>
+            </div>
+          </details>
         </td>
         <td class="col-stake">$${Number(bet.stake).toFixed(2)}</td>
         <td class="col-resolved">${resolvedCell}</td>
@@ -1544,11 +1639,14 @@ ul.task-list li input[type="checkbox"] {
     const btn = document.getElementById('placeBtn');
     btn.disabled = true;
 
+    const horizonVal = document.getElementById('betHorizon').value || null;
+
     const { data, error } = await sb.from('bets').insert({
       description: desc,
       ben_position: benPos,
       verity_position: verityPos,
-      stake: stake
+      stake: stake,
+      horizon: horizonVal
     }).select();
 
     if (error) {
@@ -1566,6 +1664,7 @@ ul.task-list li input[type="checkbox"] {
     document.getElementById('betBen').value = '';
     document.getElementById('betVerity').value = '';
     document.getElementById('betStake').value = '1';
+    document.getElementById('betHorizon').value = '';
     document.getElementById('newBetDetails').removeAttribute('open');
 
     renderAll();
@@ -1627,6 +1726,7 @@ ul.task-list li input[type="checkbox"] {
     document.getElementById('editBen').value = bet.ben_position || '';
     document.getElementById('editVerity').value = bet.verity_position || '';
     document.getElementById('editStake').value = Number(bet.stake);
+    document.getElementById('editHorizon').value = bet.horizon || '';
     document.getElementById('editOverlay').classList.add('active');
     document.getElementById('editDesc').focus();
   }
@@ -1657,14 +1757,23 @@ ul.task-list li input[type="checkbox"] {
     const betId = editingBetId;
     closeEdit();
 
+    const horizonVal = document.getElementById('editHorizon').value || null;
+    const bet = currentBets.find(b => b.id === betId);
+    const horizonChanged = (bet && bet.horizon !== horizonVal);
+
+    const updatePayload = {
+      description: desc,
+      ben_position: benPos,
+      verity_position: verityPos,
+      stake: stake,
+      horizon: horizonVal
+    };
+    // Reset notification flag if horizon was changed
+    if (horizonChanged) updatePayload.horizon_notified = false;
+
     const { error } = await sb
       .from('bets')
-      .update({
-        description: desc,
-        ben_position: benPos,
-        verity_position: verityPos,
-        stake: stake
-      })
+      .update(updatePayload)
       .eq('id', betId);
 
     if (error) {
@@ -1673,12 +1782,13 @@ ul.task-list li input[type="checkbox"] {
       return;
     }
 
-    const bet = currentBets.find(b => b.id === betId);
     if (bet) {
       bet.description = desc;
       bet.ben_position = benPos;
       bet.verity_position = verityPos;
       bet.stake = stake;
+      bet.horizon = horizonVal;
+      if (horizonChanged) bet.horizon_notified = false;
     }
 
     renderAll();

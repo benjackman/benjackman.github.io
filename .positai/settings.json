@@ -35,6 +35,9 @@
       "*.md": "allow",
       "*.yml": "allow",
       "*.scss": "allow"
+    },
+    "webfetch": {
+      "https://ll.thespacedevs.com/*": "allow"
     }
   },
   "model": {
