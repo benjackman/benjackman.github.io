@@ -828,7 +828,7 @@ toc: false
     <div class="bl-masthead">
       <div class="bl-masthead-title">The Gambler's Ledger</div>
       <div class="bl-masthead-date" id="mastheadDate"></div>
-      <p class="bl-masthead-strapline"><strong>SYDNEY, New South Wales</strong> — A local couple, locked in a long-running series of trivial domestic wagers, have today made their betting record public. The pair, who have asked to be identified only as Ben and Verity, confirmed that their wagers range from their toddler's mealtime behaviour to whether local starlets Timothée and Kylie are soon to be betrothed. Stakes rarely exceed a few dollars. "We needed accountability," explained one member of the gambling family to this masthead. Only the couple may place or resolve bets, but the public is invited to inspect the record below. This ledger was produced with the assistance of <a href="https://benjackman.github.io/tinkering/"> Claude, a vast and foreign machine intelligence</a>.</p>
+      <p class="bl-masthead-strapline"><strong>SYDNEY, New South Wales</strong> — A local couple, locked in a long-running series of trivial domestic wagers, have today made their betting record public. The pair, who have asked to be identified only as Ben and Verity, confirmed that their wagers range from their toddler's mealtime behaviour to whether local starlets Timothée and Kylie are soon to be betrothed. Stakes rarely exceed a few dollars. Only the couple may place or resolve bets, but the public is invited to inspect the record below. This ledger was produced with the assistance of <a href="https://benjackman.github.io/tinkering/"> Claude, a vast and foreign machine intelligence</a>.</p>
     </div>
 
     <hr class="bl-rule-double">

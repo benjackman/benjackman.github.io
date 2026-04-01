@@ -867,14 +867,14 @@ ul.task-list li input[type="checkbox"] {
 
   function isPrecise(launch) {
     const p = launch.net_precision?.name || 'Hour';
-    return p === 'Hour' || p === 'Minute' || p === 'Day';
+    return p === 'Second' || p === 'Hour' || p === 'Minute' || p === 'Day';
   }
 
   function formatNET(launch) {
     const d = new Date(launch.net);
     const p = launch.net_precision?.name || 'Hour';
     const base = d.toLocaleDateString('en-AU', { timeZone:'UTC', day:'numeric', month:'short', year:'numeric' });
-    if (p === 'Hour' || p === 'Minute') {
+    if (p === 'Second' || p === 'Hour' || p === 'Minute') {
       const t = d.toLocaleTimeString('en-AU', { timeZone:'UTC', hour:'2-digit', minute:'2-digit' });
       return `${base} at ${t} UTC`;
     }
@@ -891,7 +891,7 @@ ul.task-list li input[type="checkbox"] {
   /** Format time in Australian Eastern (AEDT/AEST), only for precise launches */
   function formatAET(launch) {
     const p = launch.net_precision?.name || 'Hour';
-    if (p !== 'Hour' && p !== 'Minute') return '';
+    if (p !== 'Second' && p !== 'Hour' && p !== 'Minute') return '';
     const d = new Date(launch.net);
     const tz = 'Australia/Sydney';
     const t = d.toLocaleTimeString('en-AU', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
