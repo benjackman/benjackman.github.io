@@ -23,6 +23,8 @@ website:
         href: space_corner/index.qmd
       - text: "🤬 Swear Jar"
         href: swearjar/index.qmd
+      - text: "Gambler's Ledger"
+        href: betledger/index.qmd
     
     # your social media handles
     right:
