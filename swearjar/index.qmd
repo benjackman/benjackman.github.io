@@ -501,7 +501,7 @@ My wife and I have potty-mouths. With a toddler learning new words every day, we
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ---- Auth gate ----
-  const PASSPHRASE_HASH = 'd3a1f13383639f52d4d5c039ece558853c3d9104c0673a7e53a14088843f1732';
+  const PASSPHRASE_HASH = 'cbb1f9a826bbf7d27c605bf98807fed9ef5474079dd5fd22cd3339145d16a771';
   let isAuthed = localStorage.getItem('swearjar_authed') === 'true';
 
   async function sha256(text) {
