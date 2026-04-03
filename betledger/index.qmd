@@ -1033,7 +1033,7 @@ toc: false
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ---- Auth gate ----
-  const PASSPHRASE_HASH = 'f1c072414387df13649fe3151d9b6c96ac1de1ea9dcf16e1c7b112d6daa9c8c1';
+  const PASSPHRASE_HASH = 'd3a1f13383639f52d4d5c039ece558853c3d9104c0673a7e53a14088843f1732';
   let isAuthed = localStorage.getItem('betledger_authed') === 'true';
 
   async function sha256(text) {
