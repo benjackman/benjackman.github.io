@@ -429,6 +429,98 @@ My wife and I have potty-mouths. With a toddler learning new words every day, we
   .quarto-dark .loading {
     color: #adb5bd;
   }
+
+  /* ---- Login modal ---- */
+  .login-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-overlay.active {
+    display: flex;
+  }
+
+  .login-modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    max-width: 300px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  .login-modal h4 {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2d3436;
+  }
+
+  .login-modal label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    color: #495057;
+  }
+
+  .login-field {
+    margin-bottom: 0.65rem;
+  }
+
+  .login-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.75rem;
+  }
+
+  .login-cancel-btn {
+    padding: 0.65rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    background: #f0f1f3;
+    color: #495057;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .login-cancel-btn:hover {
+    opacity: 0.8;
+  }
+
+  .login-error {
+    color: #dc3545;
+    font-size: 0.8rem;
+    text-align: center;
+    min-height: 1.2em;
+    margin-bottom: 0.25rem;
+  }
+
+  .quarto-dark .login-modal {
+    background: #2b2d30;
+  }
+
+  .quarto-dark .login-modal h4 {
+    color: #dee2e6;
+  }
+
+  .quarto-dark .login-modal label {
+    color: #adb5bd;
+  }
+
+  .quarto-dark .login-cancel-btn {
+    background: #495057;
+    color: #dee2e6;
+  }
 </style>
 
 <div class="swearjar-app">
@@ -484,6 +576,31 @@ My wife and I have potty-mouths. With a toddler learning new words every day, we
         </tbody>
       </table>
     </details>
+
+    <!-- Auth bar -->
+    <div id="authBar" style="display:none;text-align:right;margin-top:0.5rem;">
+      <button onclick="signOut()" style="background:none;border:none;cursor:pointer;color:#adb5bd;font-size:0.82rem;padding:0;">sign out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Login modal -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-modal">
+    <h4>Sign in</h4>
+    <div class="login-field">
+      <label for="loginEmail">Email</label>
+      <input type="email" class="note-input" id="loginEmail" autocomplete="email" placeholder="email address">
+    </div>
+    <div class="login-field">
+      <label for="loginPassword">Password</label>
+      <input type="password" class="note-input" id="loginPassword" autocomplete="current-password" placeholder="password">
+    </div>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-actions">
+      <button class="swear-btn" id="loginSubmitBtn" onclick="submitLogin()">Sign in</button>
+      <button class="login-cancel-btn" onclick="cancelLogin()">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -500,29 +617,76 @@ My wife and I have potty-mouths. With a toddler learning new words every day, we
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ---- Auth gate ----
-  const PASSPHRASE_HASH = 'cbb1f9a826bbf7d27c605bf98807fed9ef5474079dd5fd22cd3339145d16a771';
-  let isAuthed = localStorage.getItem('swearjar_authed') === 'true';
+  // ---- Auth ----
+  let currentUser = null;
+  let loginResolve = null;
 
-  async function sha256(text) {
-    const buf = await crypto.subtle.digest('SHA-256',
-      new TextEncoder().encode(text));
-    return Array.from(new Uint8Array(buf))
-      .map(b => b.toString(16).padStart(2, '0')).join('');
+  async function initAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    currentUser = session?.user ?? null;
+    sb.auth.onAuthStateChange((_event, session) => {
+      currentUser = session?.user ?? null;
+      updateAuthUI();
+    });
+  }
+
+  function updateAuthUI() {
+    const authBar = document.getElementById('authBar');
+    if (authBar) authBar.style.display = currentUser ? 'block' : 'none';
   }
 
   async function requireAuth() {
-    if (isAuthed) return true;
-    const input = prompt('Enter the passphrase to make changes:');
-    if (!input) return false;
-    const hash = await sha256(input.toLowerCase().trim());
-    if (hash === PASSPHRASE_HASH) {
-      isAuthed = true;
-      localStorage.setItem('swearjar_authed', 'true');
-      return true;
+    if (currentUser) return true;
+    return new Promise(resolve => {
+      loginResolve = resolve;
+      document.getElementById('loginOverlay').classList.add('active');
+      setTimeout(() => document.getElementById('loginEmail').focus(), 50);
+    });
+  }
+
+  async function submitLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginSubmitBtn');
+
+    if (!email || !password) {
+      errEl.textContent = 'Enter your email and password.';
+      return;
     }
-    showStatus('Wrong passphrase!');
-    return false;
+
+    btn.disabled = true;
+    errEl.textContent = '';
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    btn.disabled = false;
+
+    if (error) {
+      errEl.textContent = 'Incorrect email or password.';
+      return;
+    }
+
+    currentUser = data.user;
+    document.getElementById('loginOverlay').classList.remove('active');
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+
+    if (loginResolve) {
+      loginResolve(true);
+      loginResolve = null;
+    }
+  }
+
+  function cancelLogin() {
+    document.getElementById('loginOverlay').classList.remove('active');
+    if (loginResolve) {
+      loginResolve(false);
+      loginResolve = null;
+    }
+  }
+
+  async function signOut() {
+    await sb.auth.signOut();
   }
 
   const costPerSwear = 1.00;
@@ -546,6 +710,7 @@ My wife and I have potty-mouths. With a toddler learning new words every day, we
   // ---- Init ----
   async function init() {
     try {
+      await initAuth();
       await loadLastSettlement();
       await loadCounts();
       await loadHistory();
@@ -830,6 +995,14 @@ My wife and I have potty-mouths. With a toddler learning new words every day, we
   }
 
   // ---- Start ----
+  document.getElementById('loginOverlay').addEventListener('click', function(e) {
+    if (e.target === this) cancelLogin();
+  });
+
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitLogin();
+  });
+
   init();
 </script>
 ```

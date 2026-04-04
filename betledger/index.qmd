@@ -968,6 +968,11 @@ toc: false
         </tbody>
       </table>
     </details>
+
+    <!-- Auth bar -->
+    <div id="authBar" style="display:none;text-align:right;margin-top:0.75rem;font-size:0.72rem;font-style:italic;">
+      <button class="tbl-action" onclick="signOut()">sign out</button>
+    </div>
   </div>
 
   <!-- Resolve modal -->
@@ -1017,6 +1022,26 @@ toc: false
       </div>
     </div>
   </div>
+
+  <!-- Login modal -->
+  <div class="resolve-overlay" id="loginOverlay" style="z-index:1001;">
+    <div class="resolve-modal" style="text-align:left;">
+      <h4 style="text-align:center;">Sign in</h4>
+      <div class="form-group">
+        <label for="loginEmail">email</label>
+        <input type="email" class="form-input" id="loginEmail" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">password</label>
+        <input type="password" class="form-input" id="loginPassword" autocomplete="current-password">
+      </div>
+      <div id="loginError" style="color:#dc3545;font-size:0.8rem;text-align:center;min-height:1.2em;margin-bottom:0.25rem;"></div>
+      <div style="display:flex;gap:0.4rem;justify-content:center;margin-top:0.5rem;">
+        <button class="place-btn" id="loginSubmitBtn" onclick="submitLogin()">sign in</button>
+        <button class="resolve-modal opt-cancel" onclick="cancelLogin()" style="padding:0.45rem 1rem;">cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Supabase JS client -->
@@ -1032,29 +1057,76 @@ toc: false
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ---- Auth gate ----
-  const PASSPHRASE_HASH = 'cbb1f9a826bbf7d27c605bf98807fed9ef5474079dd5fd22cd3339145d16a771';
-  let isAuthed = localStorage.getItem('betledger_authed') === 'true';
+  // ---- Auth ----
+  let currentUser = null;
+  let loginResolve = null;
 
-  async function sha256(text) {
-    const buf = await crypto.subtle.digest('SHA-256',
-      new TextEncoder().encode(text));
-    return Array.from(new Uint8Array(buf))
-      .map(b => b.toString(16).padStart(2, '0')).join('');
+  async function initAuth() {
+    const { data: { session } } = await sb.auth.getSession();
+    currentUser = session?.user ?? null;
+    sb.auth.onAuthStateChange((_event, session) => {
+      currentUser = session?.user ?? null;
+      updateAuthUI();
+    });
+  }
+
+  function updateAuthUI() {
+    const authBar = document.getElementById('authBar');
+    if (authBar) authBar.style.display = currentUser ? 'block' : 'none';
   }
 
   async function requireAuth() {
-    if (isAuthed) return true;
-    const input = prompt('Enter the passphrase to make changes:');
-    if (!input) return false;
-    const hash = await sha256(input.toLowerCase().trim());
-    if (hash === PASSPHRASE_HASH) {
-      isAuthed = true;
-      localStorage.setItem('betledger_authed', 'true');
-      return true;
+    if (currentUser) return true;
+    return new Promise(resolve => {
+      loginResolve = resolve;
+      document.getElementById('loginOverlay').classList.add('active');
+      setTimeout(() => document.getElementById('loginEmail').focus(), 50);
+    });
+  }
+
+  async function submitLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginSubmitBtn');
+
+    if (!email || !password) {
+      errEl.textContent = 'Enter your email and password.';
+      return;
     }
-    showStatus('Wrong passphrase!');
-    return false;
+
+    btn.disabled = true;
+    errEl.textContent = '';
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    btn.disabled = false;
+
+    if (error) {
+      errEl.textContent = 'Incorrect email or password.';
+      return;
+    }
+
+    currentUser = data.user;
+    document.getElementById('loginOverlay').classList.remove('active');
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+
+    if (loginResolve) {
+      loginResolve(true);
+      loginResolve = null;
+    }
+  }
+
+  function cancelLogin() {
+    document.getElementById('loginOverlay').classList.remove('active');
+    if (loginResolve) {
+      loginResolve(false);
+      loginResolve = null;
+    }
+  }
+
+  async function signOut() {
+    await sb.auth.signOut();
   }
 
   // ---- State ----
@@ -1065,6 +1137,7 @@ toc: false
   // ---- Init ----
   async function init() {
     try {
+      await initAuth();
       await loadLastSettlement();
       await Promise.all([loadBets(), loadSettlements()]);
       renderAll();
@@ -1548,6 +1621,14 @@ toc: false
 
   document.getElementById('editOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeEdit();
+  });
+
+  document.getElementById('loginOverlay').addEventListener('click', function(e) {
+    if (e.target === this) cancelLogin();
+  });
+
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitLogin();
   });
 
   // ---- Masthead date ----
