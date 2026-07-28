@@ -63,18 +63,11 @@
     "text": "Starship & Artemis\n  \n\n\n\n  More Launches\n  \n    Upcoming\n    Recent\n  \n  \n    \n      Loading… 🛰️\n    \n  \n  \n    \n      Loading… 🛰️\n    \n  \n\n\n\n  Data from Launch Library 2 ·\n  Updates every 30 min ·"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Ben Jackman",
+    "objectID": "isochrones/index.html",
+    "href": "isochrones/index.html",
+    "title": "Isochrones",
     "section": "",
-    "text": "X\n  \n  \n    \n     Github\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     Email\n  \n\n\n\n\nBen Jackman\nI’m an economist and data scientist in Sydney. I work in Monetary Policy Implementation at the Reserve Bank of Australia. I’m interested in macro, finance, central banking, and data science. The “Public Work” tab highlights some of my professional work, and ‘Tinkering’ documents what else I’ve been playing with. You can contact me via email, Twitter, LinkedIn, or on the Bloomberg terminal.\n\n\nThanks to Marvin Schmitt for this great Quarto website template, and Claude for being ever-helpful."
-  },
-  {
-    "objectID": "betledger/index.html",
-    "href": "betledger/index.html",
-    "title": "Gambler’s Ledger",
-    "section": "",
-    "text": "Loading the ledger...\n\n  \n\n    \n    \n      The Gambler's Ledger\n      \n      SYDNEY, New South Wales — A local couple, locked in a long-running series of trivial domestic wagers, have today made their betting record public. The pair, who have asked to be identified only as Ben and Verity, confirmed that their wagers range from their toddler's mealtime behaviour to whether local starlets Timothée and Kylie are soon to be betrothed. Stakes rarely exceed a few dollars. Only the couple may place or resolve bets, but the public is invited to inspect the record below. This ledger was produced with the assistance of  Claude, a vast and foreign machine intelligence.\n    \n\n    \n\n    \n    \n      \n\n\n\nbet\nstake\nresolved\ndraw\nvoid\nwinner\n\n\n\n\n\n\n\n    \n\n    \n    \n      Record another wager\n      \n        \n          the bet\n          \n        \n        \n          ben says\n          \n        \n        \n          verity says\n          \n        \n        \n          stake\n          \n            $\n            \n          \n        \n        \n          horizon (optional)\n          \n        \n        place bet\n      \n    \n\n    \n\n    \n    \n      \n        Ben\n        0 wins · $0.00\n      \n      \n        Verity\n        0 wins · $0.00\n      \n    \n\n    \n    \n      All square!\n      settle up\n    \n\n    \n\n    \n    \n      Settlement history\n      \n\n\n\ndate\nben\nverity\nresult\n\n\n\n\n\n\n    \n  \n\n  \n  \n    \n      Who won?\n      \n        Ben wins\n        Verity wins\n        Draw\n        Void\n        cancel\n      \n    \n  \n\n  \n  \n    \n      Edit wager\n      \n        the bet\n        \n      \n      \n        ben says\n        \n      \n      \n        verity says\n        \n      \n      \n        stake\n        \n          $\n          \n        \n      \n      \n        horizon (optional)\n        \n      \n      \n        save\n        cancel"
+    "text": "Google Maps Platform recently launched an Isochrones API (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple “as the crow flies” radius. Below are isochrones from two addresses: 310 Young St, Annandale NSW (Sydney) and 34 Herrick St, Mount Gravatt QLD (Brisbane).\n\n\n\n\n  Loading...\n\n  \n    \n      Sign in to view the isochrone maps.\n      sign in\n    \n  \n\n  \n    \n      sign out\n    \n    \n  \n\n  \n  \n    \n      Sign in\n      \n        email\n        \n      \n      \n        password\n        \n      \n      \n      \n        sign in\n        cancel"
   },
   {
     "objectID": "cv/index.html",
@@ -82,6 +75,20 @@
     "title": "Curriculum vitae",
     "section": "",
     "text": "Download current CV"
+  },
+  {
+    "objectID": "betledger/index.html",
+    "href": "betledger/index.html",
+    "title": "Gambler’s Ledger",
+    "section": "",
+    "text": "Loading the ledger...\n\n  \n\n    \n    \n      The Gambler's Ledger\n      \n      SYDNEY, New South Wales — A local couple, locked in a long-running series of trivial domestic wagers, have today made their betting record public. The pair, who have asked to be identified only as Ben and Verity, confirmed that their wagers range from their toddler's mealtime behaviour to whether local starlets Timothée and Kylie are soon to be betrothed. Stakes rarely exceed a few dollars. Only the couple may place or resolve bets, but the public is invited to inspect the record below. This ledger was produced with the assistance of  Claude, a vast and foreign machine intelligence.\n    \n\n    \n\n    \n    \n      \n\n\n\nbet\nstake\nresolved\ndraw\nvoid\nwinner\n\n\n\n\n\n\n\n    \n\n    \n    \n      Record another wager\n      \n        \n          the bet\n          \n        \n        \n          ben says\n          \n        \n        \n          verity says\n          \n        \n        \n          stake\n          \n            $\n            \n          \n        \n        \n          horizon (optional)\n          \n        \n        place bet\n      \n    \n\n    \n\n    \n    \n      \n        Ben\n        0 wins · $0.00\n      \n      \n        Verity\n        0 wins · $0.00\n      \n    \n\n    \n    \n      All square!\n      settle up\n    \n\n    \n\n    \n    \n      Settlement history\n      \n\n\n\ndate\nben\nverity\nresult\n\n\n\n\n\n\n    \n\n    \n    \n      sign out\n    \n  \n\n  \n  \n    \n      Who won?\n      \n        Ben wins\n        Verity wins\n        Draw\n        Void\n        cancel\n      \n    \n  \n\n  \n  \n    \n      Edit wager\n      \n        the bet\n        \n      \n      \n        ben says\n        \n      \n      \n        verity says\n        \n      \n      \n        stake\n        \n          $\n          \n        \n      \n      \n        horizon (optional)\n        \n      \n      \n        save\n        cancel\n      \n    \n  \n\n  \n  \n    \n      Sign in\n      \n        email\n        \n      \n      \n        password\n        \n      \n      \n      \n        sign in\n        cancel"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ben Jackman",
+    "section": "",
+    "text": "X\n  \n  \n    \n     Github\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     Email\n  \n\n\n\n\nBen Jackman\nI’m an economist and data scientist in Sydney. I work in Monetary Policy Implementation at the Reserve Bank of Australia. I’m interested in macro, finance, central banking, and data science. The “Public Work” tab highlights some of my professional work, and ‘Tinkering’ documents what else I’ve been playing with. You can contact me via email, Twitter, LinkedIn, or on the Bloomberg terminal.\n\n\nThanks to Marvin Schmitt for this great Quarto website template, and Claude for being ever-helpful."
   },
   {
     "objectID": "public_work/index.html",
@@ -123,6 +130,6 @@
     "href": "swearjar/index.html",
     "title": "🤬 Swear Jar",
     "section": "",
-    "text": "My wife and I have potty-mouths. With a toddler learning new words every day, we need an incentive to keep our words family-friendly. This is the Swear Jar. Only my wife and I can put a coin in the jar - but you can see our latest naughty words below. Made with help from Claude, which I’ve written about here.\n\n\n\n  \n\n  Loading swear jar...\n\n  \n    \n    \n      \n        Ben\n        \n        0\n        + Swear\n      \n      \n        Verity\n        \n        0\n        + Swear\n      \n    \n\n    \n    \n      \n    \n\n    \n    \n      All square!\n      Settle Up\n    \n\n    \n    \n      Recent swears\n      \n        No swears yet — keep it clean!\n      \n    \n\n    \n    \n      Settlement history\n      \n\n\n\nDate\nBen\nVerity\nResult"
+    "text": "My wife and I have potty-mouths. With a toddler learning new words every day, we need an incentive to keep our words family-friendly. This is the Swear Jar. Only my wife and I can put a coin in the jar - but you can see our latest naughty words below. Made with help from Claude, which I’ve written about here.\n\n\n\n  \n\n  Loading swear jar...\n\n  \n    \n    \n      \n        Ben\n        \n        0\n        + Swear\n      \n      \n        Verity\n        \n        0\n        + Swear\n      \n    \n\n    \n    \n      \n    \n\n    \n    \n      All square!\n      Settle Up\n    \n\n    \n    \n      Recent swears\n      \n        No swears yet — keep it clean!\n      \n    \n\n    \n    \n      Settlement history\n      \n\n\n\nDate\nBen\nVerity\nResult\n\n\n\n\n\n\n    \n\n    \n    \n      sign out\n    \n  \n\n\n\n\n  \n    Sign in\n    \n      Email\n      \n    \n    \n      Password\n      \n    \n    \n    \n      Sign in\n      Cancel"
   }
 ]
