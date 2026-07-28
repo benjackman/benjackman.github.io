@@ -25,6 +25,8 @@ website:
         href: swearjar/index.qmd
       - text: "Gambler's Ledger"
         href: betledger/index.qmd
+      - text: "🗺️ Isochrones"
+        href: isochrones/index.qmd
     
     # your social media handles
     right:
