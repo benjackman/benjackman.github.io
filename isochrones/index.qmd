@@ -3,7 +3,7 @@ title: "Isochrones"
 page-layout: full
 toc: false
 resources:
-  - img/*.png
+  - img/*.jpg
 ---
 
 Google Maps Platform recently launched an [Isochrones API](https://developers.google.com/maps/documentation/isochrones/overview) (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple "as the crow flies" radius. <span id="isoSplashNote">Below you can see a static image of what Google thinks is a 30-minute walk from the Occidental Hotel in Sydney's CBD.</span>
@@ -375,7 +375,7 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
       <button class="iso-btn" onclick="showLogin()">sign in</button>
 
       <figure class="iso-splash-fig">
-        <img src="img/occidental-30min-walk.png"
+        <img src="img/occidental-30min-walk.jpg"
              alt="Map of Sydney's CBD with a shaded overlay marking everywhere reachable on foot within 30 minutes of the Occidental Hotel."
              loading="lazy">
         <figcaption>A 30-minute walk from the Occidental Hotel, Sydney CBD.</figcaption>
