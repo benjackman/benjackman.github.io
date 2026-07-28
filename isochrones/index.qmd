@@ -2,9 +2,11 @@
 title: "Isochrones"
 page-layout: full
 toc: false
+resources:
+  - img/*.jpg
 ---
 
-Google Maps Platform recently launched an [Isochrones API](https://developers.google.com/maps/documentation/isochrones/overview) (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple "as the crow flies" radius.
+Google Maps Platform recently launched an [Isochrones API](https://developers.google.com/maps/documentation/isochrones/overview) (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple "as the crow flies" radius. <span id="isoSplashNote">Below you can see a static image of what Google thinks is a 30-minute walk from the Occidental Hotel in Sydney's CBD.</span>
 
 ```{=html}
 <style>
@@ -37,6 +39,38 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
   }
 
   .quarto-dark .iso-locked-msg { color: #adb5bd; }
+
+  .iso-splash-fig {
+    max-width: 720px;
+    margin: 2.5rem auto 0;
+    padding: 0;
+  }
+
+  .iso-splash-fig img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #d8dde3;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .iso-splash-fig figcaption {
+    margin-top: 0.6rem;
+    color: #868e96;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .quarto-dark .iso-splash-fig img { border-color: #495057; }
+  .quarto-dark .iso-splash-fig figcaption { color: #adb5bd; }
+
+  /* Claw back the container padding on narrow screens so the map stays legible. */
+  @media (max-width: 600px) {
+    .iso-splash-fig {
+      margin: 2rem -1rem 0;
+    }
+  }
 
   .iso-panel {
     border: 1px solid #d8dde3;
@@ -339,6 +373,13 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     <div class="iso-locked">
       <div class="iso-locked-msg">Sign in to view the isochrone maps.</div>
       <button class="iso-btn" onclick="showLogin()">sign in</button>
+
+      <figure class="iso-splash-fig">
+        <img src="img/occidental-30min-walk.jpg"
+             alt="Map of Sydney's CBD with a shaded overlay marking everywhere reachable on foot within 30 minutes of the Occidental Hotel."
+             loading="lazy">
+        <figcaption>A 30-minute walk from the Occidental Hotel, Sydney CBD.</figcaption>
+      </figure>
     </div>
   </div>
 
@@ -461,6 +502,12 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     return Array.isArray(pages) && pages.includes(pageName);
   }
 
+  // The intro sentence refers to the splash map, so it tracks #isoLocked's visibility.
+  function setSplashNoteVisible(visible) {
+    var note = document.getElementById('isoSplashNote');
+    if (note) note.style.display = visible ? '' : 'none';
+  }
+
   function updateView() {
     document.getElementById('isoLoading').style.display = 'none';
     if (currentUser) {
@@ -468,10 +515,12 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
         document.getElementById('isoLocked').style.display = 'block';
         document.getElementById('isoContent').style.display = 'none';
         document.getElementById('isoLocked').querySelector('.iso-locked-msg').textContent = 'You don\'t have access to this page.';
+        setSplashNoteVisible(true);
         return;
       }
       document.getElementById('isoLocked').style.display = 'none';
       document.getElementById('isoContent').style.display = 'block';
+      setSplashNoteVisible(false);
       if (!mapsLoaded) {
         mapsLoaded = true;
         loadGoogleMaps();
@@ -479,6 +528,7 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     } else {
       document.getElementById('isoLocked').style.display = 'block';
       document.getElementById('isoContent').style.display = 'none';
+      setSplashNoteVisible(true);
     }
   }
 
