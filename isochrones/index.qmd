@@ -11,7 +11,7 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
   .quarto-title-block { display: none; }
 
   .iso-app {
-    max-width: 1100px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 0.5rem 1rem 2rem;
   }
@@ -38,16 +38,6 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
 
   .quarto-dark .iso-locked-msg { color: #adb5bd; }
 
-  .iso-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.4rem;
-  }
-
-  @media (max-width: 880px) {
-    .iso-grid { grid-template-columns: 1fr; }
-  }
-
   .iso-panel {
     border: 1px solid #d8dde3;
     border-radius: 10px;
@@ -60,37 +50,83 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     background: #1c1f22;
   }
 
-  .iso-panel-header {
-    padding: 0.8rem 1rem 0.6rem;
+  .iso-address-bar {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
     border-bottom: 1px solid #e9ecef;
   }
 
-  .quarto-dark .iso-panel-header {
+  .quarto-dark .iso-address-bar {
     border-bottom-color: #2f3338;
   }
 
-  .iso-panel-title {
-    font-weight: 700;
-    font-size: 1.05rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .iso-address-bar input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #ccd2d8;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-family: inherit;
+    background: #fff;
+    color: #212529;
   }
 
-  .iso-swatch {
-    display: inline-block;
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 3px;
+  .quarto-dark .iso-address-bar input[type="text"] {
+    background: #16181b;
+    border-color: #4a4f55;
+    color: #e8eaed;
   }
 
-  .iso-panel-address {
-    font-size: 0.82rem;
+  .iso-address-bar input[type="text"]:focus {
+    outline: none;
+    border-color: #2a6f6f;
+  }
+
+  .iso-address-bar input[type="text"]::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+  }
+
+  .quarto-dark .iso-address-bar input[type="text"]::placeholder {
     color: #6c757d;
-    margin-top: 0.15rem;
   }
 
-  .quarto-dark .iso-panel-address { color: #adb5bd; }
+  .iso-go-btn {
+    padding: 0.45rem 1rem;
+    border: 2px solid #2d3436;
+    background: none;
+    color: #2d3436;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .iso-go-btn:hover {
+    background: #2d3436;
+    color: #fff;
+  }
+
+  .iso-go-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .quarto-dark .iso-go-btn {
+    border-color: #dee2e6;
+    color: #dee2e6;
+  }
+
+  .quarto-dark .iso-go-btn:hover {
+    background: #dee2e6;
+    color: #1e1f22;
+  }
 
   .iso-controls {
     display: flex;
@@ -122,7 +158,7 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
   }
 
   .iso-map {
-    height: 420px;
+    height: 500px;
     width: 100%;
     background: #e9ecef;
     display: flex;
@@ -139,15 +175,15 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     color: #6c757d;
   }
 
-  .iso-panel-status {
-    padding: 0.4rem 1rem 0.7rem;
+  .iso-status {
+    padding: 0.5rem 1rem 0.7rem;
     font-size: 0.8rem;
     color: #6c757d;
     min-height: 1.4em;
   }
 
-  .quarto-dark .iso-panel-status { color: #adb5bd; }
-  .iso-panel-status.iso-error { color: #c0392b; }
+  .quarto-dark .iso-status { color: #adb5bd; }
+  .iso-status.iso-error { color: #c0392b; }
 
   /* ---- Login overlay (matches betledger) ---- */
   .iso-overlay {
@@ -310,7 +346,27 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     <div class="iso-auth-bar" id="isoAuthBar">
       <button onclick="isoSignOut()">sign out</button>
     </div>
-    <div class="iso-grid" id="isoGrid"></div>
+
+    <div class="iso-panel">
+      <div class="iso-address-bar">
+        <input type="text" id="isoAddress" placeholder="Enter an address, e.g. 1 Martin Place, Sydney NSW">
+        <button class="iso-go-btn" id="isoGoBtn" onclick="isoGeocode()">go</button>
+      </div>
+      <div class="iso-controls" id="isoControls">
+        <select id="isoMode">
+          <option value="DRIVE">Drive</option>
+          <option value="WALK">Walk</option>
+          <option value="BICYCLE">Bicycle</option>
+        </select>
+        <select id="isoDuration"></select>
+        <select id="isoDirection">
+          <option value="FROM">From here</option>
+          <option value="TO">To here</option>
+        </select>
+      </div>
+      <div class="iso-map" id="isoMap">Enter an address above to draw the isochrone.</div>
+      <div class="iso-status" id="isoStatus"></div>
+    </div>
   </div>
 
   <!-- Login modal -->
@@ -348,22 +404,9 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
   var SUPABASE_URL  = 'https://pkiocdaqdnpkwvvqfwwd.supabase.co';
   var SUPABASE_ANON = 'sb_publishable_lr7mFUX6xdrq4AS8ct3o6w_qj9J2kh3';
   var GOOGLE_API_KEY = 'AIzaSyDwPseJOenoZtU1mN-JqdH2f1twzyd-W0Q';
+  var ISO_COLOR = '#2a6f6f';
+  var STORAGE_PREFIX = 'iso_addr_';
   // ============================================================
-
-  var LOCATIONS = [
-    {
-      id: "syd",
-      label: "Annandale, Sydney",
-      address: "310 Young St, Annandale NSW 2038, Australia",
-      color: "#2a6f6f"
-    },
-    {
-      id: "bne",
-      label: "Mount Gravatt, Brisbane",
-      address: "34 Herrick St, Mount Gravatt QLD 4122, Australia",
-      color: "#c1622d"
-    }
-  ];
 
   var DURATION_OPTIONS_MIN = {
     DRIVE: [10, 15, 20, 30, 45, 60],
@@ -374,7 +417,31 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
   var currentUser = null;
   var mapsLoaded = false;
-  var panels = {};
+
+  var map = null;
+  var marker = null;
+  var dataLayer = null;
+  var currentLocation = null;
+
+  var addressInput = null;
+  var goBtn = null;
+  var modeSel = null;
+  var durationSel = null;
+  var directionSel = null;
+  var mapEl = null;
+  var statusEl = null;
+
+  // ---- Persistence (localStorage keyed by user id) ----
+
+  function saveAddress(addr) {
+    if (!currentUser) return;
+    try { localStorage.setItem(STORAGE_PREFIX + currentUser.id, addr); } catch (e) {}
+  }
+
+  function loadAddress() {
+    if (!currentUser) return '';
+    try { return localStorage.getItem(STORAGE_PREFIX + currentUser.id) || ''; } catch (e) { return ''; }
+  }
 
   // ---- Auth ----
 
@@ -449,8 +516,7 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
 
   function loadGoogleMaps() {
     window.__isoMapsReady = function () {
-      buildPanels();
-      LOCATIONS.forEach(function (loc) { geocodeAndInit(panels[loc.id]); });
+      initMap();
     };
 
     var script = document.createElement("script");
@@ -461,132 +527,125 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     document.head.appendChild(script);
   }
 
-  function buildPanels() {
-    var grid = document.getElementById("isoGrid");
-    grid.innerHTML = "";
+  function initMap() {
+    addressInput = document.getElementById('isoAddress');
+    goBtn = document.getElementById('isoGoBtn');
+    modeSel = document.getElementById('isoMode');
+    durationSel = document.getElementById('isoDuration');
+    directionSel = document.getElementById('isoDirection');
+    mapEl = document.getElementById('isoMap');
+    statusEl = document.getElementById('isoStatus');
 
-    LOCATIONS.forEach(function (loc) {
-      var panel = document.createElement("div");
-      panel.className = "iso-panel";
-      panel.innerHTML =
-        '<div class="iso-panel-header">' +
-        '  <div class="iso-panel-title"><span class="iso-swatch" style="background:' + loc.color + '"></span>' + loc.label + '</div>' +
-        '  <div class="iso-panel-address">' + loc.address + '</div>' +
-        '</div>' +
-        '<div class="iso-controls">' +
-        '  <select class="iso-mode" data-loc="' + loc.id + '">' +
-        '    <option value="DRIVE">Drive</option>' +
-        '    <option value="WALK">Walk</option>' +
-        '    <option value="BICYCLE">Bicycle</option>' +
-        '  </select>' +
-        '  <select class="iso-duration" data-loc="' + loc.id + '"></select>' +
-        '  <select class="iso-direction" data-loc="' + loc.id + '">' +
-        '    <option value="FROM">From here</option>' +
-        '    <option value="TO">To here</option>' +
-        '  </select>' +
-        '</div>' +
-        '<div class="iso-map" id="isoMap-' + loc.id + '">Loading map...</div>' +
-        '<div class="iso-panel-status" id="isoStatus-' + loc.id + '"></div>';
-      grid.appendChild(panel);
+    populateDurations();
 
-      panels[loc.id] = {
-        loc: loc,
-        mapEl: panel.querySelector("#isoMap-" + loc.id),
-        statusEl: panel.querySelector("#isoStatus-" + loc.id),
-        modeSel: panel.querySelector(".iso-mode"),
-        durationSel: panel.querySelector(".iso-duration"),
-        directionSel: panel.querySelector(".iso-direction"),
-        map: null,
-        marker: null,
-        dataLayer: null,
-        location: null
-      };
-
-      populateDurationOptions(panels[loc.id]);
-
-      panels[loc.id].modeSel.addEventListener("change", function () {
-        populateDurationOptions(panels[loc.id]);
-        runIsochrone(panels[loc.id]);
-      });
-      panels[loc.id].durationSel.addEventListener("change", function () {
-        runIsochrone(panels[loc.id]);
-      });
-      panels[loc.id].directionSel.addEventListener("change", function () {
-        runIsochrone(panels[loc.id]);
-      });
+    modeSel.addEventListener('change', function () {
+      populateDurations();
+      if (currentLocation) runIsochrone();
     });
-  }
+    durationSel.addEventListener('change', function () {
+      if (currentLocation) runIsochrone();
+    });
+    directionSel.addEventListener('change', function () {
+      if (currentLocation) runIsochrone();
+    });
+    addressInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); isoGeocode(); }
+    });
 
-  function populateDurationOptions(panel) {
-    var mode = panel.modeSel.value;
-    var mins = DURATION_OPTIONS_MIN[mode];
-    var prev = panel.durationSel.value;
-    panel.durationSel.innerHTML = mins.map(function (m) {
-      return '<option value="' + (m * 60) + '">' + m + ' min</option>';
-    }).join("");
-    if (prev && mins.some(function (m) { return String(m * 60) === prev; })) {
-      panel.durationSel.value = prev;
-    } else {
-      panel.durationSel.value = String(mins[1] * 60);
+    map = new google.maps.Map(mapEl, {
+      center: { lat: -30, lng: 135 },
+      zoom: 4
+    });
+    dataLayer = new google.maps.Data({ map: map });
+    dataLayer.setStyle({
+      fillColor: ISO_COLOR,
+      fillOpacity: 0.28,
+      strokeColor: ISO_COLOR,
+      strokeWeight: 2
+    });
+
+    var saved = loadAddress();
+    if (saved) {
+      addressInput.value = saved;
+      isoGeocode();
     }
   }
 
-  function setPanelStatus(panel, msg, isError) {
-    panel.statusEl.textContent = msg || "";
-    panel.statusEl.className = "iso-panel-status" + (isError ? " iso-error" : "");
+  function populateDurations() {
+    var mode = modeSel.value;
+    var mins = DURATION_OPTIONS_MIN[mode];
+    var prev = durationSel.value;
+    durationSel.innerHTML = mins.map(function (m) {
+      return '<option value="' + (m * 60) + '">' + m + ' min</option>';
+    }).join('');
+    if (prev && mins.some(function (m) { return String(m * 60) === prev; })) {
+      durationSel.value = prev;
+    } else {
+      durationSel.value = String(mins[1] * 60);
+    }
   }
 
-  function geocodeAndInit(panel) {
+  function setStatus(msg, isError) {
+    statusEl.textContent = msg || '';
+    statusEl.className = 'iso-status' + (isError ? ' iso-error' : '');
+  }
+
+  window.isoGeocode = function () {
+    var addr = addressInput.value.trim();
+    if (!addr) {
+      setStatus('Enter an address first.', true);
+      return;
+    }
+
+    goBtn.disabled = true;
+    setStatus('Geocoding...');
+
     var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: panel.loc.address }, function (results, status) {
-      if (status !== "OK" || !results || !results[0]) {
-        setPanelStatus(panel, "Geocoding failed (" + status + ") for " + panel.loc.address, true);
+    geocoder.geocode({ address: addr }, function (results, status) {
+      goBtn.disabled = false;
+      if (status !== 'OK' || !results || !results[0]) {
+        setStatus('Could not find that address (' + status + '). Try being more specific.', true);
         return;
       }
+
       var loc = results[0].geometry.location;
-      panel.location = { latitude: loc.lat(), longitude: loc.lng() };
+      currentLocation = { latitude: loc.lat(), longitude: loc.lng() };
 
-      panel.map = new google.maps.Map(panel.mapEl, {
-        center: { lat: panel.location.latitude, lng: panel.location.longitude },
-        zoom: 12
-      });
-      panel.marker = new google.maps.Marker({
-        position: { lat: panel.location.latitude, lng: panel.location.longitude },
-        map: panel.map,
-        title: panel.loc.label
-      });
-      panel.dataLayer = new google.maps.Data({ map: panel.map });
-      panel.dataLayer.setStyle({
-        fillColor: panel.loc.color,
-        fillOpacity: 0.28,
-        strokeColor: panel.loc.color,
-        strokeWeight: 2
+      if (marker) marker.setMap(null);
+      marker = new google.maps.Marker({
+        position: { lat: loc.lat(), lng: loc.lng() },
+        map: map,
+        title: addr
       });
 
-      runIsochrone(panel);
+      map.setCenter({ lat: loc.lat(), lng: loc.lng() });
+      map.setZoom(12);
+
+      saveAddress(addr);
+      runIsochrone();
     });
-  }
+  };
 
-  function runIsochrone(panel) {
-    if (!panel.location) return;
+  function runIsochrone() {
+    if (!currentLocation) return;
 
-    panel.dataLayer.forEach(function (f) { panel.dataLayer.remove(f); });
-    setPanelStatus(panel, "Generating isochrone...");
+    dataLayer.forEach(function (f) { dataLayer.remove(f); });
+    setStatus('Generating isochrone...');
 
     var body = {
-      location: panel.location,
-      travelDuration: panel.durationSel.value + "s",
-      travelMode: panel.modeSel.value,
-      routingPreference: "TRAFFIC_UNAWARE",
+      location: currentLocation,
+      travelDuration: durationSel.value + 's',
+      travelMode: modeSel.value,
+      routingPreference: 'TRAFFIC_UNAWARE',
       enableSmoothing: true,
-      travelDirection: panel.directionSel.value
+      travelDirection: directionSel.value
     };
 
-    fetch("https://isochrones.googleapis.com/v1/isochrones:generate", {
-      method: "POST",
+    fetch('https://isochrones.googleapis.com/v1/isochrones:generate', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": GOOGLE_API_KEY
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': GOOGLE_API_KEY
       },
       body: JSON.stringify(body)
     })
@@ -598,27 +657,27 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
       })
       .then(function (data) {
         var geoJson = data && data.isochrone && data.isochrone.geoJson;
-        if (!geoJson) throw { error: { message: "Unexpected response shape." } };
-        var feature = geoJson.type === "Feature" || geoJson.type === "FeatureCollection"
+        if (!geoJson) throw { error: { message: 'Unexpected response shape.' } };
+        var feature = geoJson.type === 'Feature' || geoJson.type === 'FeatureCollection'
           ? geoJson
-          : { type: "Feature", geometry: geoJson, properties: {} };
-        panel.dataLayer.addGeoJson(feature);
+          : { type: 'Feature', geometry: geoJson, properties: {} };
+        dataLayer.addGeoJson(feature);
 
         var bounds = new google.maps.LatLngBounds();
-        panel.dataLayer.forEach(function (feature) {
-          feature.getGeometry().forEachLatLng(function (ll) { bounds.extend(ll); });
+        dataLayer.forEach(function (f) {
+          f.getGeometry().forEachLatLng(function (ll) { bounds.extend(ll); });
         });
-        bounds.extend(panel.marker.getPosition());
-        panel.map.fitBounds(bounds);
+        if (marker) bounds.extend(marker.getPosition());
+        map.fitBounds(bounds);
 
-        var mins = parseInt(panel.durationSel.value, 10) / 60;
-        var modeLabel = panel.modeSel.options[panel.modeSel.selectedIndex].text.toLowerCase();
-        var dirLabel = panel.directionSel.value === "FROM" ? "reachable from" : "able to reach";
-        setPanelStatus(panel, "Area " + dirLabel + " " + panel.loc.label + " within " + mins + " min " + modeLabel + ".");
+        var mins = parseInt(durationSel.value, 10) / 60;
+        var modeLabel = modeSel.options[modeSel.selectedIndex].text.toLowerCase();
+        var dirLabel = directionSel.value === 'FROM' ? 'reachable from' : 'able to reach';
+        setStatus('Area ' + dirLabel + ' this address within ' + mins + ' min ' + modeLabel + '.');
       })
       .catch(function (err) {
-        var msg = (err && err.error && err.error.message) || (err && err.message) || "Request failed";
-        setPanelStatus(panel, "Isochrones API error: " + msg, true);
+        var msg = (err && err.error && err.error.message) || (err && err.message) || 'Request failed';
+        setStatus('Isochrones API error: ' + msg, true);
       });
   }
 
