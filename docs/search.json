@@ -67,7 +67,7 @@
     "href": "isochrones/index.html",
     "title": "Isochrones",
     "section": "",
-    "text": "Google Maps Platform recently launched an Isochrones API (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple “as the crow flies” radius. Below are isochrones from two addresses: 310 Young St, Annandale NSW (Sydney) and 34 Herrick St, Mount Gravatt QLD (Brisbane).\n\n\n\n\n  Loading...\n\n  \n    \n      Sign in to view the isochrone maps.\n      sign in\n    \n  \n\n  \n    \n      sign out\n    \n    \n  \n\n  \n  \n    \n      Sign in\n      \n        email\n        \n      \n      \n        password\n        \n      \n      \n      \n        sign in\n        cancel"
+    "text": "Google Maps Platform recently launched an Isochrones API (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple “as the crow flies” radius.\n\n\n\n\n  Loading...\n\n  \n    \n      Sign in to view the isochrone maps.\n      sign in\n    \n  \n\n  \n    \n      sign out\n    \n\n    \n      \n        \n        go\n      \n      \n        \n          Drive\n          Walk\n          Bicycle\n        \n        \n        \n          From here\n          To here\n        \n      \n      Enter an address above to draw the isochrone.\n      \n    \n  \n\n  \n  \n    \n      Sign in\n      \n        email\n        \n      \n      \n        password\n        \n      \n      \n      \n        sign in\n        cancel"
   },
   {
     "objectID": "cv/index.html",

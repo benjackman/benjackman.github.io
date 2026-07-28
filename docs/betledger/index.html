@@ -1420,8 +1420,20 @@ ul.task-list li input[type="checkbox"] {
     if (authBar) authBar.style.display = currentUser ? 'block' : 'none';
   }
 
+  function hasPageAccess(pageName) {
+    if (!currentUser) return false;
+    const pages = currentUser.app_metadata && currentUser.app_metadata.pages;
+    return Array.isArray(pages) && pages.includes(pageName);
+  }
+
   async function requireAuth() {
-    if (currentUser) return true;
+    if (currentUser) {
+      if (!hasPageAccess('betledger')) {
+        document.getElementById('loginError').textContent = 'You don\'t have access to this page.';
+        return false;
+      }
+      return true;
+    }
     return new Promise(resolve => {
       loginResolve = resolve;
       document.getElementById('loginOverlay').classList.add('active');
@@ -1452,6 +1464,13 @@ ul.task-list li input[type="checkbox"] {
     }
 
     currentUser = data.user;
+
+    if (!hasPageAccess('betledger')) {
+      errEl.textContent = 'You don\'t have access to this page.';
+      await sb.auth.signOut();
+      return;
+    }
+
     document.getElementById('loginOverlay').classList.remove('active');
     document.getElementById('loginEmail').value = '';
     document.getElementById('loginPassword').value = '';
