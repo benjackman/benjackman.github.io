@@ -4,118 +4,39 @@ page-layout: full
 toc: false
 ---
 
-Google Maps Platform recently launched an [Isochrones API](https://developers.google.com/maps/documentation/isochrones/overview) (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple "as the crow flies" radius. Below are isochrones from two addresses: 310 Young St, Annandale NSW (Sydney) and 34 Herrick St, Mount Gravatt QLD (Brisbane). The API is time-based rather than distance-based, so both maps show travel-*time* isochrones.
-
-This page calls the Isochrones API directly from your browser, so it needs a Google Maps Platform API key with the **Maps JavaScript API**, **Geocoding API**, and **Isochrones API** enabled (and billing set up — the Isochrones API is a paid preview product). Your key is stored only in this browser's `localStorage` and is sent straight from your browser to Google; it never touches any server of mine.
+Google Maps Platform recently launched an [Isochrones API](https://developers.google.com/maps/documentation/isochrones/overview) (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple "as the crow flies" radius. Below are isochrones from two addresses: 310 Young St, Annandale NSW (Sydney) and 34 Herrick St, Mount Gravatt QLD (Brisbane).
 
 ```{=html}
 <style>
+  .quarto-title-block { display: none; }
+
   .iso-app {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0.5rem 0 1.5rem;
+    padding: 0.5rem 1rem 2rem;
   }
 
-  .iso-key-panel {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.9rem 1rem;
-    border: 1px solid #d8dde3;
-    border-radius: 10px;
-    background: #f7f9fb;
-    margin-bottom: 1.4rem;
-  }
-
-  .quarto-dark .iso-key-panel {
-    border-color: #3a3f45;
-    background: #262a2e;
-  }
-
-  .iso-key-panel label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #495057;
-  }
-
-  .quarto-dark .iso-key-panel label {
-    color: #c7ccd1;
-  }
-
-  .iso-key-panel input[type="password"],
-  .iso-key-panel input[type="text"] {
-    flex: 1 1 260px;
-    min-width: 180px;
-    padding: 0.4rem 0.6rem;
-    border: 1px solid #ccd2d8;
-    border-radius: 6px;
-    font-family: monospace;
-    font-size: 0.85rem;
-    background: #fff;
-    color: #212529;
-  }
-
-  .quarto-dark .iso-key-panel input[type="password"],
-  .quarto-dark .iso-key-panel input[type="text"] {
-    background: #1c1f22;
-    border-color: #4a4f55;
-    color: #e8eaed;
-  }
-
-  .iso-key-panel button {
-    padding: 0.4rem 0.9rem;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .iso-btn-primary {
-    background: #2a6f6f;
-    color: #fff;
-  }
-
-  .iso-btn-primary:hover {
-    background: #235c5c;
-  }
-
-  .iso-btn-secondary {
-    background: transparent;
+  .iso-loading {
+    text-align: center;
+    padding: 3rem 1rem;
     color: #6c757d;
-    border-color: #ccd2d8;
+    font-size: 0.9rem;
   }
 
-  .quarto-dark .iso-btn-secondary {
-    color: #adb5bd;
-    border-color: #4a4f55;
+  .quarto-dark .iso-loading { color: #adb5bd; }
+
+  .iso-locked {
+    text-align: center;
+    padding: 3rem 1rem;
   }
 
-  .iso-key-panel .iso-key-check {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.8rem;
+  .iso-locked-msg {
     color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
   }
 
-  .quarto-dark .iso-key-panel .iso-key-check {
-    color: #adb5bd;
-  }
-
-  .iso-key-status {
-    flex-basis: 100%;
-    font-size: 0.82rem;
-    color: #6c757d;
-  }
-
-  .quarto-dark .iso-key-status {
-    color: #adb5bd;
-  }
-
-  .iso-key-status.iso-error { color: #c0392b; }
-  .iso-key-status.iso-ok { color: #2a6f6f; }
+  .quarto-dark .iso-locked-msg { color: #adb5bd; }
 
   .iso-grid {
     display: grid;
@@ -169,9 +90,7 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
     margin-top: 0.15rem;
   }
 
-  .quarto-dark .iso-panel-address {
-    color: #adb5bd;
-  }
+  .quarto-dark .iso-panel-address { color: #adb5bd; }
 
   .iso-controls {
     display: flex;
@@ -227,35 +146,209 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
     min-height: 1.4em;
   }
 
-  .quarto-dark .iso-panel-status {
-    color: #adb5bd;
+  .quarto-dark .iso-panel-status { color: #adb5bd; }
+  .iso-panel-status.iso-error { color: #c0392b; }
+
+  /* ---- Login overlay (matches betledger) ---- */
+  .iso-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
   }
 
-  .iso-panel-status.iso-error { color: #c0392b; }
+  .iso-overlay.active { display: flex; }
+
+  .iso-modal {
+    background: #fff;
+    border: 2px solid #2d3436;
+    padding: 1.5rem;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+  }
+
+  .quarto-dark .iso-modal {
+    background: #1e1f22;
+    border-color: #dee2e6;
+  }
+
+  .iso-modal h4 {
+    margin: 0 0 0.75rem 0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2d3436;
+  }
+
+  .quarto-dark .iso-modal h4 { color: #dee2e6; }
+
+  .iso-form-group {
+    margin-bottom: 0.65rem;
+    text-align: left;
+  }
+
+  .iso-form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    color: #495057;
+    margin-bottom: 0.2rem;
+  }
+
+  .quarto-dark .iso-form-group label { color: #adb5bd; }
+
+  .iso-form-input {
+    width: 100%;
+    padding: 0.45rem 0.5rem;
+    border: 1px solid #adb5bd;
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    background: transparent;
+    color: inherit;
+    transition: border-color 0.15s ease;
+  }
+
+  .iso-form-input:focus {
+    outline: none;
+    border-color: #2d3436;
+  }
+
+  .quarto-dark .iso-form-input {
+    border-color: #6c757d;
+    color: #dee2e6;
+  }
+
+  .quarto-dark .iso-form-input:focus { border-color: #dee2e6; }
+
+  .iso-btn {
+    display: inline-block;
+    padding: 0.45rem 1.2rem;
+    border: 2px solid #2d3436;
+    background: none;
+    color: #2d3436;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-variant: small-caps;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .iso-btn:hover {
+    background: #2d3436;
+    color: #fff;
+  }
+
+  .iso-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .quarto-dark .iso-btn {
+    border-color: #dee2e6;
+    color: #dee2e6;
+  }
+
+  .quarto-dark .iso-btn:hover {
+    background: #dee2e6;
+    color: #1e1f22;
+  }
+
+  .iso-btn-text {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    border: none;
+    background: none;
+    color: #6c757d;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .quarto-dark .iso-btn-text { color: #adb5bd; }
+
+  .iso-auth-bar {
+    text-align: right;
+    margin-bottom: 0.8rem;
+    font-size: 0.8rem;
+    color: #6c757d;
+  }
+
+  .quarto-dark .iso-auth-bar { color: #adb5bd; }
+
+  .iso-auth-bar button {
+    background: none;
+    border: none;
+    color: #6c757d;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0;
+  }
+
+  .quarto-dark .iso-auth-bar button { color: #adb5bd; }
 </style>
 
 <div class="iso-app">
 
-  <div class="iso-key-panel" id="isoKeyPanel">
-    <label for="isoApiKey">Google Maps Platform API key</label>
-    <input type="password" id="isoApiKey" placeholder="AIza..." autocomplete="off" spellcheck="false">
-    <label class="iso-key-check">
-      <input type="checkbox" id="isoKeyShow"> show
-    </label>
-    <button class="iso-btn-primary" id="isoKeyLoad">Load maps</button>
-    <button class="iso-btn-secondary" id="isoKeyClear">Clear saved key</button>
-    <div class="iso-key-status" id="isoKeyStatus">Enter a key and click "Load maps" to draw the isochrones below. Nothing loads until you do.</div>
+  <div class="iso-loading" id="isoLoading">Loading...</div>
+
+  <div id="isoLocked" style="display:none;">
+    <div class="iso-locked">
+      <div class="iso-locked-msg">Sign in to view the isochrone maps.</div>
+      <button class="iso-btn" onclick="showLogin()">sign in</button>
+    </div>
   </div>
 
-  <div class="iso-grid" id="isoGrid"></div>
+  <div id="isoContent" style="display:none;">
+    <div class="iso-auth-bar" id="isoAuthBar">
+      <button onclick="isoSignOut()">sign out</button>
+    </div>
+    <div class="iso-grid" id="isoGrid"></div>
+  </div>
+
+  <!-- Login modal -->
+  <div class="iso-overlay" id="isoLoginOverlay">
+    <div class="iso-modal">
+      <h4>Sign in</h4>
+      <div class="iso-form-group">
+        <label for="isoLoginEmail">email</label>
+        <input type="email" class="iso-form-input" id="isoLoginEmail" autocomplete="email">
+      </div>
+      <div class="iso-form-group">
+        <label for="isoLoginPassword">password</label>
+        <input type="password" class="iso-form-input" id="isoLoginPassword" autocomplete="current-password">
+      </div>
+      <div id="isoLoginError" style="color:#dc3545;font-size:0.8rem;text-align:center;min-height:1.2em;margin-bottom:0.25rem;"></div>
+      <div style="display:flex;gap:0.4rem;justify-content:center;margin-top:0.5rem;">
+        <button class="iso-btn" id="isoLoginSubmit" onclick="isoSubmitLogin()">sign in</button>
+        <button class="iso-btn-text" onclick="isoCancelLogin()">cancel</button>
+      </div>
+    </div>
+  </div>
 
 </div>
+
+<!-- Supabase JS client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "isochrones_gmp_api_key_v1";
+  // ============================================================
+  // CONFIG
+  // ============================================================
+  var SUPABASE_URL  = 'https://pkiocdaqdnpkwvvqfwwd.supabase.co';
+  var SUPABASE_ANON = 'sb_publishable_lr7mFUX6xdrq4AS8ct3o6w_qj9J2kh3';
+  var GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
+  // ============================================================
 
   var LOCATIONS = [
     {
@@ -272,33 +365,106 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
     }
   ];
 
-  var MODE_MAX_SECONDS = {
-    DRIVE: 3600,
-    WALK: 7200,
-    BICYCLE: 7200
-  };
-
   var DURATION_OPTIONS_MIN = {
     DRIVE: [10, 15, 20, 30, 45, 60],
     WALK: [10, 15, 20, 30, 45, 60, 90, 120],
     BICYCLE: [10, 15, 20, 30, 45, 60, 90, 120]
   };
 
-  var grid = document.getElementById("isoGrid");
-  var keyInput = document.getElementById("isoApiKey");
-  var keyShow = document.getElementById("isoKeyShow");
-  var keyLoadBtn = document.getElementById("isoKeyLoad");
-  var keyClearBtn = document.getElementById("isoKeyClear");
-  var keyStatus = document.getElementById("isoKeyStatus");
-
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  var currentUser = null;
+  var mapsLoaded = false;
   var panels = {};
 
-  function setKeyStatus(msg, kind) {
-    keyStatus.textContent = msg;
-    keyStatus.className = "iso-key-status" + (kind ? " iso-" + kind : "");
+  // ---- Auth ----
+
+  async function initAuth() {
+    var result = await sb.auth.getSession();
+    currentUser = result.data.session ? result.data.session.user : null;
+    sb.auth.onAuthStateChange(function (_event, session) {
+      currentUser = session ? session.user : null;
+      updateView();
+    });
+    updateView();
+  }
+
+  function updateView() {
+    document.getElementById('isoLoading').style.display = 'none';
+    if (currentUser) {
+      document.getElementById('isoLocked').style.display = 'none';
+      document.getElementById('isoContent').style.display = 'block';
+      if (!mapsLoaded) {
+        mapsLoaded = true;
+        loadGoogleMaps();
+      }
+    } else {
+      document.getElementById('isoLocked').style.display = 'block';
+      document.getElementById('isoContent').style.display = 'none';
+    }
+  }
+
+  window.showLogin = function () {
+    document.getElementById('isoLoginOverlay').classList.add('active');
+    setTimeout(function () { document.getElementById('isoLoginEmail').focus(); }, 50);
+  };
+
+  window.isoSubmitLogin = async function () {
+    var email = document.getElementById('isoLoginEmail').value.trim();
+    var password = document.getElementById('isoLoginPassword').value;
+    var errEl = document.getElementById('isoLoginError');
+    var btn = document.getElementById('isoLoginSubmit');
+
+    if (!email || !password) {
+      errEl.textContent = 'Enter your email and password.';
+      return;
+    }
+
+    btn.disabled = true;
+    errEl.textContent = '';
+
+    var result = await sb.auth.signInWithPassword({ email: email, password: password });
+    btn.disabled = false;
+
+    if (result.error) {
+      errEl.textContent = 'Incorrect email or password.';
+      return;
+    }
+
+    currentUser = result.data.user;
+    document.getElementById('isoLoginOverlay').classList.remove('active');
+    document.getElementById('isoLoginEmail').value = '';
+    document.getElementById('isoLoginPassword').value = '';
+    updateView();
+  };
+
+  window.isoCancelLogin = function () {
+    document.getElementById('isoLoginOverlay').classList.remove('active');
+  };
+
+  window.isoSignOut = async function () {
+    await sb.auth.signOut();
+  };
+
+  // ---- Maps ----
+
+  function loadGoogleMaps() {
+    window.__isoMapsReady = function () {
+      buildPanels();
+      LOCATIONS.forEach(function (loc) { geocodeAndInit(panels[loc.id]); });
+    };
+
+    var script = document.createElement("script");
+    script.async = true;
+    script.defer = true;
+    script.src = "https://maps.googleapis.com/maps/api/js?key=" +
+      encodeURIComponent(GOOGLE_API_KEY) + "&callback=__isoMapsReady&v=weekly";
+    document.head.appendChild(script);
   }
 
   function buildPanels() {
+    var grid = document.getElementById("isoGrid");
+    grid.innerHTML = "";
+
     LOCATIONS.forEach(function (loc) {
       var panel = document.createElement("div");
       panel.className = "iso-panel";
@@ -319,7 +485,7 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
         '    <option value="TO">To here</option>' +
         '  </select>' +
         '</div>' +
-        '<div class="iso-map" id="isoMap-' + loc.id + '">Enter your API key above and click "Load maps".</div>' +
+        '<div class="iso-map" id="isoMap-' + loc.id + '">Loading map...</div>' +
         '<div class="iso-panel-status" id="isoStatus-' + loc.id + '"></div>';
       grid.appendChild(panel);
 
@@ -361,7 +527,7 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
     if (prev && mins.some(function (m) { return String(m * 60) === prev; })) {
       panel.durationSel.value = prev;
     } else {
-      panel.durationSel.value = String(mins[1] * 60); // second option as a sane default
+      panel.durationSel.value = String(mins[1] * 60);
     }
   }
 
@@ -370,81 +536,42 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
     panel.statusEl.className = "iso-panel-status" + (isError ? " iso-error" : "");
   }
 
-  function getApiKey() {
-    return keyInput.value.trim();
-  }
+  function geocodeAndInit(panel) {
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: panel.loc.address }, function (results, status) {
+      if (status !== "OK" || !results || !results[0]) {
+        setPanelStatus(panel, "Geocoding failed (" + status + ") for " + panel.loc.address, true);
+        return;
+      }
+      var loc = results[0].geometry.location;
+      panel.location = { latitude: loc.lat(), longitude: loc.lng() };
 
-  function loadGoogleMaps(key) {
-    setKeyStatus("Loading Google Maps…");
-    keyLoadBtn.disabled = true;
-
-    var existing = document.getElementById("isoGoogleMapsScript");
-    if (existing) existing.remove();
-
-    window.__isoInit = function () {
-      setKeyStatus("Google Maps loaded. Geocoding addresses…", "ok");
-      keyLoadBtn.disabled = false;
-      initLocations(key);
-    };
-
-    var script = document.createElement("script");
-    script.id = "isoGoogleMapsScript";
-    script.async = true;
-    script.defer = true;
-    script.src = "https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(key) + "&callback=__isoInit&v=weekly";
-    script.onerror = function () {
-      keyLoadBtn.disabled = false;
-      setKeyStatus(
-        "Failed to load the Google Maps script. If you're viewing this inside a sandboxed preview (e.g. an embedded artifact), open the page directly in a normal browser tab instead — sandboxed previews block external scripts.",
-        "error"
-      );
-    };
-    document.head.appendChild(script);
-  }
-
-  function initLocations(key) {
-    LOCATIONS.forEach(function (loc) {
-      var panel = panels[loc.id];
-      panel.mapEl.textContent = "";
-      panel.mapEl.style.display = "";
-
-      var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address: loc.address }, function (results, status) {
-        if (status !== "OK" || !results || !results[0]) {
-          setPanelStatus(panel, "Geocoding failed (" + status + ") for " + loc.address, true);
-          return;
-        }
-        var locResult = results[0].geometry.location;
-        panel.location = { latitude: locResult.lat(), longitude: locResult.lng() };
-
-        panel.map = new google.maps.Map(panel.mapEl, {
-          center: { lat: panel.location.latitude, lng: panel.location.longitude },
-          zoom: 12
-        });
-        panel.marker = new google.maps.Marker({
-          position: { lat: panel.location.latitude, lng: panel.location.longitude },
-          map: panel.map,
-          title: loc.label
-        });
-        panel.dataLayer = new google.maps.Data({ map: panel.map });
-        panel.dataLayer.setStyle({
-          fillColor: loc.color,
-          fillOpacity: 0.28,
-          strokeColor: loc.color,
-          strokeWeight: 2
-        });
-
-        runIsochrone(panel, key);
+      panel.map = new google.maps.Map(panel.mapEl, {
+        center: { lat: panel.location.latitude, lng: panel.location.longitude },
+        zoom: 12
       });
+      panel.marker = new google.maps.Marker({
+        position: { lat: panel.location.latitude, lng: panel.location.longitude },
+        map: panel.map,
+        title: panel.loc.label
+      });
+      panel.dataLayer = new google.maps.Data({ map: panel.map });
+      panel.dataLayer.setStyle({
+        fillColor: panel.loc.color,
+        fillOpacity: 0.28,
+        strokeColor: panel.loc.color,
+        strokeWeight: 2
+      });
+
+      runIsochrone(panel);
     });
   }
 
-  function runIsochrone(panel, key) {
-    key = key || getApiKey();
-    if (!panel.location || !key) return;
+  function runIsochrone(panel) {
+    if (!panel.location) return;
 
     panel.dataLayer.forEach(function (f) { panel.dataLayer.remove(f); });
-    setPanelStatus(panel, "Generating isochrone…");
+    setPanelStatus(panel, "Generating isochrone...");
 
     var body = {
       location: panel.location,
@@ -459,7 +586,7 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Goog-Api-Key": key
+        "X-Goog-Api-Key": GOOGLE_API_KEY
       },
       body: JSON.stringify(body)
     })
@@ -471,8 +598,7 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
       })
       .then(function (data) {
         var geoJson = data && data.isochrone && data.isochrone.geoJson;
-        if (!geoJson) throw { error: { message: "Unexpected response shape — see console." } };
-        console.log("Isochrone response for " + panel.loc.id, data);
+        if (!geoJson) throw { error: { message: "Unexpected response shape." } };
         panel.dataLayer.addGeoJson(geoJson);
 
         var bounds = new google.maps.LatLngBounds();
@@ -490,45 +616,11 @@ This page calls the Isochrones API directly from your browser, so it needs a Goo
       .catch(function (err) {
         var msg = (err && err.error && err.error.message) || (err && err.message) || "Request failed";
         setPanelStatus(panel, "Isochrones API error: " + msg, true);
-        console.error("Isochrone error for " + panel.loc.id, err);
       });
   }
 
-  function init() {
-    buildPanels();
-
-    var savedKey = "";
-    try { savedKey = window.localStorage.getItem(STORAGE_KEY) || ""; } catch (e) {}
-    if (savedKey) {
-      keyInput.value = savedKey;
-    }
-
-    keyShow.addEventListener("change", function () {
-      keyInput.type = keyShow.checked ? "text" : "password";
-    });
-
-    keyLoadBtn.addEventListener("click", function () {
-      var key = getApiKey();
-      if (!key) {
-        setKeyStatus("Enter an API key first.", "error");
-        return;
-      }
-      try { window.localStorage.setItem(STORAGE_KEY, key); } catch (e) {}
-      loadGoogleMaps(key);
-    });
-
-    keyClearBtn.addEventListener("click", function () {
-      try { window.localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-      keyInput.value = "";
-      setKeyStatus("Saved key cleared.");
-    });
-
-    if (savedKey) {
-      loadGoogleMaps(savedKey);
-    }
-  }
-
-  init();
+  // ---- Init ----
+  initAuth();
 })();
 </script>
 ```
