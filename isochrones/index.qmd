@@ -455,9 +455,21 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     updateView();
   }
 
+  function hasPageAccess(pageName) {
+    if (!currentUser) return false;
+    var pages = currentUser.app_metadata && currentUser.app_metadata.pages;
+    return Array.isArray(pages) && pages.includes(pageName);
+  }
+
   function updateView() {
     document.getElementById('isoLoading').style.display = 'none';
     if (currentUser) {
+      if (!hasPageAccess('isochrones')) {
+        document.getElementById('isoLocked').style.display = 'block';
+        document.getElementById('isoContent').style.display = 'none';
+        document.getElementById('isoLocked').querySelector('.iso-locked-msg').textContent = 'You don\'t have access to this page.';
+        return;
+      }
       document.getElementById('isoLocked').style.display = 'none';
       document.getElementById('isoContent').style.display = 'block';
       if (!mapsLoaded) {
@@ -498,6 +510,13 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
     }
 
     currentUser = result.data.user;
+
+    if (!hasPageAccess('isochrones')) {
+      errEl.textContent = 'You don\'t have access to this page.';
+      await sb.auth.signOut();
+      return;
+    }
+
     document.getElementById('isoLoginOverlay').classList.remove('active');
     document.getElementById('isoLoginEmail').value = '';
     document.getElementById('isoLoginPassword').value = '';
