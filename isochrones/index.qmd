@@ -347,7 +347,7 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
   // ============================================================
   var SUPABASE_URL  = 'https://pkiocdaqdnpkwvvqfwwd.supabase.co';
   var SUPABASE_ANON = 'sb_publishable_lr7mFUX6xdrq4AS8ct3o6w_qj9J2kh3';
-  var GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
+  var GOOGLE_API_KEY = 'AIzaSyDwPseJOenoZtU1mN-JqdH2f1twzyd-W0Q';
   // ============================================================
 
   var LOCATIONS = [
