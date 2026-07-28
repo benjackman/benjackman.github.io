@@ -4,7 +4,7 @@ page-layout: full
 toc: false
 ---
 
-Google Maps Platform recently launched an [Isochrones API](https://developers.google.com/maps/documentation/isochrones/overview) (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple "as the crow flies" radius. Below are isochrones from two addresses: 310 Young St, Annandale NSW (Sydney) and 34 Herrick St, Mount Gravatt QLD (Brisbane).
+Google Maps Platform recently launched an [Isochrones API](https://developers.google.com/maps/documentation/isochrones/overview) (currently in preview) that draws the area reachable within a given travel time along the real road/path network, rather than a simple "as the crow flies" radius.
 
 ```{=html}
 <style>
@@ -599,7 +599,10 @@ Google Maps Platform recently launched an [Isochrones API](https://developers.go
       .then(function (data) {
         var geoJson = data && data.isochrone && data.isochrone.geoJson;
         if (!geoJson) throw { error: { message: "Unexpected response shape." } };
-        panel.dataLayer.addGeoJson(geoJson);
+        var feature = geoJson.type === "Feature" || geoJson.type === "FeatureCollection"
+          ? geoJson
+          : { type: "Feature", geometry: geoJson, properties: {} };
+        panel.dataLayer.addGeoJson(feature);
 
         var bounds = new google.maps.LatLngBounds();
         panel.dataLayer.forEach(function (feature) {
